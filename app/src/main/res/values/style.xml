@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ════ Base theme ════ -->
+    <style name="Theme.TransGo" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/blue_primary</item>
+        <item name="colorPrimaryVariant">@color/blue_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/orange_accent</item>
+        <item name="android:windowBackground">@color/bg_page</item>
+        <item name="android:statusBarColor">@color/bg_page</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/bg_page</item>
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <!-- Splash: status bar matches baby blue bg -->
+    <style name="Theme.TransGo.Splash" parent="Theme.TransGo">
+        <item name="android:statusBarColor">#C8E0F8</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">#2B90D8</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <!-- Blue header screens: OTP, Forgot, Reset -->
+    <style name="Theme.TransGo.BlueHeader" parent="Theme.TransGo">
+        <item name="android:statusBarColor">@color/blue_primary</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <!-- ════ Buttons ════ -->
+    <style name="Widget.TransGo.Button.Navy" parent="Widget.MaterialComponents.Button">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/bg_btn_dark</item>
+        <item name="android:minHeight">52dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <style name="Widget.TransGo.Button.Blue" parent="Widget.MaterialComponents.Button">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/bg_btn_dark</item>
+        <item name="android:minHeight">52dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <style name="Widget.TransGo.Button.Orange" parent="Widget.MaterialComponents.Button">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/bg_btn_orange</item>
+        <item name="android:minHeight">52dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <style name="Widget.TransGo.Button.Social" parent="Widget.MaterialComponents.Button">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:background">@drawable/bg_social_btn</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <!-- ════ EditText ════ -->
+    <style name="Widget.TransGo.EditText" parent="Widget.MaterialComponents.TextInputEditText">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColorHint">@color/text_disabled</item>
+        <item name="android:background">@drawable/bg_input_field</item>
+        <item name="android:paddingTop">13dp</item>
+        <item name="android:paddingBottom">13dp</item>
+        <item name="android:paddingStart">44dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <!-- ════ CheckBox ════ -->
+    <style name="Widget.TransGo.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/text_hint</item>
+        <item name="android:buttonTint">@color/blue_primary</item>
+        <item name="fontFamily">@font/nunito</item>
+    </style>
+
+    <!-- ════ Text Appearances ════ -->
+    <style name="TextAppearance.TransGo.H1">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="TextAppearance.TransGo.H2">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="TextAppearance.TransGo.Body">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
+    <style name="TextAppearance.TransGo.Caption">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/text_hint</item>
+    </style>
+
+    <style name="TextAppearance.TransGo.Label">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="TextAppearance.TransGo.Link">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/blue_primary</item>
+    </style>
+
+    <style name="TextAppearance.TransGo.Timer">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/blue_primary</item>
+    </style>
+
+    <style name="TextAppearance.TransGo.OTP">
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/blue_primary</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+</resources>

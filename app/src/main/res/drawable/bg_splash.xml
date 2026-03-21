@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/bg_splash.xml -->
+<!-- Dùng solid color, hiệu ứng gradient nằm trong city SVG -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#0b1928" />
+</shape>

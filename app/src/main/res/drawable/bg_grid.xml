@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/bg_grid.xml -->
+<!-- Lưới ô vuông nét mảnh, dùng làm overlay lên bg_splash -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="800dp"
+    android:viewportWidth="360"
+    android:viewportHeight="800">
+
+    <!-- ===== ĐƯỜNG DỌC (vertical lines) ===== -->
+    <path android:pathData="M30,0 L30,800"   android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M60,0 L60,800"   android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M90,0 L90,800"   android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M120,0 L120,800" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M150,0 L150,800" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M180,0 L180,800" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M210,0 L210,800" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M240,0 L240,800" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M270,0 L270,800" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M300,0 L300,800" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M330,0 L330,800" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+
+    <!-- ===== ĐƯỜNG NGANG (horizontal lines) ===== -->
+    <path android:pathData="M0,30 L360,30"   android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,60 L360,60"   android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,90 L360,90"   android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,120 L360,120" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,150 L360,150" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,180 L360,180" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,210 L360,210" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,240 L360,240" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,270 L360,270" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,300 L360,300" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,330 L360,330" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,360 L360,360" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,390 L360,390" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,420 L360,420" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,450 L360,450" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,480 L360,480" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,510 L360,510" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,540 L360,540" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,570 L360,570" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,600 L360,600" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,630 L360,630" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,660 L360,660" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,690 L360,690" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,720 L360,720" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,750 L360,750" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+    <path android:pathData="M0,780 L360,780" android:strokeColor="#FFFFFF" android:strokeWidth="0.4" android:strokeAlpha="0.07" android:fillColor="#00000000"/>
+
+</vector>

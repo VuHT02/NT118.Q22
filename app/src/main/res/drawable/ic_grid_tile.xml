@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="30dp"
+    android:height="30dp"
+    android:viewportWidth="30"
+    android:viewportHeight="30">
+
+    <!-- Đường ngang -->
+    <path
+        android:pathData="M0,0 L30,0 L30,0.5 L0,0.5 Z"
+        android:fillColor="#5BA8E0"/>
+
+    <!-- Đường dọc -->
+    <path
+        android:pathData="M0,0 L0.5,0 L0.5,30 L0,30 Z"
+        android:fillColor="#5BA8E0"/>
+
+</vector>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/ic_transgo_logo.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <!-- Line: top dot to bottom-left dot -->
+    <path
+        android:pathData="M24,12 L12,32"
+        android:strokeColor="#2DD4BF"
+        android:strokeWidth="1.8"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round" />
+
+    <!-- Line: top dot to bottom-right dot -->
+    <path
+        android:pathData="M24,12 L36,32"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.8"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.35" />
+
+    <!-- Line: bottom left to bottom right -->
+    <path
+        android:pathData="M12,32 L36,32"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.2"
+        android:fillColor="#00000000"
+        android:strokeAlpha="0.2" />
+
+    <!-- Top dot (orange) -->
+    <path
+        android:pathData="M24,8 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0"
+        android:fillColor="#F97316" />
+
+    <!-- Bottom-left dot (teal) -->
+    <path
+        android:pathData="M12,32 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0"
+        android:fillColor="#2DD4BF" />
+
+    <!-- Bottom-right dot (white dim) -->
+    <path
+        android:pathData="M36,32 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0"
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.4" />
+
+</vector>

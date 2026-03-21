@@ -1,0 +1,741 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f4f6f8">
+
+    <!-- SCROLLABLE CONTENT -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:paddingBottom="70dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- ===== HEADER ===== -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#0b1928"
+                android:paddingBottom="16dp">
+
+                <!-- Top bar -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <!-- Logo -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="8dp">
+
+                        <FrameLayout
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/bg_logo_circle_orange"
+                            android:layout_marginEnd="10dp">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_transgo_logo" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="TRANS"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:includeFontPadding="false" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="GO"
+                                    android:textColor="#F97316"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:includeFontPadding="false" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="DI CHUYỂN THÔNG MINH"
+                                android:textColor="#66FFFFFF"
+                                android:textSize="8sp"
+                                android:letterSpacing="0.15" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Notification bell -->
+                    <FrameLayout
+                        android:id="@+id/btnNotification"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_header_icon_btn"
+                        android:layout_marginEnd="8dp">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_bell" />
+                    </FrameLayout>
+
+                    <!-- Profile -->
+                    <FrameLayout
+                        android:id="@+id/btnProfile"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_header_icon_btn">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_user" />
+                    </FrameLayout>
+                </LinearLayout>
+
+                <!-- Greeting banner -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_banner_orange"
+                    android:gravity="center_vertical"
+                    android:padding="12dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Xin chào 👋"
+                            android:textColor="#99FFFFFF"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Đa phương tiện – Trọn vẹn hành trình"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TransPass"
+                        android:textColor="#FFFFFF"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_btn_orange"
+                        android:backgroundTint="@null"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ===== MAIN CONTENT (white bg) ===== -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <!-- Search bar -->
+                <LinearLayout
+                    android:id="@+id/searchBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_search_bar"
+                    android:gravity="center_vertical"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:layout_marginBottom="16dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_transgo_logo"
+                        android:layout_marginEnd="10dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tìm đường thông minh..."
+                        android:textColor="#9aa5b4"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <!-- Transport types title -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phương tiện"
+                    android:textColor="#0b1928"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="10dp" />
+
+                <!-- Transport grid 4 cols -->
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="4"
+                    android:rowCount="1"
+                    android:layout_marginBottom="20dp">
+
+                    <!-- Buyt -->
+                    <LinearLayout
+                        android:id="@+id/btnBuyt"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/bg_transport_card"
+                        android:padding="10dp"
+                        android:layout_marginEnd="6dp">
+
+                        <FrameLayout
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_transport_icon_orange">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_bus" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Buýt"
+                            android:textColor="#0b1928"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="6dp" />
+                    </LinearLayout>
+
+                    <!-- Metro -->
+                    <LinearLayout
+                        android:id="@+id/btnMetro"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/bg_transport_card"
+                        android:padding="10dp"
+                        android:layout_marginEnd="6dp">
+
+                        <FrameLayout
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_transport_icon_blue">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_metro" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Metro"
+                            android:textColor="#0b1928"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="6dp" />
+                    </LinearLayout>
+
+                    <!-- Waterbus -->
+                    <LinearLayout
+                        android:id="@+id/btnWaterbus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/bg_transport_card"
+                        android:padding="10dp"
+                        android:layout_marginEnd="6dp">
+
+                        <FrameLayout
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_transport_icon_teal">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_waterbus" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Waterbus"
+                            android:textColor="#0b1928"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="6dp" />
+                    </LinearLayout>
+
+                    <!-- Xe đạp -->
+                    <LinearLayout
+                        android:id="@+id/btnBike"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/bg_transport_card"
+                        android:padding="10dp">
+
+                        <FrameLayout
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_transport_icon_yellow">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_bike" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Xe đạp"
+                            android:textColor="#0b1928"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="6dp" />
+                    </LinearLayout>
+                </GridLayout>
+
+                <!-- Tính năng thông minh -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Tính năng thông minh"
+                        android:textColor="#0b1928"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvSeeAllFeatures"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Xem tất cả →"
+                        android:textColor="#F97316"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Features grid -->
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="4"
+                    android:layout_marginBottom="20dp">
+
+                    <!-- Tìm đường -->
+                    <LinearLayout
+                        android:id="@+id/featureRoute"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="6dp">
+
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_feature_orange">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_route" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tìm đường"
+                            android:textColor="#444444"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:layout_marginTop="5dp" />
+                    </LinearLayout>
+
+                    <!-- Trạm xung quanh -->
+                    <LinearLayout
+                        android:id="@+id/featureNearby"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="6dp">
+
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_feature_green">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_location" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Trạm xung quanh"
+                            android:textColor="#444444"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:layout_marginTop="5dp" />
+                    </LinearLayout>
+
+                    <!-- Đánh giá -->
+                    <LinearLayout
+                        android:id="@+id/featureReview"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="6dp">
+
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_feature_pink">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_feedback" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Đánh giá &amp; Góp ý"
+                            android:textColor="#444444"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:layout_marginTop="5dp" />
+                    </LinearLayout>
+
+                    <!-- Mua vé -->
+                    <LinearLayout
+                        android:id="@+id/featureTicket"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="6dp">
+
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_feature_teal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_ticket" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mua vé Waterbus"
+                            android:textColor="#444444"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:layout_marginTop="5dp" />
+                    </LinearLayout>
+                </GridLayout>
+
+                <!-- Tin tức & Ưu đãi -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Tin tức &amp; Ưu đãi"
+                        android:textColor="#0b1928"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvSeeAllNews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Xem tất cả →"
+                        android:textColor="#F97316"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- News horizontal scroll -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- News card 1 -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="180dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            app:cardCornerRadius="14dp"
+                            app:cardElevation="4dp"
+                            app:cardBackgroundColor="#FFFFFF">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="80dp"
+                                    android:background="#0b1928">
+
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:src="@drawable/bg_grid"
+                                        android:scaleType="fitXY"
+                                        android:alpha="0.3" />
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="TRANS"
+                                            android:textColor="#FFFFFF"
+                                            android:textSize="20sp"
+                                            android:textStyle="bold"
+                                            android:fontFamily="sans-serif-condensed" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="GO"
+                                            android:textColor="#F97316"
+                                            android:textSize="20sp"
+                                            android:textStyle="bold"
+                                            android:fontFamily="sans-serif-condensed" />
+                                    </LinearLayout>
+                                </FrameLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:padding="10dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Tuyến buýt mới Q.9"
+                                        android:textColor="#0b1928"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold"
+                                        android:layout_marginBottom="3dp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Khai thác từ 01/04/2026"
+                                        android:textColor="#9aa5b4"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- News card 2 -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="180dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            app:cardCornerRadius="14dp"
+                            app:cardElevation="4dp"
+                            app:cardBackgroundColor="#FFFFFF">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="80dp"
+                                    android:background="#F97316">
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:orientation="vertical"
+                                        android:gravity="center">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="50%"
+                                            android:textColor="#FFFFFF"
+                                            android:textSize="28sp"
+                                            android:textStyle="bold"
+                                            android:fontFamily="sans-serif-condensed" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="GIẢM GIÁ VÉ"
+                                            android:textColor="#FFFFFFCC"
+                                            android:textSize="9sp"
+                                            android:letterSpacing="0.15" />
+                                    </LinearLayout>
+                                </FrameLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:padding="10dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Ưu đãi tháng 4"
+                                        android:textColor="#0b1928"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold"
+                                        android:layout_marginBottom="3dp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Áp dụng cho thẻ TransPass"
+                                        android:textColor="#9aa5b4"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- ===== BOTTOM NAVIGATION ===== -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_gravity="bottom"
+        android:background="#FFFFFF"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:labelVisibilityMode="labeled"
+        app:itemActiveIndicatorStyle="@style/Widget.TransGo.BottomNav.ActiveIndicator" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

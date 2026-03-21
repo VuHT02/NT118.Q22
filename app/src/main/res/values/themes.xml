@@ -1,9 +1,27 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.CityMove" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.CityMove" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#0b1928</item>
+        <item name="colorPrimaryVariant">#0d1e35</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#F97316</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="buttonStyle">@style/Widget.TransGo.Button</item>
+        <item name="materialButtonStyle">@style/Widget.TransGo.Button</item>
+        <item name="android:buttonStyle">@style/Widget.TransGo.Button</item>
     </style>
 
-    <style name="Theme.CityMove" parent="Base.Theme.CityMove" />
+    <style name="Widget.TransGo.Button" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@null</item>
+        <item name="android:backgroundTint">@null</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="elevation">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="cornerRadius">10dp</item>
+    </style>
+
 </resources>

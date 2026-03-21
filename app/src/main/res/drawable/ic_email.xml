@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/ic_email.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="18dp"
+    android:height="18dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:pathData="M2,4 L22,4 L22,20 L2,20 Z" android:strokeColor="#9aa5b4" android:strokeWidth="1.5" android:fillColor="#00000000" android:strokeLineCap="round" android:strokeLineJoin="round"/>
+    <path android:pathData="M2,8 L12,14 L22,8" android:strokeColor="#9aa5b4" android:strokeWidth="1.5" android:fillColor="#00000000" android:strokeLineCap="round"/>
+</vector>

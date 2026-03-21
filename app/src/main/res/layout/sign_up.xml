@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#0b1928">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Grid overlay -->
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/bg_grid"
+            android:scaleType="fitXY"
+            android:alpha="0.4"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Back -->
+        <LinearLayout
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_arrow_back"
+                android:layout_marginEnd="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quay lại"
+                android:textColor="#99FFFFFF"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng ký"
+            android:textColor="#FFFFFF"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/btnBack"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tạo tài khoản TransGo mới"
+            android:textColor="#66FFFFFF"
+            android:textSize="13sp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Email -->
+        <LinearLayout
+            android:id="@+id/layoutEmail"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_input_field"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                android:src="@drawable/ic_email" android:layout_marginEnd="12dp" />
+
+            <EditText android:layout_width="match_parent" android:layout_height="match_parent"
+                android:hint="Email" android:hintTextColor="#9aa5b4"
+                android:textColor="#0b1928" android:textSize="14sp"
+                android:background="@null" android:inputType="textEmailAddress" android:singleLine="true" />
+        </LinearLayout>
+
+        <!-- Password -->
+        <LinearLayout
+            android:id="@+id/layoutPassword"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_input_field"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/layoutEmail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                android:src="@drawable/ic_lock" android:layout_marginEnd="12dp" />
+
+            <EditText android:layout_width="match_parent" android:layout_height="match_parent"
+                android:hint="Mật khẩu" android:hintTextColor="#9aa5b4"
+                android:textColor="#0b1928" android:textSize="14sp"
+                android:background="@null" android:inputType="textPassword" android:singleLine="true" />
+        </LinearLayout>
+
+        <!-- Confirm Password -->
+        <LinearLayout
+            android:id="@+id/layoutConfirmPassword"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_input_field"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/layoutPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                android:src="@drawable/ic_lock" android:layout_marginEnd="12dp" />
+
+            <EditText android:layout_width="match_parent" android:layout_height="match_parent"
+                android:hint="Xác nhận mật khẩu" android:hintTextColor="#9aa5b4"
+                android:textColor="#0b1928" android:textSize="14sp"
+                android:background="@null" android:inputType="textPassword" android:singleLine="true" />
+        </LinearLayout>
+
+        <!-- Phone -->
+        <LinearLayout
+            android:id="@+id/layoutPhone"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_input_field"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/layoutConfirmPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                android:src="@drawable/ic_phone" android:layout_marginEnd="12dp" />
+
+            <EditText android:layout_width="match_parent" android:layout_height="match_parent"
+                android:hint="Số điện thoại" android:hintTextColor="#9aa5b4"
+                android:textColor="#0b1928" android:textSize="14sp"
+                android:background="@null" android:inputType="phone" android:singleLine="true" />
+        </LinearLayout>
+
+        <!-- Signup Button -->
+        <Button
+            android:id="@+id/btnSignup"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:text="ĐĂNG KÝ"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-condensed"
+            android:letterSpacing="0.1"
+            android:background="@drawable/bg_btn_orange"
+            android:backgroundTint="@null"
+            android:stateListAnimator="@null"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/layoutPhone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Login link -->
+        <LinearLayout
+            android:id="@+id/layoutLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="40dp"
+            app:layout_constraintTop_toBottomOf="@id/btnSignup"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đã có tài khoản? "
+                android:textColor="#4a6a8a"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvGoLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đăng nhập"
+                android:textColor="#F97316"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
