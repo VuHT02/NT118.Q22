@@ -97,8 +97,9 @@
             <ImageView android:layout_width="20dp" android:layout_height="20dp"
                 android:src="@drawable/ic_email" android:layout_marginEnd="12dp" />
 
-            <EditText android:layout_width="match_parent" android:layout_height="match_parent"
-                android:hint="Email" android:hintTextColor="#9aa5b4"
+            <EditText android:id="@+id/edtEmail"
+                android:layout_width="match_parent" android:layout_height="match_parent"
+                android:hint="Email" android:textColorHint="#9aa5b4"
                 android:textColor="#0b1928" android:textSize="14sp"
                 android:background="@null" android:inputType="textEmailAddress" android:singleLine="true" />
         </LinearLayout>
@@ -123,8 +124,9 @@
             <ImageView android:layout_width="20dp" android:layout_height="20dp"
                 android:src="@drawable/ic_lock" android:layout_marginEnd="12dp" />
 
-            <EditText android:layout_width="match_parent" android:layout_height="match_parent"
-                android:hint="Mật khẩu" android:hintTextColor="#9aa5b4"
+            <EditText android:id="@+id/edtPassword"
+                android:layout_width="match_parent" android:layout_height="match_parent"
+                android:hint="Mật khẩu" android:textColorHint="#9aa5b4"
                 android:textColor="#0b1928" android:textSize="14sp"
                 android:background="@null" android:inputType="textPassword" android:singleLine="true" />
         </LinearLayout>
@@ -149,8 +151,9 @@
             <ImageView android:layout_width="20dp" android:layout_height="20dp"
                 android:src="@drawable/ic_lock" android:layout_marginEnd="12dp" />
 
-            <EditText android:layout_width="match_parent" android:layout_height="match_parent"
-                android:hint="Xác nhận mật khẩu" android:hintTextColor="#9aa5b4"
+            <EditText android:id="@+id/edtConfirmPassword"
+                android:layout_width="match_parent" android:layout_height="match_parent"
+                android:hint="Xác nhận mật khẩu" android:textColorHint="#9aa5b4"
                 android:textColor="#0b1928" android:textSize="14sp"
                 android:background="@null" android:inputType="textPassword" android:singleLine="true" />
         </LinearLayout>
@@ -175,8 +178,9 @@
             <ImageView android:layout_width="20dp" android:layout_height="20dp"
                 android:src="@drawable/ic_phone" android:layout_marginEnd="12dp" />
 
-            <EditText android:layout_width="match_parent" android:layout_height="match_parent"
-                android:hint="Số điện thoại" android:hintTextColor="#9aa5b4"
+            <EditText android:id="@+id/edtPhone"
+                android:layout_width="match_parent" android:layout_height="match_parent"
+                android:hint="Số điện thoại" android:textColorHint="#9aa5b4"
                 android:textColor="#0b1928" android:textSize="14sp"
                 android:background="@null" android:inputType="phone" android:singleLine="true" />
         </LinearLayout>
@@ -211,9 +215,8 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="40dp"
             app:layout_constraintTop_toBottomOf="@id/btnSignup"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 android:layout_width="wrap_content"

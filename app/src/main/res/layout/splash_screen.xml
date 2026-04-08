@@ -29,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@id/layoutBrand"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVerticalBias="0.38" />
+        app:layout_constraintVertical_bias="0.38" />
 
     <!-- Logo Circle -->
     <FrameLayout
@@ -42,7 +42,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/layoutBrand"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVerticalBias="0.38">
+        app:layout_constraintVertical_bias="0.38">
 
         <ImageView
             android:layout_width="48dp"
@@ -147,7 +147,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dotsIndicator"
-        app:layout_constraintVerticalBias="1.0"
+        app:layout_constraintVertical_bias="1.0"
         app:layout_constraintHeight_percent="0.32" />
 
     <!-- CTA Button -->

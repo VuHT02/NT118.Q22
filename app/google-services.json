@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "587650640705",
+    "project_id": "citymove-f6556",
+    "storage_bucket": "citymove-f6556.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587650640705:android:2676585f1d471a83d24fc0",
+        "android_client_info": {
+          "package_name": "com.example.citymove"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWQ6tR-CML9tXEQcoqNycoJ8Q71C0vsrU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
