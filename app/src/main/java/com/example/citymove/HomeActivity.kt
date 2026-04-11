@@ -2,8 +2,12 @@ package com.example.citymove
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -124,8 +128,55 @@ class HomeActivity : AppCompatActivity() {
     // CLICK LISTENERS
     // ─────────────────────────────────────────────────────────
     private fun setupClickListeners() {
+        val destinationInput = findViewById<EditText>(R.id.etDestinationInput)
+
         findViewById<View>(R.id.searchBar)?.setOnClickListener {
-            startActivity(Intent(this, SearchActivity::class.java))
+            openSearchWithDestination(destinationInput?.text?.toString())
+        }
+        findViewById<View>(R.id.btnGoNow)?.setOnClickListener {
+            val destination = destinationInput?.text?.toString().orEmpty().trim()
+            if (destination.isEmpty()) {
+                Toast.makeText(this, getString(R.string.search_map_empty_destination), Toast.LENGTH_SHORT).show()
+            } else {
+                openSearchWithDestination(destination)
+            }
+        }
+
+        destinationInput?.setOnEditorActionListener { _, actionId, event ->
+            val isKeyboardSubmit = actionId == EditorInfo.IME_ACTION_SEARCH ||
+                actionId == EditorInfo.IME_ACTION_GO ||
+                actionId == EditorInfo.IME_ACTION_DONE ||
+                (event?.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER)
+
+            if (isKeyboardSubmit) {
+                val destination = destinationInput.text?.toString().orEmpty().trim()
+                if (destination.isNotEmpty()) {
+                    openSearchWithDestination(destination)
+                }
+                true
+            } else {
+                false
+            }
+        }
+
+        findViewById<View>(R.id.chipDestinationBenThanh)?.setOnClickListener {
+            destinationInput?.setText("Bến Thành")
+            openSearchWithDestination("Bến Thành")
+        }
+        findViewById<View>(R.id.chipDestinationSuoiTien)?.setOnClickListener {
+            destinationInput?.setText("Suối Tiên")
+            openSearchWithDestination("Suối Tiên")
+        }
+        findViewById<View>(R.id.chipDestinationTanSonNhat)?.setOnClickListener {
+            destinationInput?.setText("Sân bay Tân Sơn Nhất")
+            openSearchWithDestination("Sân bay Tân Sơn Nhất")
+        }
+
+        findViewById<View>(R.id.btnRoutePlanner)?.setOnClickListener {
+            startActivity(Intent(this, AllRoutesActivity::class.java))
+        }
+        findViewById<View>(R.id.btnLocation)?.setOnClickListener {
+            openRouteDetail(1)
         }
         findViewById<View>(R.id.btnNotification)?.setOnClickListener {
             startActivity(Intent(this, NotificationActivity::class.java))
@@ -153,6 +204,16 @@ class HomeActivity : AppCompatActivity() {
     private fun openRouteDetail(routeId: Int) {
         val intent = Intent(this, RouteDetailActivity::class.java)
         intent.putExtra("ROUTE_ID", routeId)
+        startActivity(intent)
+    }
+
+    private fun openSearchWithDestination(destination: String?) {
+        val intent = Intent(this, SearchActivity::class.java)
+        intent.putExtra(SearchActivity.EXTRA_ORIGIN_QUERY, "Vị trí hiện tại")
+        val sanitized = destination.orEmpty().trim()
+        if (sanitized.isNotEmpty()) {
+            intent.putExtra(SearchActivity.EXTRA_DESTINATION_QUERY, sanitized)
+        }
         startActivity(intent)
     }
 }

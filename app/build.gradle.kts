@@ -57,6 +57,7 @@ dependencies {
 
     // Google Sign-In (Letting BOM handle version if possible, or use a stable one)
     implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
     // Facebook SDK
     implementation("com.facebook.android:facebook-android-sdk:latest.release")
