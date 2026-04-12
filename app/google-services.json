@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "587650640705",
+    "firebase_url": "https://citymove-f6556-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "citymove-f6556",
     "storage_bucket": "citymove-f6556.firebasestorage.app"
   },
@@ -12,7 +13,12 @@
           "package_name": "com.example.citymove"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "587650640705-i4u8mvdu9df3222t18d5rj60j99mhe2v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAWQ6tR-CML9tXEQcoqNycoJ8Q71C0vsrU"
@@ -20,7 +26,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587650640705-i4u8mvdu9df3222t18d5rj60j99mhe2v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -163,4 +163,18 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+    <style name="OtpBoxStyle">
+        android:layout_width="46dp"
+        android:layout_height="58dp"
+        android:background="@drawable/bg_otp_box_empty"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#0b1928"
+        android:inputType="number"
+        android:maxLength="1"
+        android:cursorVisible="false"
+        android:importantForAutofill="no"
+    </style>
+
 </resources>

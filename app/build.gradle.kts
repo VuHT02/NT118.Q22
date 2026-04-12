@@ -47,21 +47,25 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // Firebase BOM
-    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+
 
     // Google Sign-In (Letting BOM handle version if possible, or use a stable one)
-    implementation("com.google.android.gms:play-services-auth:21.2.0")
+
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+    // Google Sign-In
+    implementation("com.google.android.gms:play-services-auth:21.5.1")
+
 
     // Facebook SDK
     implementation("com.facebook.android:facebook-android-sdk:latest.release")
-    implementation("com.facebook.android:facebook-login:16.3.0")
+    implementation("com.facebook.android:facebook-login:18.2.3")
 
     // Biometric
     implementation("androidx.biometric:biometric:1.1.0")

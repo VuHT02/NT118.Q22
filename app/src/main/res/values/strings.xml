@@ -16,7 +16,6 @@
     <string name="facebook_app_id">917242807738729</string>
     <string name="facebook_client_token">f3f97e1560ab1ffe069ead89c55d4db9</string>
     <string name="fb_login_protocol_scheme">fb917242807738729</string>
-    <string name="default_web_client_id">YOUR_CLIENT_ID</string>
     <string name="google_maps_key">AIzaSyAhNTnHgaFX1P4L7fR8UcsZrW1G2GN7uMg</string>
     <string name="route_map_title">Bản đồ tuyến</string>
     <string name="route_map_open_external">Mở Google Maps</string>
@@ -45,4 +44,7 @@
     <string name="search_map_empty_origin">Vui lòng nhập điểm đi</string>
     <string name="search_map_empty_destination">Vui lòng nhập điểm đến</string>
     <string name="search_map_swap_points">Đảo chiều điểm đi và điểm đến</string>
+
+    <string name="default_web_client_id">587650640705-i4u8mvdu9df3222t18d5rj60j99mhe2v.apps.googleusercontent.com</string>
+
 </resources>

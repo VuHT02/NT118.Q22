@@ -1,10 +1,7 @@
 package com.example.citymove
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Base64
-import android.util.Log
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +11,6 @@ import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.*
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.*
-import java.security.MessageDigest
 import java.util.*
 
 class LoginActivity : AppCompatActivity() {
@@ -31,7 +27,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_screen_layout)
         supportActionBar?.hide()
-
 
         auth = FirebaseAuth.getInstance()
 
@@ -54,8 +49,16 @@ class LoginActivity : AppCompatActivity() {
 
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful) goHome()
-                    else Toast.makeText(this, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show()
+                    if (task.isSuccessful) {
+                        goHome()
+                    } else {
+                        val errorMessage = when (task.exception) {
+                            is FirebaseAuthInvalidUserException -> "Tài khoản không tồn tại"
+                            is FirebaseAuthInvalidCredentialsException -> "Sai mật khẩu"
+                            else -> "Đăng nhập thất bại: ${task.exception?.message}"
+                        }
+                        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+                    }
                 }
         }
 
