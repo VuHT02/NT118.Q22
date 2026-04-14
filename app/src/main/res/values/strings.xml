@@ -44,7 +44,6 @@
     <string name="search_map_empty_origin">Vui lòng nhập điểm đi</string>
     <string name="search_map_empty_destination">Vui lòng nhập điểm đến</string>
     <string name="search_map_swap_points">Đảo chiều điểm đi và điểm đến</string>
-
     <string name="default_web_client_id">587650640705-i4u8mvdu9df3222t18d5rj60j99mhe2v.apps.googleusercontent.com</string>
 
 </resources>

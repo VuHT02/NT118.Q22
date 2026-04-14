@@ -2,206 +2,238 @@ package com.example.citymove
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
-import android.widget.*
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+
+data class NotificationItem(
+    val id          : String  = "",
+    val title       : String  = "",
+    val description : String  = "",
+    val type        : String  = "system",   // "trip" | "promo" | "system" | "reward"
+    val isRead      : Boolean = false,
+    val timestamp   : Long    = 0L,
+)
 
 class NotificationActivity : AppCompatActivity() {
 
-    // Data mẫu — sau thay bằng Firestore
-    data class NotificationItem(
-        val icon: String,
-        val title: String,
-        val message: String,
-        val time: String,
-        val isRead: Boolean,
-        val type: String  // "system" | "trip" | "promo"
-    )
+    private val auth = FirebaseAuth.getInstance()
+    private val db   = FirebaseFirestore.getInstance()
 
-    private val notifications = listOf(
-        NotificationItem("🔔", "Chuyến xe sắp khởi hành", "Buýt số 01 sẽ khởi hành lúc 17:28 tại Bến Thành", "2 phút trước", false, "trip"),
-        NotificationItem("🎁", "Ưu đãi hôm nay", "Giảm 20% cho chuyến đi đầu tiên trong ngày!", "15 phút trước", false, "promo"),
-        NotificationItem("⚙️", "Cập nhật hệ thống", "Ứng dụng đã được cập nhật lên phiên bản mới nhất", "1 giờ trước", true, "system"),
-        NotificationItem("🚌", "Chuyến đi hoàn thành", "Bạn vừa hoàn thành chuyến Bình Thái → Tham Lương", "3 giờ trước", true, "trip"),
-        NotificationItem("🎁", "Điểm thưởng mới", "Bạn vừa nhận được 50 điểm thưởng từ chuyến đi hôm nay", "5 giờ trước", true, "promo"),
-        NotificationItem("⚙️", "Bảo trì hệ thống", "Hệ thống sẽ bảo trì lúc 2:00 AM ngày mai", "Hôm qua", true, "system"),
-        NotificationItem("🚌", "Nhắc lịch thường ngày", "Đã đến giờ di chuyển về nhà của bạn!", "Hôm qua", true, "trip"),
-        NotificationItem("🎁", "Khuyến mãi cuối tuần", "Đi xe buýt miễn phí vào thứ 7 tuần này!", "2 ngày trước", true, "promo"),
-    )
+    private var allNotifications = listOf<NotificationItem>()
+    private var currentTab = 0  // 0=All 1=Trip 2=Promo 3=System
 
-    private var currentTab = "all"
+    private val tabTypes = listOf(null, "trip", "promo", "system")
+    private val tabLabels = listOf("Tất cả", "Chuyến đi", "Khuyến mãi", "Hệ thống")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notification)
         supportActionBar?.hide()
 
-        setupHeader()
         setupTabs()
-        setupBottomNav()
-        renderNotifications("all")
+        setupClickListeners()
+        loadNotifications()
     }
 
-    private fun setupHeader() {
-        findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
-
-        findViewById<TextView>(R.id.tvMarkAllRead).setOnClickListener {
-            Toast.makeText(this, "Đã đánh dấu tất cả là đã đọc", Toast.LENGTH_SHORT).show()
-            renderNotifications(currentTab)
-        }
-    }
-
+    // ── Tabs ──────────────────────────────────────────────────────
     private fun setupTabs() {
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
-        listOf("Tất cả", "Hệ thống", "Chuyến đi", "Khuyến mãi").forEach {
-            tabLayout.addTab(tabLayout.newTab().setText(it))
-        }
+        tabLabels.forEach { tabLayout.addTab(tabLayout.newTab().setText(it)) }
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                currentTab = when (tab.position) {
-                    0 -> "all"
-                    1 -> "system"
-                    2 -> "trip"
-                    3 -> "promo"
-                    else -> "all"
-                }
-                renderNotifications(currentTab)
+                currentTab = tab.position
+                renderList(filterByTab(allNotifications))
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
     }
 
-    private fun renderNotifications(type: String) {
-        val container = findViewById<LinearLayout>(R.id.listNotifications)
-        container.removeAllViews()
+    // ── Load từ Firestore ─────────────────────────────────────────
+    private fun loadNotifications() {
+        val uid = auth.currentUser?.uid ?: return
 
-        val filtered = if (type == "all") notifications
-        else notifications.filter { it.type == type }
-
-        if (filtered.isEmpty()) {
-            // Empty state
-            val tv = TextView(this).apply {
-                text = "Không có thông báo"
-                textSize = 14f
-                setTextColor(0xFF9aa5b4.toInt())
-                gravity = Gravity.CENTER
-                setPadding(0, 80, 0, 0)
-            }
-            container.addView(tv)
-            return
-        }
-
-        filtered.forEach { item ->
-            container.addView(buildNotificationCard(item))
-        }
-    }
-
-    private fun buildNotificationCard(item: NotificationItem): View {
-        val card = CardView(this).apply {
-            radius = 16f
-            cardElevation = if (item.isRead) 2f else 6f
-            setCardBackgroundColor(if (item.isRead) 0xFFFFFFFF.toInt() else 0xFFFFF8F3.toInt())
-            val lp = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply { bottomMargin = 10 }
-            layoutParams = lp
-        }
-
-        val row = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = android.view.Gravity.CENTER_VERTICAL
-            setPadding(16, 16, 16, 16)
-        }
-
-        // Icon
-        val iconBg = FrameLayout(this).apply {
-            val size = (48 * resources.displayMetrics.density).toInt()
-            layoutParams = LinearLayout.LayoutParams(size, size).apply {
-                marginEnd = (12 * resources.displayMetrics.density).toInt()
-            }
-            background = getDrawable(R.drawable.bg_stat_card)
-        }
-        val iconTv = TextView(this).apply {
-            text = item.icon
-            textSize = 20f
-            gravity = android.view.Gravity.CENTER
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT
-            )
-        }
-        iconBg.addView(iconTv)
-
-        // Text
-        val textCol = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-        }
-        val titleTv = TextView(this).apply {
-            text = item.title
-            textSize = 13f
-            setTextColor(0xFF0b1928.toInt())
-            setTypeface(null, android.graphics.Typeface.BOLD)
-        }
-        val msgTv = TextView(this).apply {
-            text = item.message
-            textSize = 11f
-            setTextColor(0xFF9aa5b4.toInt())
-            setPadding(0, 4, 0, 4)
-        }
-        val timeTv = TextView(this).apply {
-            text = item.time
-            textSize = 10f
-            setTextColor(if (item.isRead) 0xFF9aa5b4.toInt() else 0xFFF97316.toInt())
-        }
-        textCol.addView(titleTv)
-        textCol.addView(msgTv)
-        textCol.addView(timeTv)
-
-        // Unread dot
-        if (!item.isRead) {
-            val dot = View(this).apply {
-                val size = (8 * resources.displayMetrics.density).toInt()
-                layoutParams = LinearLayout.LayoutParams(size, size).apply {
-                    marginStart = (8 * resources.displayMetrics.density).toInt()
+        db.collection("users").document(uid)
+            .collection("notifications")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .limit(50)
+            .get()
+            .addOnSuccessListener { snap ->
+                allNotifications = snap.documents.map { doc ->
+                    NotificationItem(
+                        id          = doc.id,
+                        title       = doc.getString("title") ?: "",
+                        description = doc.getString("description") ?: "",
+                        type        = doc.getString("type") ?: "system",
+                        isRead      = doc.getBoolean("isRead") ?: false,
+                        timestamp   = doc.getLong("timestamp") ?: 0L,
+                    )
                 }
-                background = getDrawable(R.drawable.bg_notification_dot)
+                updateUnreadBadge()
+                renderList(filterByTab(allNotifications))
             }
-            row.addView(iconBg)
-            row.addView(textCol)
-            row.addView(dot)
-        } else {
-            row.addView(iconBg)
-            row.addView(textCol)
-        }
-
-        card.addView(row)
-        return card
     }
 
-    private fun setupBottomNav() {
+    // ── Filter ────────────────────────────────────────────────────
+    private fun filterByTab(list: List<NotificationItem>): List<NotificationItem> {
+        val type = tabTypes[currentTab] ?: return list
+        return list.filter { it.type == type }
+    }
+
+    // ── Render ────────────────────────────────────────────────────
+    private fun renderList(items: List<NotificationItem>) {
+        val now = System.currentTimeMillis()
+        val dayMs = 86_400_000L
+
+        val today     = items.filter { now - it.timestamp < dayMs }
+        val yesterday = items.filter { it.timestamp in (now - 2 * dayMs)..(now - dayMs) }
+        val older     = items.filter { now - it.timestamp >= 2 * dayMs }
+
+        val listToday     = findViewById<LinearLayout>(R.id.listToday)
+        val listYesterday = findViewById<LinearLayout>(R.id.listYesterday)
+        val listOlder     = findViewById<LinearLayout>(R.id.listOlder)
+        val labelToday    = findViewById<TextView>(R.id.labelToday)
+        val labelYesterday= findViewById<TextView>(R.id.labelYesterday)
+        val labelOlder    = findViewById<TextView>(R.id.labelOlder)
+        val layoutEmpty   = findViewById<LinearLayout>(R.id.layoutEmpty)
+
+        listToday.removeAllViews()
+        listYesterday.removeAllViews()
+        listOlder.removeAllViews()
+
+        labelToday.visibility     = if (today.isNotEmpty()) View.VISIBLE else View.GONE
+        labelYesterday.visibility = if (yesterday.isNotEmpty()) View.VISIBLE else View.GONE
+        labelOlder.visibility     = if (older.isNotEmpty()) View.VISIBLE else View.GONE
+        layoutEmpty.visibility    = if (items.isEmpty()) View.VISIBLE else View.GONE
+
+        today.forEach     { addNotifCard(listToday, it) }
+        yesterday.forEach { addNotifCard(listYesterday, it) }
+        older.forEach     { addNotifCard(listOlder, it) }
+    }
+
+    // ── Inflate card ──────────────────────────────────────────────
+    private fun addNotifCard(container: LinearLayout, item: NotificationItem) {
+        val view = layoutInflater.inflate(R.layout.item_notification, container, false)
+
+        view.findViewById<TextView>(R.id.tvTitle).text       = item.title
+        view.findViewById<TextView>(R.id.tvDescription).text = item.description
+        view.findViewById<TextView>(R.id.tvTime).text        = formatTime(item.timestamp)
+
+        // Unread state
+        if (!item.isRead) {
+            view.findViewById<View>(R.id.unreadDot).visibility = View.VISIBLE
+            view.findViewById<View>(R.id.unreadBar).visibility = View.VISIBLE
+        }
+
+        // Icon theo type
+        val iconView = view.findViewById<android.widget.ImageView>(R.id.ivIcon)
+        val iconBg   = view.findViewById<android.widget.FrameLayout>(R.id.iconContainer)
+        when (item.type) {
+            "trip"   -> {
+                iconView.setImageResource(R.drawable.ic_transgo_logo)
+                iconBg.setBackgroundResource(R.drawable.bg_transport_icon_orange)
+            }
+            "promo"  -> {
+                iconView.setImageResource(R.drawable.ic_star)
+                iconBg.setBackgroundResource(R.drawable.bg_transport_icon_blue)
+            }
+            "reward" -> {
+                iconView.setImageResource(R.drawable.ic_star)
+                iconBg.setBackgroundResource(R.drawable.bg_icon_circle_orange)
+            }
+            else     -> {
+                iconView.setImageResource(R.drawable.ic_bell)
+                iconBg.setBackgroundResource(R.drawable.bg_transport_icon_teal)
+            }
+        }
+
+        // Click → đánh dấu đã đọc
+        view.setOnClickListener {
+            markAsRead(item.id)
+            view.findViewById<View>(R.id.unreadDot).visibility = View.GONE
+            view.findViewById<View>(R.id.unreadBar).visibility = View.GONE
+        }
+
+        container.addView(view)
+    }
+
+    // ── Mark as read ──────────────────────────────────────────────
+    private fun markAsRead(notifId: String) {
+        val uid = auth.currentUser?.uid ?: return
+        db.collection("users").document(uid)
+            .collection("notifications").document(notifId)
+            .update("isRead", true)
+
+        allNotifications = allNotifications.map {
+            if (it.id == notifId) it.copy(isRead = true) else it
+        }
+        updateUnreadBadge()
+    }
+
+    private fun markAllRead() {
+        val uid = auth.currentUser?.uid ?: return
+        val batch = db.batch()
+        allNotifications.filter { !it.isRead }.forEach {
+            val ref = db.collection("users").document(uid)
+                .collection("notifications").document(it.id)
+            batch.update(ref, "isRead", true)
+        }
+        batch.commit()
+        allNotifications = allNotifications.map { it.copy(isRead = true) }
+        updateUnreadBadge()
+        renderList(filterByTab(allNotifications))
+    }
+
+    // ── Unread badge ─────────────────────────────────────────────
+    private fun updateUnreadBadge() {
+        val count = allNotifications.count { !it.isRead }
+        val badge = findViewById<TextView>(R.id.tvUnreadCount)
+        if (count > 0) {
+            badge.text = "$count"
+            badge.visibility = View.VISIBLE
+        } else {
+            badge.visibility = View.GONE
+        }
+    }
+
+    // ── Format time ───────────────────────────────────────────────
+    private fun formatTime(timestamp: Long): String {
+        if (timestamp == 0L) return ""
+        val diff = System.currentTimeMillis() - timestamp
+        return when {
+            diff < 60_000       -> "Vừa xong"
+            diff < 3_600_000    -> "${diff / 60_000} phút trước"
+            diff < 86_400_000   -> "${diff / 3_600_000} giờ trước"
+            diff < 172_800_000  -> "Hôm qua"
+            else -> {
+                val d = java.util.Date(timestamp)
+                java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault()).format(d)
+            }
+        }
+    }
+
+    // ── Click listeners ───────────────────────────────────────────
+    private fun setupClickListeners() {
+        findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
+        findViewById<TextView>(R.id.tvMarkAllRead).setOnClickListener { markAllRead() }
+
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNav.selectedItemId = R.id.nav_notification
-
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, HomeActivity::class.java)); finish(); true
-                }
-                R.id.nav_favorite -> {
-                    startActivity(Intent(this, FavoriteActivity::class.java)); finish(); true
-                }
+                R.id.nav_home         -> { startActivity(Intent(this, HomeActivity::class.java)); true }
+                R.id.nav_favorite     -> { startActivity(Intent(this, FavoriteActivity::class.java)); true }
                 R.id.nav_notification -> true
-                R.id.nav_account -> {
-                    startActivity(Intent(this, AccountActivity::class.java)); finish(); true
-                }
+                R.id.nav_account      -> { startActivity(Intent(this, AccountActivity::class.java)); true }
                 else -> false
             }
         }

@@ -37,6 +37,7 @@ class RouteDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var panelHandleTapArea: View
     private var dragStartY = 0f
     private var dragStartGuidePercent = 0f
+    private var routeId: Int = DEFAULT_ROUTE_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +45,9 @@ class RouteDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
         supportActionBar?.hide()
 
-        currentRoute = routeForId(intent.getIntExtra(EXTRA_ROUTE_ID, DEFAULT_ROUTE_ID))
+        routeId = intent.getIntExtra(EXTRA_ROUTE_ID, DEFAULT_ROUTE_ID)
+        currentRoute = routeForId(routeId)
+        
         routeDetailRoot = findViewById(R.id.routeDetailRoot)
         mapContainer = findViewById(R.id.mapContainer)
         topBar = findViewById(R.id.topBar)
@@ -181,8 +184,12 @@ class RouteDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         findViewById<TextView>(R.id.btnOpenMaps).setOnClickListener {
             openExternalMaps()
         }
-
-        findViewById<android.view.View>(R.id.btnBack).setOnClickListener {
+        findViewById<TextView>(R.id.btnBookTicket).setOnClickListener {
+            val intent = Intent(this, BookTicketActivity::class.java)
+            intent.putExtra("ROUTE_ID", routeId)
+            startActivity(intent)
+        }
+        findViewById<View>(R.id.btnBack).setOnClickListener {
             finish()
         }
     }

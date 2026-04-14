@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="#F0F4F8">
 
+    <!-- Top bar — có background để che map khi scroll -->
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="0dp"
@@ -16,6 +17,7 @@
         android:layout_marginEnd="16dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:background="#F0F4F8"
         android:elevation="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,13 +28,12 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/bg_header_icon_btn">
-
             <ImageView
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_gravity="center"
                 android:contentDescription="@string/route_map_back"
-                android:src="@drawable/ic_arrow_back" />
+                android:src="@drawable/ic_arrow_back"/>
         </FrameLayout>
 
         <TextView
@@ -42,9 +43,10 @@
             android:text="@string/search_map_title"
             android:textColor="#0b1928"
             android:textSize="19sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
     </LinearLayout>
 
+    <!-- Search card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/searchCard"
         android:layout_width="0dp"
@@ -68,6 +70,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -76,6 +79,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
+                    <!-- Origin -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -85,19 +89,18 @@
                         android:paddingTop="2dp"
                         android:paddingEnd="4dp"
                         android:paddingBottom="6dp">
-
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_marginEnd="8dp"
                             android:contentDescription="@string/search_map_origin_label"
-                            android:src="@drawable/ic_location" />
-
+                            android:src="@drawable/ic_location"/>
                         <EditText
                             android:id="@+id/etOrigin"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:autofillHints="postalAddress"
                             android:background="@android:color/transparent"
                             android:hint="@string/search_map_origin_hint"
                             android:imeOptions="actionNext"
@@ -105,14 +108,15 @@
                             android:maxLines="1"
                             android:textColor="#0b1928"
                             android:textColorHint="#9AA5B4"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"/>
                     </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#E2E8F0" />
+                        android:background="#E2E8F0"/>
 
+                    <!-- Destination -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -122,19 +126,18 @@
                         android:paddingTop="6dp"
                         android:paddingEnd="4dp"
                         android:paddingBottom="2dp">
-
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_marginEnd="8dp"
                             android:contentDescription="@string/search_map_destination_label"
-                            android:src="@drawable/ic_location_dot" />
-
+                            android:src="@drawable/ic_location_dot"/>
                         <EditText
                             android:id="@+id/etDestination"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:autofillHints="postalAddress"
                             android:background="@android:color/transparent"
                             android:hint="@string/search_map_destination_hint"
                             android:imeOptions="actionSearch"
@@ -142,10 +145,11 @@
                             android:maxLines="1"
                             android:textColor="#0b1928"
                             android:textColorHint="#9AA5B4"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"/>
                     </LinearLayout>
                 </LinearLayout>
 
+                <!-- Swap button -->
                 <FrameLayout
                     android:id="@+id/btnSwapPoints"
                     android:layout_width="32dp"
@@ -156,20 +160,21 @@
                     android:clickable="true"
                     android:contentDescription="@string/search_map_swap_points"
                     android:focusable="true">
-
                     <ImageView
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_gravity="center"
                         android:contentDescription="@null"
-                        android:src="@drawable/ic_swap_vertical" />
+                        android:src="@drawable/ic_swap_vertical"/>
                 </FrameLayout>
             </LinearLayout>
 
+            <!-- Action buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <TextView
@@ -186,7 +191,7 @@
                     android:text="@string/search_map_preview"
                     android:textColor="#0b1928"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/btnRouteNow"
@@ -201,31 +206,36 @@
                     android:text="@string/search_map_route_now"
                     android:textColor="#FFFFFF"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+    <!-- Guideline tại 55% thay vì 60% — cân bằng hơn trên màn nhỏ -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/panelSplitGuide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.60" />
+        app:layout_constraintGuide_percent="0.55"/>
 
-    <FrameLayout
+    <!-- Map container — có bo góc + clip -->
+    <androidx.cardview.widget.CardView
         android:id="@+id/mapContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:background="#DDE6EF"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#DDE6EF"
         app:layout_constraintTop_toBottomOf="@id/searchCard"
         app:layout_constraintBottom_toTopOf="@id/panelSplitGuide"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- Fragment map sẽ được add vào đây bằng code -->
         <TextView
             android:id="@+id/tvMapFallback"
             android:layout_width="match_parent"
@@ -238,9 +248,10 @@
             android:textColor="#4A5565"
             android:textSize="14sp"
             android:visibility="gone"
-            tools:visibility="visible" />
-    </FrameLayout>
+            tools:visibility="visible"/>
+    </androidx.cardview.widget.CardView>
 
+    <!-- Info panel -->
     <androidx.cardview.widget.CardView
         android:id="@+id/infoPanelCard"
         android:layout_width="0dp"
@@ -263,6 +274,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <!-- Drag handle -->
             <LinearLayout
                 android:id="@+id/panelHandleTapArea"
                 android:layout_width="match_parent"
@@ -273,19 +285,19 @@
                 android:gravity="center"
                 android:paddingTop="2dp"
                 android:paddingBottom="10dp">
-
                 <View
                     android:layout_width="52dp"
                     android:layout_height="5dp"
-                    android:background="@drawable/bg_panel_handle" />
+                    android:background="@drawable/bg_panel_handle"/>
             </LinearLayout>
 
+            <!-- Origin -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/search_map_origin_label"
                 android:textColor="#9AA5B4"
-                android:textSize="11sp" />
+                android:textSize="11sp"/>
 
             <TextView
                 android:id="@+id/tvSelectedOrigin"
@@ -296,15 +308,18 @@
                 android:textColor="#0b1928"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                tools:text="Bến Thành" />
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Bến Thành"/>
 
+            <!-- Destination -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/search_map_destination_label"
                 android:textColor="#9AA5B4"
-                android:textSize="11sp" />
+                android:textSize="11sp"/>
 
             <TextView
                 android:id="@+id/tvSelectedDestination"
@@ -315,8 +330,11 @@
                 android:textColor="#0b1928"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                tools:text="Bến Thành" />
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Suối Tiên"/>
 
+            <!-- Status -->
             <TextView
                 android:id="@+id/tvMapStatus"
                 android:layout_width="match_parent"
@@ -325,8 +343,10 @@
                 android:text="@string/search_map_status_default"
                 android:textColor="#5F6B7A"
                 android:textSize="13sp"
-                tools:text="Nhap diem den va bam Di ngay de hien thi ban do." />
+                android:lineSpacingMultiplier="1.4"
+                tools:text="Nhập điểm đến và bấm Đi ngay để hiển thị bản đồ."/>
 
+            <!-- Open Google Maps button -->
             <TextView
                 android:id="@+id/btnOpenGoogleMaps"
                 android:layout_width="match_parent"
@@ -340,7 +360,7 @@
                 android:text="@string/route_map_open_external"
                 android:textColor="#FFFFFF"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

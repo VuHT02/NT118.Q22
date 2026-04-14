@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F0F4F8">
 
-    <!-- Header -->
+    <!-- ===== HEADER ===== -->
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -14,7 +14,6 @@
         android:orientation="vertical"
         android:background="#0b1928"
         android:paddingTop="16dp"
-        android:paddingBottom="0dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
@@ -24,13 +23,12 @@
             android:layout_height="48dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="16dp">
 
             <LinearLayout
                 android:id="@+id/btnBack"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:orientation="horizontal"
                 android:gravity="center"
                 android:background="@drawable/bg_header_icon_btn"
                 android:layout_marginEnd="12dp">
@@ -49,6 +47,24 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-condensed"/>
+
+            <!-- Badge unread count -->
+            <TextView
+                android:id="@+id/tvUnreadCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_btn_orange"
+                android:backgroundTint="@null"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tvMarkAllRead"
@@ -70,33 +86,125 @@
             app:tabSelectedTextColor="#FFFFFF"
             app:tabIndicatorColor="#F97316"
             app:tabIndicatorHeight="3dp"
+            app:tabIndicatorGravity="bottom"
             app:tabRippleColor="@null"
-            app:tabPaddingStart="0dp"
-            app:tabPaddingEnd="0dp"/>
+            app:tabMode="scrollable"
+            app:tabGravity="start"
+            app:tabPaddingStart="4dp"
+            app:tabPaddingEnd="4dp"
+            app:tabTextAppearance="@style/TabTextAppearance.Notification"/>
     </LinearLayout>
 
-    <!-- Content -->
+    <!-- ===== CONTENT ===== -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="12dp"
-        android:paddingBottom="16dp"
+        android:paddingBottom="80dp"
         android:clipToPadding="false"
         android:overScrollMode="never"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:id="@+id/listNotifications"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingStart="14dp"
-            android:paddingEnd="14dp"/>
+            android:paddingEnd="14dp">
 
+            <!-- Section label: Hôm nay -->
+            <TextView
+                android:id="@+id/labelToday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HÔM NAY"
+                android:textColor="#9aa5b4"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"/>
+
+            <!-- List today -->
+            <LinearLayout
+                android:id="@+id/listToday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- Section label: Hôm qua -->
+            <TextView
+                android:id="@+id/labelYesterday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HÔM QUA"
+                android:textColor="#9aa5b4"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"/>
+
+            <!-- List yesterday -->
+            <LinearLayout
+                android:id="@+id/listYesterday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- Section label: Trước đó -->
+            <TextView
+                android:id="@+id/labelOlder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TRƯỚC ĐÓ"
+                android:textColor="#9aa5b4"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"/>
+
+            <!-- List older -->
+            <LinearLayout
+                android:id="@+id/listOlder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+            <!-- Empty state -->
+            <LinearLayout
+                android:id="@+id/layoutEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingTop="60dp"
+                android:paddingBottom="60dp"
+                android:visibility="gone">
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/ic_bell"
+                    android:alpha="0.2"
+                    android:layout_marginBottom="12dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chưa có thông báo nào"
+                    android:textColor="#9aa5b4"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Nav -->
+    <!-- ===== BOTTOM NAV ===== -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"

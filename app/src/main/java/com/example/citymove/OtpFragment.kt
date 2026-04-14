@@ -1,4 +1,4 @@
-package com.example.citymove.ui.auth
+package com.example.citymove
 
 import android.os.Bundle
 import android.os.CountDownTimer

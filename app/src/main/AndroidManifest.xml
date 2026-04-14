@@ -10,7 +10,15 @@
     <!-- Queries for Android 11+ (API 30+) -->
     <queries>
         <package android:name="com.google.android.gms" />
+        <intent>
+            <action android:name="com.google.android.gms.auth.api.signin.SERVICE" />
+        </intent>
         <package android:name="com.facebook.katana" />
+        <package android:name="com.facebook.orca" />
+        <package android:name="com.facebook.android" />
+        <intent>
+            <action android:name="com.facebook.platform.PLATFORM_SERVICE" />
+        </intent>
     </queries>
 
     <application
@@ -65,6 +73,7 @@
         <activity android:name=".RouteDetailActivity" />
         <activity android:name=".AllRoutesActivity" />
         <activity android:name=".HistoryActivity" />
+        <activity android:name=".BookTicketActivity" />
 
         <!-- ─── Facebook Login ───────────────────────────────── -->
         <activity

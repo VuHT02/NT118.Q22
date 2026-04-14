@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is incorrectly placed in res/layout and should be in res/drawable. -->
+<!-- It is being ignored to fix the ViewBinding build error. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:shape="rectangle"
+    tools:viewBindingIgnore="true">
+    <solid android:color="#FFFFFF"/>
+    <stroke android:width="1.5dp" android:color="#FF5252"/>
+    <corners android:radius="12dp"/>
+</shape>
