@@ -1,14 +1,18 @@
 package com.example.citymove
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -206,19 +210,19 @@ class HomeActivity : AppCompatActivity() {
 
         fun selectTransport(selected: View, others: List<View>) {
             selected.setBackgroundResource(R.drawable.bg_transport_selected)
+            val activeColor = ContextCompat.getColor(this, R.color.blue_primary)
+            val inactiveColor = ContextCompat.getColor(this, android.R.color.darker_gray)
+
             // cập nhật text color cho label con
             (selected as? LinearLayout)?.let { ll ->
-                (ll.getChildAt(1) as? TextView)?.setTextColor(
-                    resources.getColor(R.color.colorPrimary, theme))
-                (ll.getChildAt(0) as? ImageView)?.backgroundTintList =
-                    android.content.res.ColorStateList.valueOf(
-                        resources.getColor(R.color.colorPrimary, theme))
+                (ll.getChildAt(1) as? TextView)?.setTextColor(activeColor)
+                (ll.getChildAt(0) as? ImageView)?.imageTintList = ColorStateList.valueOf(activeColor)
             }
             others.forEach { v ->
                 v.setBackgroundResource(R.drawable.bg_transport_unselected)
                 (v as? LinearLayout)?.let { ll ->
-                    (ll.getChildAt(1) as? TextView)?.setTextColor(
-                        resources.getColor(android.R.color.darker_gray, theme))
+                    (ll.getChildAt(1) as? TextView)?.setTextColor(inactiveColor)
+                    (ll.getChildAt(0) as? ImageView)?.imageTintList = null // Reset tint if needed or set to inactive
                 }
             }
         }
