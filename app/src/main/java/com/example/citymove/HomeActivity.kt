@@ -190,14 +190,53 @@ class HomeActivity : AppCompatActivity() {
         findViewById<View>(R.id.btnTopUp)?.setOnClickListener {
             startActivity(Intent(this, TopUpActivity::class.java))
         }
-        findViewById<View>(R.id.routeItem1)?.setOnClickListener { openRouteDetail(1) }
-        findViewById<View>(R.id.routeItem2)?.setOnClickListener { openRouteDetail(2) }
-        findViewById<View>(R.id.routeItem3)?.setOnClickListener { openRouteDetail(3) }
+        findViewById<View>(R.id.busRouteItem1)?.setOnClickListener { openRouteDetail(1) }
+        findViewById<View>(R.id.busRouteItem2)?.setOnClickListener { openRouteDetail(2) }
+        findViewById<View>(R.id.busRouteItem3)?.setOnClickListener { openRouteDetail(3) }
         findViewById<View>(R.id.tvSeeAllRoutes)?.setOnClickListener {
             startActivity(Intent(this, AllRoutesActivity::class.java))
         }
         findViewById<View>(R.id.tvSeeHistory)?.setOnClickListener {
             startActivity(Intent(this, HistoryActivity::class.java))
+        }
+        // ── Transport mode selector ──────────────────────────────
+        val btnWaterbus = findViewById<View>(R.id.btnTransportWaterbus)
+        val btnMetro    = findViewById<View>(R.id.btnTransportMetro)
+        val btnBus      = findViewById<View>(R.id.btnTransportBus)
+
+        fun selectTransport(selected: View, others: List<View>) {
+            selected.setBackgroundResource(R.drawable.bg_transport_selected)
+            // cập nhật text color cho label con
+            (selected as? LinearLayout)?.let { ll ->
+                (ll.getChildAt(1) as? TextView)?.setTextColor(
+                    resources.getColor(R.color.colorPrimary, theme))
+                (ll.getChildAt(0) as? ImageView)?.backgroundTintList =
+                    android.content.res.ColorStateList.valueOf(
+                        resources.getColor(R.color.colorPrimary, theme))
+            }
+            others.forEach { v ->
+                v.setBackgroundResource(R.drawable.bg_transport_unselected)
+                (v as? LinearLayout)?.let { ll ->
+                    (ll.getChildAt(1) as? TextView)?.setTextColor(
+                        resources.getColor(android.R.color.darker_gray, theme))
+                }
+            }
+        }
+
+        btnWaterbus?.setOnClickListener {
+            selectTransport(it, listOf(btnMetro!!, btnBus!!))
+            startActivity(Intent(this, AllRoutesActivity::class.java)
+                .putExtra("TRANSPORT_TYPE", "waterbus"))
+        }
+        btnMetro?.setOnClickListener {
+            selectTransport(it, listOf(btnWaterbus!!, btnBus!!))
+            startActivity(Intent(this, AllRoutesActivity::class.java)
+                .putExtra("TRANSPORT_TYPE", "metro"))
+        }
+        btnBus?.setOnClickListener {
+            selectTransport(it, listOf(btnWaterbus!!, btnMetro!!))
+            startActivity(Intent(this, AllRoutesActivity::class.java)
+                .putExtra("TRANSPORT_TYPE", "bus"))
         }
     }
 
