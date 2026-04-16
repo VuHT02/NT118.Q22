@@ -74,7 +74,9 @@
         <activity android:name=".AllRoutesActivity" />
         <activity android:name=".HistoryActivity" />
         <activity android:name=".BookTicketActivity" />
-
+        <activity android:name=".BusRoutesActivity"/>
+        <activity android:name=".MetroRoutesActivity"/>
+        <activity android:name=".WaterbusRoutesActivity"/>
         <!-- ─── Facebook Login ───────────────────────────────── -->
         <activity
             android:name="com.facebook.FacebookActivity"
