@@ -655,11 +655,11 @@
                 <!-- Tab: Buýt | Metro | Waterbus -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="48dp"
                     android:orientation="horizontal"
-                    android:background="@drawable/bg_stat_card"
-                    android:padding="3dp"
-                    android:layout_marginBottom="10dp">
+                    android:background="@drawable/bg_tab_container"
+                    android:padding="4dp"
+                    android:layout_marginBottom="12dp">
 
                     <TextView
                         android:id="@+id/tabBus"
@@ -667,12 +667,12 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="🚌 Xe buýt"
+                        android:text="🚌\nXe buýt"
+                        android:textAlignment="center"
                         android:textColor="#FFFFFF"
-                        android:textSize="11sp"
+                        android:textSize="12sp"
                         android:textStyle="bold"
-                        android:background="@drawable/bg_btn_orange"
-                        android:backgroundTint="@null"/>
+                        android:background="@drawable/bg_tab_selected"/>
 
                     <TextView
                         android:id="@+id/tabMetro"
@@ -680,11 +680,12 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="🚇 Metro"
-                        android:textColor="#5F6B7A"
-                        android:textSize="11sp"
+                        android:text="🚇\nMetro"
+                        android:textAlignment="center"
+                        android:textColor="#6B7280"
+                        android:textSize="12sp"
                         android:textStyle="bold"
-                        android:background="@android:color/transparent"/>
+                        android:background="@drawable/bg_tab_unselected"/>
 
                     <TextView
                         android:id="@+id/tabWaterbus"
@@ -692,13 +693,14 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="⛴ Waterbus"
-                        android:textColor="#5F6B7A"
-                        android:textSize="11sp"
+                        android:text="⛴\nWaterbus"
+                        android:textAlignment="center"
+                        android:textColor="#6B7280"
+                        android:textSize="12sp"
                         android:textStyle="bold"
-                        android:background="@android:color/transparent"/>
-                </LinearLayout>
+                        android:background="@drawable/bg_tab_unselected"/>
 
+                </LinearLayout>
                 <!-- PANEL XE BUÝT -->
                 <LinearLayout
                     android:id="@+id/panelBus"
