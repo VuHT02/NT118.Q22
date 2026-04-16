@@ -21,7 +21,7 @@
             <!-- ===== HERO HEADER ===== -->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="190dp"
+                android:layout_height="185dp"
                 android:background="#0b1928">
 
                 <ImageView
@@ -33,11 +33,11 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="70dp"
                     android:layout_gravity="bottom"
                     android:src="@drawable/img_city_skyline"
                     android:scaleType="fitXY"
-                    android:alpha="0.6"/>
+                    android:alpha="0.5"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -45,12 +45,13 @@
                     android:orientation="vertical"
                     android:padding="14dp">
 
+                    <!-- Top bar: logo + actions -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:layout_marginBottom="12dp">
+                        android:layout_marginBottom="14dp">
 
                         <FrameLayout
                             android:layout_width="34dp"
@@ -167,7 +168,7 @@
                         </FrameLayout>
                     </LinearLayout>
 
-                    <!-- Greeting card -->
+                    <!-- Greeting + today trips -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -229,7 +230,7 @@
                 </LinearLayout>
             </FrameLayout>
 
-            <!-- ===== SEARCH CARD ===== -->
+            <!-- ===== SEARCH CARD (overlap header) ===== -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardSearch"
                 android:layout_width="match_parent"
@@ -248,6 +249,7 @@
                     android:orientation="vertical"
                     android:padding="12dp">
 
+                    <!-- Input row -->
                     <LinearLayout
                         android:id="@+id/searchBar"
                         android:layout_width="match_parent"
@@ -296,6 +298,7 @@
                             android:paddingEnd="14dp"/>
                     </LinearLayout>
 
+                    <!-- Quick chips row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -372,141 +375,7 @@
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-            <!-- ── Chọn phương tiện ── -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardTransportMode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="12dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/white">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <!-- Tiêu đề -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="12dp">
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:src="@drawable/ic_location_pin"
-                            app:tint="#2563EB"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Chọn phương tiện"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:textColor="#1E293B"
-                            android:layout_marginStart="6dp"/>
-                    </LinearLayout>
-
-                    <!-- 3 lựa chọn -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="3">
-
-                        <!-- Waterbus -->
-                        <LinearLayout
-                            android:id="@+id/btnTransportWaterbus"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center"
-                            android:padding="12dp"
-                            android:background="@drawable/bg_transport_selected"
-                            android:layout_marginEnd="6dp">
-
-                            <ImageView
-                                android:layout_width="44dp"
-                                android:layout_height="44dp"
-                                android:src="@drawable/ic_waterbus"
-                                android:background="@drawable/bg_icon_blue"
-                                android:padding="10dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Waterbus"
-                                android:textSize="12sp"
-                                android:textColor="#2563EB"
-                                android:textStyle="bold"
-                                android:layout_marginTop="8dp"/>
-                        </LinearLayout>
-
-                        <!-- Metro -->
-                        <LinearLayout
-                            android:id="@+id/btnTransportMetro"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center"
-                            android:padding="12dp"
-                            android:background="@drawable/bg_transport_unselected"
-                            android:layout_marginEnd="6dp">
-
-                            <ImageView
-                                android:layout_width="44dp"
-                                android:layout_height="44dp"
-                                android:src="@drawable/ic_metro"
-                                android:background="@drawable/bg_icon_gray"
-                                android:padding="10dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Metro"
-                                android:textSize="12sp"
-                                android:textColor="#64748B"
-                                android:layout_marginTop="8dp"/>
-                        </LinearLayout>
-
-                        <!-- Bus -->
-                        <LinearLayout
-                            android:id="@+id/btnTransportBus"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center"
-                            android:padding="12dp"
-                            android:background="@drawable/bg_transport_unselected">
-
-                            <ImageView
-                                android:layout_width="44dp"
-                                android:layout_height="44dp"
-                                android:src="@drawable/ic_bus"
-                                android:background="@drawable/bg_icon_gray"
-                                android:padding="10dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Bus"
-                                android:textSize="12sp"
-                                android:textColor="#64748B"
-                                android:layout_marginTop="8dp"/>
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
             <!-- ===== MAIN CONTENT ===== -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -515,7 +384,119 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp">
 
-                <!-- 1. THẺ TRANSPASS -->
+                <!-- ═══════════════════════════════════════ -->
+                <!-- 1. CHỌN PHƯƠNG TIỆN                    -->
+                <!-- ═══════════════════════════════════════ -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chọn phương tiện"
+                    android:textColor="#0b1928"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3"
+                    android:layout_marginBottom="20dp">
+
+                    <!-- Xe buýt -->
+                    <LinearLayout
+                        android:id="@+id/btnTransportBus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp"
+                        android:background="@drawable/bg_transport_unselected"
+                        android:layout_marginEnd="6dp">
+                        <FrameLayout
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_icon_gray">
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_bus"/>
+                        </FrameLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Xe buýt"
+                            android:textSize="12sp"
+                            android:textColor="#64748B"
+                            android:layout_marginTop="8dp"/>
+                    </LinearLayout>
+
+                    <!-- Metro -->
+                    <LinearLayout
+                        android:id="@+id/btnTransportMetro"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp"
+                        android:background="@drawable/bg_transport_unselected"
+                        android:layout_marginEnd="6dp">
+                        <FrameLayout
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_icon_gray">
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_metro"/>
+                        </FrameLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Metro"
+                            android:textSize="12sp"
+                            android:textColor="#64748B"
+                            android:layout_marginTop="8dp"/>
+                    </LinearLayout>
+
+                    <!-- Waterbus (selected by default) -->
+                    <LinearLayout
+                        android:id="@+id/btnTransportWaterbus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp"
+                        android:background="@drawable/bg_transport_selected">
+                        <FrameLayout
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_icon_blue">
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_waterbus"/>
+                        </FrameLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Waterbus"
+                            android:textSize="12sp"
+                            android:textColor="#2563EB"
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- 2. THẺ TRANSPASS                       -->
+                <!-- ═══════════════════════════════════════ -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -553,6 +534,7 @@
                         android:orientation="horizontal"
                         android:padding="12dp">
 
+                        <!-- Balance -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -598,6 +580,7 @@
                                 android:paddingEnd="12dp"/>
                         </LinearLayout>
 
+                        <!-- Stats -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -642,7 +625,9 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- 2. TUYẾN HAY ĐI — HEADER + TAB -->
+                <!-- ═══════════════════════════════════════ -->
+                <!-- 3. TUYẾN HAY ĐI + TAB                  -->
+                <!-- ═══════════════════════════════════════ -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -670,11 +655,11 @@
                 <!-- Tab: Buýt | Metro | Waterbus -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="48dp"
                     android:orientation="horizontal"
-                    android:background="@drawable/bg_stat_card"
-                    android:padding="3dp"
-                    android:layout_marginBottom="10dp">
+                    android:background="@drawable/bg_tab_container"
+                    android:padding="4dp"
+                    android:layout_marginBottom="12dp">
 
                     <TextView
                         android:id="@+id/tabBus"
@@ -682,12 +667,12 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="🚌 Xe buýt"
+                        android:text="🚌\nXe buýt"
+                        android:textAlignment="center"
                         android:textColor="#FFFFFF"
-                        android:textSize="11sp"
+                        android:textSize="12sp"
                         android:textStyle="bold"
-                        android:background="@drawable/bg_btn_orange"
-                        android:backgroundTint="@null"/>
+                        android:background="@drawable/bg_tab_selected"/>
 
                     <TextView
                         android:id="@+id/tabMetro"
@@ -695,11 +680,12 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="🚇 Metro"
-                        android:textColor="#5F6B7A"
-                        android:textSize="11sp"
+                        android:text="🚇\nMetro"
+                        android:textAlignment="center"
+                        android:textColor="#6B7280"
+                        android:textSize="12sp"
                         android:textStyle="bold"
-                        android:background="@android:color/transparent"/>
+                        android:background="@drawable/bg_tab_unselected"/>
 
                     <TextView
                         android:id="@+id/tabWaterbus"
@@ -707,14 +693,15 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="⛴ Waterbus"
-                        android:textColor="#5F6B7A"
-                        android:textSize="11sp"
+                        android:text="⛴\nWaterbus"
+                        android:textAlignment="center"
+                        android:textColor="#6B7280"
+                        android:textSize="12sp"
                         android:textStyle="bold"
-                        android:background="@android:color/transparent"/>
-                </LinearLayout>
+                        android:background="@drawable/bg_tab_unselected"/>
 
-                <!-- ===== PANEL XE BUÝT (visible mặc định) ===== -->
+                </LinearLayout>
+                <!-- PANEL XE BUÝT -->
                 <LinearLayout
                     android:id="@+id/panelBus"
                     android:layout_width="match_parent"
@@ -838,7 +825,7 @@
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
 
-                <!-- ===== PANEL METRO (gone mặc định) ===== -->
+                <!-- PANEL METRO -->
                 <LinearLayout
                     android:id="@+id/panelMetro"
                     android:layout_width="match_parent"
@@ -928,7 +915,7 @@
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
 
-                <!-- ===== PANEL WATERBUS (gone mặc định) ===== -->
+                <!-- PANEL WATERBUS -->
                 <LinearLayout
                     android:id="@+id/panelWaterbus"
                     android:layout_width="match_parent"
@@ -1016,7 +1003,9 @@
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
 
-                <!-- ===== AI GỢI Ý ===== -->
+                <!-- ═══════════════════════════════════════ -->
+                <!-- 4. AI GỢI Ý                            -->
+                <!-- ═══════════════════════════════════════ -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1089,7 +1078,9 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- ===== THỐNG KÊ TUẦN ===== -->
+                <!-- ═══════════════════════════════════════ -->
+                <!-- 5. THỐNG KÊ TUẦN                       -->
+                <!-- ═══════════════════════════════════════ -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1180,7 +1171,9 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- ===== ĐIỂM THƯỞNG ===== -->
+                <!-- ═══════════════════════════════════════ -->
+                <!-- 6. ĐIỂM THƯỞNG                         -->
+                <!-- ═══════════════════════════════════════ -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1238,11 +1231,6 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!--
-        FIX BOTTOM NAV: chữ đè icon do height quá thấp + thiếu padding.
-        Tăng height lên 68dp, set itemIconSize=22dp, itemPaddingTop=8dp itemPaddingBottom=6dp
-        để icon và label có đủ không gian không đè nhau.
-    -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"

@@ -24,6 +24,7 @@
     <color name="bg_blue_light">#E8F4FF</color>
     <color name="bg_card">#FFFFFF</color>
     <color name="bg_teal_light">#F0FFFE</color>
+    <color name="bg_icon_gray">#E2E8F0</color>
 
     <!-- Borders -->
     <color name="border_default">#C8E0F4</color>
