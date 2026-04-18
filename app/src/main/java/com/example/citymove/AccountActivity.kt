@@ -4,71 +4,75 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.citymove.viewmodel.AccountUiState
+import com.example.citymove.viewmodel.AccountViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 class AccountActivity : AppCompatActivity() {
 
     private val auth = FirebaseAuth.getInstance()
-    private val db   = FirebaseFirestore.getInstance()
+    private val viewModel: AccountViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
         supportActionBar?.hide()
 
-        loadUserData()
+        setupObservers()
         setupClickListeners()
         setupBottomNav()
+
+        viewModel.loadProfile()
     }
 
-    // ── Load data từ Firestore ─────────────────────────────────────
-    private fun loadUserData() {
-        val uid = auth.currentUser?.uid ?: return
+    private fun setupObservers() {
+        viewModel.uiState.observe(this) { state ->
+            when (state) {
+                is AccountUiState.Loading -> {
+                    // Show progress if needed
+                }
+                is AccountUiState.Success -> {
+                    val profile = state.profile
+                    
+                    // Avatar initials
+                    val initials = profile.name.trim().split(" ")
+                        .filter { it.isNotEmpty() }
+                        .take(2)
+                        .joinToString("") { it.first().uppercase() }
+                    findViewById<TextView>(R.id.tvAvatarInitials).text = if (initials.isNotEmpty()) initials else "U"
 
-        db.collection("users").document(uid)
-            .get()
-            .addOnSuccessListener { doc ->
-                if (doc == null || !doc.exists()) return@addOnSuccessListener
+                    // User info
+                    findViewById<TextView>(R.id.tvUserName).text  = profile.name
+                    findViewById<TextView>(R.id.tvUserEmail).text = auth.currentUser?.email ?: ""
 
-                val name   = doc.getString("name") ?: "Bạn"
-                val email  = doc.getString("email") ?: auth.currentUser?.email ?: ""
-                val points = doc.getLong("points") ?: 0L
+                    // Rank
+                    val (rankName, rankTarget) = getRank(profile.points)
+                    findViewById<TextView>(R.id.tvRank).text = rankName
 
-                // Avatar initials
-                val initials = name.trim().split(" ")
-                    .filter { it.isNotEmpty() }
-                    .take(2)
-                    .joinToString("") { it.first().uppercase() }
-                findViewById<TextView>(R.id.tvAvatarInitials).text = initials
+                    // Points progress
+                    val progress = ((profile.points.toFloat() / rankTarget) * 100).toInt().coerceIn(0, 100)
+                    findViewById<ProgressBar>(R.id.progressPoints).progress = progress
+                    findViewById<TextView>(R.id.tvPointsProgress).text = "${formatNumber(profile.points)} / ${formatNumber(rankTarget)} điểm"
+                    
+                    val remaining = rankTarget - profile.points
+                    findViewById<TextView>(R.id.tvPointsHint).text =
+                        if (remaining > 0) "Còn ${formatNumber(remaining)} điểm để lên hạng tiếp theo"
+                        else "Bạn đã đạt hạng cao nhất!"
 
-                // User info
-                findViewById<TextView>(R.id.tvUserName).text  = name
-                findViewById<TextView>(R.id.tvUserEmail).text = email
-
-                // Rank
-                val (rankName, rankTarget) = getRank(points)
-                findViewById<TextView>(R.id.tvRank).text = rankName
-
-                // Points progress
-                val progress = ((points.toFloat() / rankTarget) * 100).toInt().coerceIn(0, 100)
-                findViewById<ProgressBar>(R.id.progressPoints).progress = progress
-                findViewById<TextView>(R.id.tvPointsProgress).text = "${formatNumber(points)} / ${formatNumber(rankTarget)} điểm"
-                val remaining = rankTarget - points
-                findViewById<TextView>(R.id.tvPointsHint).text =
-                    if (remaining > 0) "Còn ${formatNumber(remaining)} điểm để lên hạng tiếp theo"
-                    else "Bạn đã đạt hạng cao nhất!"
-
-                // Points sub
-                findViewById<TextView>(R.id.tvPointsSub).text =
-                    "${formatNumber(points)} điểm · $rankName"
+                    findViewById<TextView>(R.id.tvPointsSub).text =
+                        "${formatNumber(profile.points)} điểm · $rankName"
+                }
+                is AccountUiState.Error -> {
+                    Toast.makeText(this, state.message, Toast.LENGTH_SHORT).show()
+                }
             }
+        }
     }
 
-    // ── Rank helper ───────────────────────────────────────────────
     private fun getRank(points: Long): Pair<String, Long> = when {
         points < 500  -> "Hạng Đồng"  to 500L
         points < 2000 -> "Hạng Bạc"   to 2000L
@@ -79,35 +83,28 @@ class AccountActivity : AppCompatActivity() {
     private fun formatNumber(n: Long): String =
         String.format("%,d", n).replace(",", ".")
 
-    // ── Click listeners ───────────────────────────────────────────
     private fun setupClickListeners() {
-        // Thông tin cá nhân
         findViewById<View>(R.id.menuPersonalInfo).setOnClickListener {
             startActivity(Intent(this, PersonalInfoActivity::class.java))
         }
 
-        // Đổi mật khẩu
         findViewById<View>(R.id.menuChangePassword).setOnClickListener {
             startActivity(Intent(this, ChangePasswordActivity::class.java))
         }
 
-        // Lịch sử giao dịch
         findViewById<View>(R.id.menuHistory).setOnClickListener {
             startActivity(Intent(this, HistoryActivity::class.java))
         }
 
-        // Điểm thưởng
         findViewById<View>(R.id.menuRewards).setOnClickListener {
             startActivity(Intent(this, RewardsActivity::class.java))
         }
 
-        // Đăng xuất
         findViewById<View>(R.id.menuLogout).setOnClickListener {
             showLogoutDialog()
         }
     }
 
-    // ── Logout dialog ─────────────────────────────────────────────
     private fun showLogoutDialog() {
         AlertDialog.Builder(this)
             .setTitle("Đăng xuất")
@@ -123,7 +120,6 @@ class AccountActivity : AppCompatActivity() {
             .show()
     }
 
-    // ── Bottom nav ────────────────────────────────────────────────
     private fun setupBottomNav() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNav.selectedItemId = R.id.nav_account
@@ -137,5 +133,10 @@ class AccountActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadProfile()
     }
 }

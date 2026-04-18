@@ -67,6 +67,9 @@
         <activity android:name=".FavoriteActivity" />
         <activity android:name=".NotificationActivity" />
         <activity android:name=".AccountActivity" />
+        <activity android:name=".PersonalInfoActivity" />
+        <activity android:name=".ChangePasswordActivity" />
+        <activity android:name=".RewardsActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".CardDetailActivity" />
         <activity android:name=".TopUpActivity" />
