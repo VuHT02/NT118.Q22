@@ -46,4 +46,15 @@
     <string name="search_map_swap_points">Đảo chiều điểm đi và điểm đến</string>
     <string name="default_web_client_id">587650640705-i4u8mvdu9df3222t18d5rj60j99mhe2v.apps.googleusercontent.com</string>
 
+    <!-- HomeActivity Strings -->
+    <string name="welcome_user">%1$s 👋</string>
+    <string name="balance_format">%,dđ</string>
+    <string name="trips_count">%1$d chuyến</string>
+    <string name="co2_saved_format">%1$.1f Kg</string>
+    <string name="points_format">%1$d điểm</string>
+    <string name="current_location">Vị trí hiện tại</string>
+    <string name="destination_ben_thanh">Bến Thành</string>
+    <string name="destination_suoi_tien">Suối Tiên</string>
+    <string name="destination_tan_son_nhat">Sân bay Tân Sơn Nhất</string>
+
 </resources>

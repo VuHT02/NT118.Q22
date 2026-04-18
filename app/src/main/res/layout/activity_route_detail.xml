@@ -106,231 +106,246 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:overScrollMode="never"
+            android:fillViewport="true">
 
-            <!-- Drag handle -->
-            <LinearLayout
-                android:id="@+id/panelHandleTapArea"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:contentDescription="@string/route_panel_collapse"
-                android:focusable="true"
-                android:gravity="center"
-                android:paddingTop="2dp"
-                android:paddingBottom="10dp">
-                <View
-                    android:layout_width="52dp"
-                    android:layout_height="5dp"
-                    android:background="@drawable/bg_panel_handle"/>
-            </LinearLayout>
-
-            <!-- Route header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
 
+                <!-- Drag handle -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:id="@+id/panelHandleTapArea"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/tvRouteCode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#F97316"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        tools:text="Tuyến 01"/>
-                    <TextView
-                        android:id="@+id/tvRouteTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:textColor="#0b1928"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        tools:text="Bến Thành → Suối Tiên"/>
+                    android:clickable="true"
+                    android:contentDescription="@string/route_panel_collapse"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="10dp">
+                    <View
+                        android:layout_width="52dp"
+                        android:layout_height="5dp"
+                        android:background="@drawable/bg_panel_handle"/>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvRouteBadge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_btn_orange"
-                    android:backgroundTint="@null"
-                    android:paddingStart="12dp"
-                    android:paddingTop="6dp"
-                    android:paddingEnd="12dp"
-                    android:paddingBottom="6dp"
-                    android:text="Đang hiển thị"
-                    android:textColor="#FFFFFF"
-                    android:textSize="11sp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/routeInfoExpandableSection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvRouteSummary"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#5F6B7A"
-                    android:textSize="13sp"
-                    android:lineSpacingMultiplier="1.4"
-                    tools:text="Tuyến buýt đi qua các điểm chính và hiển thị lộ trình trực quan trên bản đồ."/>
-
-                <!-- Stats row -->
+                <!-- Route header -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_stat_card"
-                        android:orientation="vertical"
-                        android:padding="12dp"
-                        android:layout_marginEnd="8dp">
+                        android:orientation="vertical">
                         <TextView
+                            android:id="@+id/tvRouteCode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Thời gian"
-                            android:textColor="#9aa5b4"
-                            android:textSize="10sp"/>
+                            android:textColor="#F97316"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            tools:text="Tuyến 01"/>
                         <TextView
-                            android:id="@+id/tvRouteDuration"
+                            android:id="@+id/tvRouteTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="2dp"
                             android:textColor="#0b1928"
-                            android:textSize="16sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
-                            tools:text="23 phút"/>
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            tools:text="Bến Thành → Suối Tiên"/>
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_stat_green"
-                        android:orientation="vertical"
-                        android:padding="12dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Giá vé"
-                            android:textColor="#2E7D32"
-                            android:textSize="10sp"/>
-                        <TextView
-                            android:id="@+id/tvRouteFare"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:textColor="#2E7D32"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            tools:text="10.000đ"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- Stops -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:text="@string/route_map_stops_title"
-                    android:textColor="#0b1928"
-                    android:textSize="13sp"
-                    android:textStyle="bold"/>
-
-                <LinearLayout
-                    android:id="@+id/stopListContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_stat_card"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    tools:ignore="UselessParent"/>
-
-                <!-- ✅ Action buttons — Đặt vé + Mở Maps + Đóng -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal">
-
-                    <!-- ✅ Nút Đặt vé — nổi bật nhất -->
                     <TextView
-                        android:id="@+id/btnBookTicket"
-                        android:layout_width="0dp"
+                        android:id="@+id/tvRouteBadge"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:layout_marginEnd="8dp"
                         android:background="@drawable/bg_btn_orange"
                         android:backgroundTint="@null"
-                        android:gravity="center"
-                        android:paddingTop="12dp"
-                        android:paddingBottom="12dp"
-                        android:text="🎫 Đặt vé"
+                        android:paddingStart="12dp"
+                        android:paddingTop="6dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="6dp"
+                        android:text="Đang hiển thị"
                         android:textColor="#FFFFFF"
-                        android:textSize="14sp"
-                        android:textStyle="bold"/>
-
-                    <!-- Mở Google Maps -->
-                    <TextView
-                        android:id="@+id/btnOpenMaps"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/bg_button_rounded"
-                        android:backgroundTint="@null"
-                        android:gravity="center"
-                        android:paddingTop="12dp"
-                        android:paddingBottom="12dp"
-                        android:text="@string/route_map_open_external"
-                        android:textColor="#0b1928"
-                        android:textSize="12sp"
-                        android:textStyle="bold"/>
-
-                    <!-- Đóng -->
-                    <TextView
-                        android:id="@+id/btnCloseRoute"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_button_rounded"
-                        android:backgroundTint="@null"
-                        android:gravity="center"
-                        android:paddingStart="14dp"
-                        android:paddingTop="12dp"
-                        android:paddingEnd="14dp"
-                        android:paddingBottom="12dp"
-                        android:text="@string/route_map_back"
-                        android:textColor="#9aa5b4"
-                        android:textSize="12sp"
+                        android:textSize="11sp"
                         android:textStyle="bold"/>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/routeInfoExpandableSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvRouteSummary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="#5F6B7A"
+                        android:textSize="13sp"
+                        android:lineSpacingMultiplier="1.4"
+                        tools:text="Tuyến buýt đi qua các điểm chính và hiển thị lộ trình trực quan trên bản đồ."/>
+
+                    <!-- Stats row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_stat_card"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Thời gian"
+                                android:textColor="#9aa5b4"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:id="@+id/tvRouteDuration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textColor="#0b1928"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                tools:text="23 phút" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_stat_green"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Giá vé"
+                                android:textColor="#2E7D32"
+                                android:textSize="10sp"/>
+                            <TextView
+                                android:id="@+id/tvRouteFare"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textColor="#2E7D32"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                tools:text="10.000đ"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Stops -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="@string/route_map_stops_title"
+                        android:textColor="#0b1928"
+                        android:textSize="13sp"
+                        android:textStyle="bold"/>
+
+                    <LinearLayout
+                        android:id="@+id/stopListContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_stat_card"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        tools:ignore="UselessParent"/>
+
+                    <!-- Action buttons Optimized -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <!-- Nút Mua vé - Nổi bật nhất (Primary Action) -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnBookTicket"
+                            style="@style/Widget.MaterialComponents.Button"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="1.5"
+                            android:layout_marginEnd="8dp"
+                            android:text="Mua vé ngay"
+                            android:textAllCaps="false"
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            app:backgroundTint="#F97316"
+                            app:cornerRadius="12dp"
+                            app:iconGravity="textStart"
+                            app:iconPadding="8dp"
+                            app:rippleColor="#FFFFFF" />
+
+                        <!-- Nút Mở Google Maps (Secondary Action) -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnOpenMaps"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:layout_marginEnd="8dp"
+                            android:padding="0dp"
+                            app:icon="@drawable/ic_location"
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            app:iconSize="22dp"
+                            app:iconTint="#4A5565"
+                            app:backgroundTint="#F0F4F8"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="#D1D9E0"
+                            app:strokeWidth="1dp"/>
+
+                        <!-- Nút Đóng (Tertiary Action) -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnCloseRoute"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:padding="0dp"
+                            app:icon="@drawable/ic_arrow_back"
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            app:iconSize="20dp"
+                            app:iconTint="#9aa5b4"
+                            app:backgroundTint="#F0F4F8"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="#D1D9E0"
+                            app:strokeWidth="1dp"/>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </ScrollView>
+
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
