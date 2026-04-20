@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This file is incorrectly placed in res/layout and should be in res/drawable. -->
-<!-- It is being ignored to fix the ViewBinding build error. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:width="24dp"
     android:height="24dp"
     android:viewportWidth="24"
-    android:viewportHeight="24"
-    tools:viewBindingIgnore="true">
+    android:viewportHeight="24">
     <path
-        android:fillColor="#00000000"
-        android:strokeColor="#CCCCCC"
-        android:strokeWidth="2"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:pathData="M9,18 L15,12 L9,6"/>
+        android:fillColor="#FF000000"
+        android:pathData="M10,6L8.59,7.41 13.17,12l-4.58,4.59L10,18l6,-6z" />
 </vector>

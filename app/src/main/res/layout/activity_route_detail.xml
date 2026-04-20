@@ -173,7 +173,7 @@
                         android:id="@+id/tvRouteBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_btn_orange"
+                        style="@style/Widget.TransGo.Button.Orange"
                         android:backgroundTint="@null"
                         android:paddingStart="12dp"
                         android:paddingTop="6dp"

@@ -84,16 +84,12 @@
             app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- ✅ FIX: Email input — icon email + edtEmail -->
+        <!-- Email input -->
         <LinearLayout
             android:id="@+id/layoutEmail"
             android:layout_width="0dp"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@drawable/bg_input_field"
-            android:gravity="center_vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginTop="20dp"
@@ -101,36 +97,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_email"
-                android:layout_marginEnd="12dp" />
-
-            <!-- ✅ FIX: đúng id, đúng inputType -->
             <EditText
                 android:id="@+id/edtEmail"
+                style="@style/Widget.TransGo.EditText"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@null"
+                android:layout_height="wrap_content"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
-                android:singleLine="true"
-                android:textColor="#0b1928"
-                android:textColorHint="#9aa5b4"
-                android:textSize="14sp" />
+                android:drawableStart="@drawable/ic_email"
+                android:drawablePadding="12dp" />
         </LinearLayout>
 
-        <!-- ✅ FIX: Password input — icon lock + edtPassword -->
+        <!-- Password input -->
         <LinearLayout
             android:id="@+id/layoutPassword"
             android:layout_width="0dp"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@drawable/bg_input_field"
-            android:gravity="center_vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginTop="12dp"
@@ -138,24 +121,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_lock"
-                android:layout_marginEnd="12dp" />
-
-            <!-- ✅ FIX: đúng id, đúng inputType -->
             <EditText
                 android:id="@+id/edtPassword"
+                style="@style/Widget.TransGo.EditText"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="Mật khẩu"
-                android:textColorHint="#9aa5b4"
-                android:textSize="14sp"
-                android:textColor="#0b1928"
-                android:background="@null"
                 android:inputType="textPassword"
-                android:singleLine="true" />
+                android:drawableStart="@drawable/ic_lock"
+                android:drawablePadding="12dp" />
         </LinearLayout>
 
         <TextView
@@ -174,17 +148,10 @@
 
         <Button
             android:id="@+id/btnLogin"
+            style="@style/Widget.TransGo.Button.Orange"
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:text="ĐĂNG NHẬP"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-condensed"
-            android:letterSpacing="0.1"
-            android:background="@drawable/bg_btn_orange"
-            android:backgroundTint="@null"
-            android:stateListAnimator="@null"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginTop="20dp"
@@ -223,7 +190,6 @@
                 android:background="#1a3a5c" />
         </LinearLayout>
 
-        <!-- ✅ FIX: Thêm android:id cho cả 3 nút social -->
         <LinearLayout
             android:id="@+id/layoutSocial"
             android:layout_width="wrap_content"
@@ -236,34 +202,28 @@
 
             <ImageButton
                 android:id="@+id/btnFacebook"
+                style="@style/Widget.TransGo.Button.Social"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_facebook"
-                android:background="@drawable/bg_social_btn"
-                android:backgroundTint="@null"
-                android:padding="12dp"
-                android:contentDescription="Facebook"
-                android:layout_marginEnd="16dp" />
+                android:layout_marginEnd="16dp"
+                android:contentDescription="Facebook" />
 
             <ImageButton
                 android:id="@+id/btnGoogle"
+                style="@style/Widget.TransGo.Button.Social"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_google"
-                android:background="@drawable/bg_social_btn"
-                android:backgroundTint="@null"
-                android:padding="12dp"
-                android:contentDescription="Google"
-                android:layout_marginEnd="16dp" />
+                android:layout_marginEnd="16dp"
+                android:contentDescription="Google" />
 
             <ImageButton
                 android:id="@+id/btnApple"
+                style="@style/Widget.TransGo.Button.Social"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_apple"
-                android:background="@drawable/bg_social_btn"
-                android:backgroundTint="@null"
-                android:padding="12dp"
                 android:contentDescription="Apple" />
         </LinearLayout>
 
@@ -304,14 +264,12 @@
                     android:background="#1a3a5c" />
             </LinearLayout>
 
-            <!-- ✅ FIX: Đổi sang ImageButton để dễ xử lý click -->
             <ImageButton
                 android:id="@+id/btnFaceID"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:src="@drawable/ic_face_id"
                 android:background="@drawable/bg_biometric_btn"
-                android:backgroundTint="@null"
                 android:padding="16dp"
                 android:contentDescription="Face ID" />
 
@@ -343,7 +301,6 @@
                 android:textColor="#4a6a8a"
                 android:textSize="13sp" />
 
-            <!-- ✅ FIX: id khớp với LoginActivity.kt (tvRegister) -->
             <TextView
                 android:id="@+id/tvRegister"
                 android:layout_width="wrap_content"

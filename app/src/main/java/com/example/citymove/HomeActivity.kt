@@ -236,7 +236,7 @@ class HomeActivity : AppCompatActivity() {
                         if (isSelected)
                             ContextCompat.getColor(this, R.color.blue_primary)
                         else
-                            ContextCompat.getColor(this, R.color.icon_bg_gray)
+                            ContextCompat.getColor(this, R.color.bg_icon_gray)
                     )
                 }
             }
@@ -272,48 +272,40 @@ class HomeActivity : AppCompatActivity() {
         val allTabs   = listOf(tabBus, tabMetro, tabWaterbus)
         val allPanels = listOf(panelBus, panelMetro, panelWaterbus)
 
-        fun selectTab(activeTab: TextView, activePanel: LinearLayout) {
-            val activeText   = ContextCompat.getColor(this, android.R.color.white)
-            val inactiveText = ContextCompat.getColor(this, R.color.text_secondary)
-
-            allTabs.forEach { tab ->
-                if (tab == activeTab) {
-                    tab?.setBackgroundResource(R.drawable.bg_btn_orange)
-                    tab?.setTextColor(activeText)
-                } else {
-                    tab?.setBackgroundColor(android.graphics.Color.TRANSPARENT)
-                    tab?.setTextColor(inactiveText)
-                }
+        fun activateTab(index: Int) {
+            allTabs.forEachIndexed { i, tv ->
+                val isSelected = (i == index)
+                tv?.setTextColor(
+                    if (isSelected) ContextCompat.getColor(this, R.color.blue_primary)
+                    else ContextCompat.getColor(this, R.color.text_secondary)
+                )
+                tv?.setTypeface(null, if (isSelected) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL)
+                // Update indicator logic if needed, usually via a custom view or bottom background
             }
-            allPanels.forEach { panel ->
-                panel?.visibility = if (panel == activePanel) View.VISIBLE else View.GONE
+            allPanels.forEachIndexed { i, layout ->
+                layout?.visibility = if (i == index) View.VISIBLE else View.GONE
             }
         }
 
-        // Mặc định: tab Buýt active
-        selectTab(tabBus, panelBus)
+        tabBus?.setOnClickListener      { activateTab(0) }
+        tabMetro?.setOnClickListener    { activateTab(1) }
+        tabWaterbus?.setOnClickListener { activateTab(2) }
 
-        tabBus?.setOnClickListener      { selectTab(tabBus, panelBus) }
-        tabMetro?.setOnClickListener    { selectTab(tabMetro, panelMetro) }
-        tabWaterbus?.setOnClickListener { selectTab(tabWaterbus, panelWaterbus) }
-    }
-
-    // ─────────────────────────────────────────────────────────
-    // HELPERS
-    // ─────────────────────────────────────────────────────────
-    private fun openRouteDetail(routeId: Int) {
-        val intent = Intent(this, RouteDetailActivity::class.java)
-        intent.putExtra("ROUTE_ID", routeId)
-        startActivity(intent)
+        // Default
+        activateTab(0)
     }
 
     private fun openSearchWithDestination(destination: String?) {
         val intent = Intent(this, SearchActivity::class.java)
-        intent.putExtra(SearchActivity.EXTRA_ORIGIN_QUERY, "Vị trí hiện tại")
-        val sanitized = destination.orEmpty().trim()
-        if (sanitized.isNotEmpty()) {
-            intent.putExtra(SearchActivity.EXTRA_DESTINATION_QUERY, sanitized)
+        if (!destination.isNullOrEmpty()) {
+            intent.putExtra("DESTINATION_NAME", destination)
         }
+        startActivity(intent)
+    }
+
+    private fun openRouteDetail(routeId: Int) {
+        val intent = Intent(this, RouteDetailActivity::class.java)
+        intent.putExtra("ROUTE_ID", routeId)
         startActivity(intent)
     }
 }

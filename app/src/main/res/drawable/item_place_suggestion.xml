@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:contentDescription="Ảnh địa điểm"
-                tools:src="@drawable/placeholder_place" />
+                tools:src="@drawable/img_city_skyline" />
         </androidx.cardview.widget.CardView>
 
         <!-- Info -->
@@ -72,7 +72,7 @@
                     android:paddingEnd="8dp"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
-                    android:background="@drawable/bg_category_tag" />
+                    android:background="@drawable/bg_stat_green" />
             </LinearLayout>
 
             <!-- District + Rating -->
@@ -135,7 +135,7 @@
                         android:textColor="#FFFFFF"
                         android:textSize="10sp"
                         android:textStyle="bold"
-                        android:background="@drawable/bg_badge_metro" />
+                        android:background="@drawable/bg_transport_metro" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -156,7 +156,7 @@
                         android:textColor="#FFFFFF"
                         android:textSize="10sp"
                         android:textStyle="bold"
-                        android:background="@drawable/bg_badge_bus" />
+                        android:background="@drawable/bg_transport_bus" />
 
                 </LinearLayout>
 

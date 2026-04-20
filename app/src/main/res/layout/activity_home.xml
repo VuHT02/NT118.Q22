@@ -292,7 +292,7 @@
                             android:textColor="#FFFFFF"
                             android:textSize="12sp"
                             android:textStyle="bold"
-                            android:background="@drawable/bg_btn_orange"
+                            style="@style/Widget.TransGo.Button.Orange"
                             android:backgroundTint="@null"
                             android:paddingStart="14dp"
                             android:paddingEnd="14dp"/>
@@ -309,7 +309,7 @@
                             android:id="@+id/btnRoutePlanner"
                             android:layout_width="wrap_content"
                             android:layout_height="32dp"
-                            android:background="@drawable/bg_btn_orange"
+                            style="@style/Widget.TransGo.Button.Orange"
                             android:backgroundTint="@null"
                             android:gravity="center"
                             android:paddingStart="14dp"
@@ -535,52 +535,57 @@
                         android:padding="12dp">
 
                         <!-- Balance -->
+
+                        <!-- Stats -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
+                            android:layout_marginEnd="8dp"
                             android:layout_weight="1"
-                            android:orientation="vertical"
                             android:background="@drawable/bg_balance_card"
-                            android:padding="12dp"
-                            android:layout_marginEnd="8dp">
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="3dp"
                                 android:text="Số dư"
                                 android:textColor="#80FFFFFF"
-                                android:textSize="10sp"
-                                android:layout_marginBottom="3dp"/>
+                                android:textSize="10sp" />
+
                             <TextView
                                 android:id="@+id/tvBalance"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-condensed"
                                 android:textColor="#F97316"
                                 android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:fontFamily="sans-serif-condensed"/>
+                                android:textStyle="bold" />
+
                             <TextView
                                 android:id="@+id/tvBalanceEstimate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
                                 android:textColor="#40FFFFFF"
-                                android:textSize="10sp"
-                                android:layout_marginBottom="10dp"/>
+                                android:textSize="10sp" />
+
                             <TextView
                                 android:id="@+id/btnTopUp"
+                                style="@style/Widget.TransGo.Button.Orange"
                                 android:layout_width="wrap_content"
                                 android:layout_height="30dp"
+                                android:backgroundTint="@null"
                                 android:gravity="center"
+                                android:paddingStart="12dp"
+                                android:paddingEnd="12dp"
                                 android:text="Nạp thêm"
                                 android:textColor="#FFFFFF"
                                 android:textSize="11sp"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_btn_orange"
-                                android:backgroundTint="@null"
-                                android:paddingStart="12dp"
-                                android:paddingEnd="12dp"/>
+                                android:textStyle="bold" />
                         </LinearLayout>
 
-                        <!-- Stats -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -747,7 +752,7 @@
                                 <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                         android:text="Mua vé" android:textColor="#FFFFFF" android:textSize="11sp" android:textStyle="bold"
-                                        android:background="@drawable/bg_btn_orange" android:backgroundTint="@null"
+                                        style="@style/Widget.TransGo.Button.Orange" android:backgroundTint="@null"
                                         android:paddingStart="12dp" android:paddingEnd="12dp" android:paddingTop="5dp" android:paddingBottom="5dp"
                                         android:layout_marginBottom="3dp"/>
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -781,7 +786,7 @@
                                 <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                         android:text="Mua vé" android:textColor="#FFFFFF" android:textSize="11sp" android:textStyle="bold"
-                                        android:background="@drawable/bg_btn_orange" android:backgroundTint="@null"
+                                        style="@style/Widget.TransGo.Button.Orange" android:backgroundTint="@null"
                                         android:paddingStart="12dp" android:paddingEnd="12dp" android:paddingTop="5dp" android:paddingBottom="5dp"
                                         android:layout_marginBottom="3dp"/>
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -814,7 +819,7 @@
                                 <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                         android:text="Mua vé" android:textColor="#FFFFFF" android:textSize="11sp" android:textStyle="bold"
-                                        android:background="@drawable/bg_btn_orange" android:backgroundTint="@null"
+                                        style="@style/Widget.TransGo.Button.Orange" android:backgroundTint="@null"
                                         android:paddingStart="12dp" android:paddingEnd="12dp" android:paddingTop="5dp" android:paddingBottom="5dp"
                                         android:layout_marginBottom="3dp"/>
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -1068,7 +1073,7 @@
                                 android:textColor="#FFFFFF"
                                 android:textSize="13sp"
                                 android:textStyle="bold"
-                                android:background="@drawable/bg_btn_orange"
+                                style="@style/Widget.TransGo.Button.Orange"
                                 android:backgroundTint="@null"
                                 android:paddingStart="18dp"
                                 android:paddingEnd="18dp"
