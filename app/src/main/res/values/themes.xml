@@ -13,7 +13,7 @@
         <item name="android:navigationBarColor">@color/bg_page</item>
         <item name="android:fontFamily">@font/nunito</item>
         <item name="fontFamily">@font/nunito</item>
-        <!-- ✅ Fix: Ngăn MaterialComponents tự override màu Button bằng colorPrimary -->
+        <!-- ✅ Chỉ định style mặc định cho Button -->
         <item name="materialButtonStyle">@style/Widget.TransGo.Button.Orange</item>
         <item name="android:buttonStyle">@style/Widget.TransGo.Button.Orange</item>
     </style>
@@ -23,63 +23,41 @@
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <!-- ════ Buttons ════ -->
-    <style name="Widget.TransGo.Button.Navy" parent="Widget.MaterialComponents.Button">
+    <!-- ════ Buttons (Đã gộp) ════ -->
+    <!-- Style gốc chứa tất cả thuộc tính chung -->
+    <style name="Widget.TransGo.Button.Base" parent="Widget.MaterialComponents.Button">
         <item name="android:fontFamily">@font/nunito</item>
+        <item name="fontFamily">@font/nunito</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/bg_btn_dark</item>
-        <item name="backgroundTint">@null</item>
+        <item name="android:background">@drawable/bg_button_base</item>
         <item name="android:minHeight">52dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
         <item name="android:stateListAnimator">@null</item>
         <item name="android:letterSpacing">0.02</item>
-        <item name="fontFamily">@font/nunito</item>
     </style>
 
-    <style name="Widget.TransGo.Button.Blue" parent="Widget.MaterialComponents.Button">
-        <item name="android:fontFamily">@font/nunito</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/bg_btn_dark</item>
-        <item name="backgroundTint">@null</item>
-        <item name="android:minHeight">52dp</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="android:stateListAnimator">@null</item>
-        <item name="fontFamily">@font/nunito</item>
+    <style name="Widget.TransGo.Button.Navy" parent="Widget.TransGo.Button.Base">
+        <item name="backgroundTint">@color/blue_deeper</item>
     </style>
 
-    <!-- ✅ Orange button — backgroundTint set null để không bị override -->
-    <style name="Widget.TransGo.Button.Orange" parent="Widget.MaterialComponents.Button">
-        <item name="android:fontFamily">@font/nunito</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/bg_btn_orange</item>
-        <item name="backgroundTint">@null</item>
-        <item name="android:minHeight">52dp</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="android:stateListAnimator">@null</item>
-        <item name="fontFamily">@font/nunito</item>
+    <style name="Widget.TransGo.Button.Blue" parent="Widget.TransGo.Button.Base">
+        <item name="backgroundTint">@color/blue_primary</item>
     </style>
 
-    <style name="Widget.TransGo.Button.Social" parent="Widget.MaterialComponents.Button">
-        <item name="android:fontFamily">@font/nunito</item>
+    <style name="Widget.TransGo.Button.Orange" parent="Widget.TransGo.Button.Base">
+        <item name="backgroundTint">@color/orange_accent</item>
+    </style>
+
+    <style name="Widget.TransGo.Button.Social" parent="Widget.TransGo.Button.Base">
         <item name="android:textSize">12sp</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_primary</item>
-        <item name="android:background">@drawable/bg_social_btn</item>
-        <item name="backgroundTint">@null</item>
+        <item name="backgroundTint">@color/white</item>
         <item name="android:minHeight">48dp</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="android:stateListAnimator">@null</item>
-        <item name="fontFamily">@font/nunito</item>
+        <item name="strokeColor">@color/border_default</item>
+        <item name="strokeWidth">1dp</item>
     </style>
 
     <!-- ════ EditText ════ -->

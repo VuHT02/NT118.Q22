@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Đặt file này vào res/drawable/img_waterbus_hero.xml
+     Đây là placeholder gradient — thay bằng ảnh thật (.jpg/.png) sau khi có asset -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:startColor="#006064"
+        android:centerColor="#00838F"
+        android:endColor="#0288D1"
+        android:angle="135"
+        android:type="linear" />
+</shape>
