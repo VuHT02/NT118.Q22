@@ -1,6 +1,7 @@
 package com.example.citymove
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
@@ -13,6 +14,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.citymove.adapter.PlaceSuggestionAdapter
+import com.example.citymove.adapter.SuggestedRouteAdapter
 import com.example.citymove.databinding.ActivitySearchMapBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -23,6 +26,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.*
+import java.util.Locale
 
 class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -34,7 +38,7 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     // ─── Bottom Sheet ────────────────────────────────────────────────────────
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     // ─── Adapters ────────────────────────────────────────────────────────────
     private lateinit var suggestionAdapter: PlaceSuggestionAdapter
@@ -53,14 +57,10 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST = 1001
-        // Mặc định: Hà Nội
-        private val DEFAULT_LOCATION = LatLng(21.0285, 105.8542)
+        // Mặc định: TP.HCM (Quận 1)
+        private val DEFAULT_LOCATION = LatLng(10.7769, 106.7009)
         private const val DEFAULT_ZOOM = 13f
     }
-
-    // ════════════════════════════════════════════════════════════════════════
-    //  Lifecycle
-    // ════════════════════════════════════════════════════════════════════════
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,10 +75,6 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
         setupSearchInputs()
         setupButtons()
     }
-
-    // ════════════════════════════════════════════════════════════════════════
-    //  Khởi tạo bản đồ
-    // ════════════════════════════════════════════════════════════════════════
 
     private fun initMap() {
         val mapFragment = supportFragmentManager
@@ -98,15 +94,10 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         checkLocationPermission()
 
-        // Tap lên bản đồ để chọn điểm
         googleMap.setOnMapClickListener { latLng ->
             handleMapClick(latLng)
         }
     }
-
-    // ════════════════════════════════════════════════════════════════════════
-    //  Quyền vị trí
-    // ════════════════════════════════════════════════════════════════════════
 
     private fun checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -142,7 +133,6 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
                 googleMap.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f)
                 )
-                // Tự động đặt vị trí hiện tại làm điểm đi
                 if (originLatLng == null) {
                     originLatLng = currentLatLng
                     binding.etOrigin.setText("Vị trí của tôi")
@@ -166,30 +156,24 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  Tap bản đồ → chọn điểm đi / đến
-    // ════════════════════════════════════════════════════════════════════════
-
     private fun handleMapClick(latLng: LatLng) {
+        val posStr = String.format(Locale.getDefault(), "%.4f, %.4f", latLng.latitude, latLng.longitude)
+
         when (activeInputField) {
             ActiveField.ORIGIN -> {
                 originLatLng = latLng
-                binding.etOrigin.setText("${latLng.latitude.format(4)}, ${latLng.longitude.format(4)}")
+                binding.etOrigin.setText(posStr)
                 placeOriginMarker(latLng)
             }
             ActiveField.DESTINATION -> {
                 destinationLatLng = latLng
-                binding.etDestination.setText("${latLng.latitude.format(4)}, ${latLng.longitude.format(4)}")
+                binding.etDestination.setText(posStr)
                 placeDestinationMarker(latLng)
                 binding.btnClearDest.visibility = View.VISIBLE
             }
         }
         hideSuggestions()
     }
-
-    // ════════════════════════════════════════════════════════════════════════
-    //  Marker trên bản đồ
-    // ════════════════════════════════════════════════════════════════════════
 
     private fun placeOriginMarker(latLng: LatLng) {
         originMarker?.remove()
@@ -220,7 +204,6 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
                 .color(ContextCompat.getColor(this, R.color.green_500))
                 .geodesic(true)
         )
-        // Zoom camera vừa 2 điểm
         val bounds = LatLngBounds.builder()
             .include(origin)
             .include(destination)
@@ -230,12 +213,7 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  Adapters
-    // ════════════════════════════════════════════════════════════════════════
-
     private fun initAdapters() {
-        // Gợi ý địa điểm
         suggestionAdapter = PlaceSuggestionAdapter { place ->
             when (activeInputField) {
                 ActiveField.ORIGIN -> {
@@ -258,20 +236,16 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
             adapter = suggestionAdapter
         }
 
-        // Tuyến gợi ý
         suggestedRouteAdapter = SuggestedRouteAdapter { route ->
-            // Click xem chi tiết tuyến
-            BusRouteDetailActivity.start(this, route.routeId)
+            val intent = Intent(this, RouteDetailActivity::class.java)
+            intent.putExtra("ROUTE_ID", route.routeId.toIntOrNull() ?: 1)
+            startActivity(intent)
         }
         binding.recyclerSuggestedRoutes.apply {
             layoutManager = LinearLayoutManager(this@SearchMapActivity)
             adapter = suggestedRouteAdapter
         }
     }
-
-    // ════════════════════════════════════════════════════════════════════════
-    //  Bottom Sheet
-    // ════════════════════════════════════════════════════════════════════════
 
     private fun initBottomSheet() {
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetRoutes)
@@ -284,12 +258,7 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
         bottomSheetBehavior.peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek)
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  Setup ô nhập liệu tìm kiếm
-    // ════════════════════════════════════════════════════════════════════════
-
     private fun setupSearchInputs() {
-        // --- Điểm đi ---
         binding.etOrigin.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) activeInputField = ActiveField.ORIGIN
         }
@@ -301,7 +270,6 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // --- Điểm đến ---
         binding.etDestination.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) activeInputField = ActiveField.DESTINATION
         }
@@ -315,7 +283,6 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // IME Search action trên điểm đến → tìm tuyến luôn
         binding.etDestination.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 performRouteSearch()
@@ -324,16 +291,11 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  Setup buttons
-    // ════════════════════════════════════════════════════════════════════════
-
     private fun setupButtons() {
-        // Vị trí hiện tại
         binding.btnMyLocation.setOnClickListener { moveToCurrentLocation() }
         binding.btnLocate.setOnClickListener { moveToCurrentLocation() }
+        binding.btnHome.setOnClickListener { finish() }
 
-        // Đổi chiều A ↔ B
         binding.btnSwapLocations.setOnClickListener {
             val tmpText = binding.etOrigin.text.toString()
             val tmpLatLng = originLatLng
@@ -349,7 +311,6 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
             destinationLatLng?.let { placeDestinationMarker(it) }
         }
 
-        // Xóa điểm đến
         binding.btnClearDest.setOnClickListener {
             binding.etDestination.setText("")
             destinationLatLng = null
@@ -361,20 +322,14 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
-        // Nút tìm tuyến xe
         binding.btnSearchRoute.setOnClickListener { performRouteSearch() }
 
-        // La bàn → về hướng Bắc
         binding.btnCompass.setOnClickListener {
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                 CameraPosition.builder(googleMap.cameraPosition).bearing(0f).build()
             ))
         }
     }
-
-    // ════════════════════════════════════════════════════════════════════════
-    //  Tìm kiếm gợi ý địa điểm (debounce 400ms)
-    // ════════════════════════════════════════════════════════════════════════
 
     private fun searchPlaceSuggestions(query: String) {
         searchJob?.cancel()
@@ -383,8 +338,7 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
             return
         }
         searchJob = lifecycleScope.launch {
-            delay(400) // debounce
-            // TODO: Gọi Places API hoặc API nội bộ
+            delay(400)
             val results = fetchPlaceSuggestions(query)
             if (results.isEmpty()) {
                 hideSuggestions()
@@ -395,26 +349,18 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    /**
-     * Gọi Places Autocomplete API – thay bằng implementation thật.
-     * Hiện tại trả về data mẫu.
-     */
     private suspend fun fetchPlaceSuggestions(query: String): List<PlaceSuggestion> {
-        delay(200) // giả lập network
+        delay(200)
         return listOf(
-            PlaceSuggestion("Bến xe Mỹ Đình", "20 Phạm Hùng, Nam Từ Liêm, Hà Nội", LatLng(21.0278, 105.7828)),
-            PlaceSuggestion("Bến xe Giáp Bát", "Km8 Giải Phóng, Hoàng Mai, Hà Nội", LatLng(20.9889, 105.8445)),
-            PlaceSuggestion("Long Biên", "Điểm đỗ xe buýt Yên Phụ, Ba Đình", LatLng(21.0444, 105.8566)),
+            PlaceSuggestion("Bến xe Miền Đông", "292 Đinh Bộ Lĩnh, Bình Thạnh", LatLng(10.8142, 106.7125)),
+            PlaceSuggestion("Bến xe Miền Tây", "395 Kinh Dương Vương, Bình Tân", LatLng(10.7388, 106.6089)),
+            PlaceSuggestion("Chợ Bến Thành", "Quận 1, TP.HCM", LatLng(10.7719, 106.6983)),
         ).filter { it.name.contains(query, ignoreCase = true) || it.address.contains(query, ignoreCase = true) }
     }
 
     private fun hideSuggestions() {
         binding.cardSuggestions.visibility = View.GONE
     }
-
-    // ════════════════════════════════════════════════════════════════════════
-    //  Tìm tuyến xe
-    // ════════════════════════════════════════════════════════════════════════
 
     private fun performRouteSearch() {
         val origin = originLatLng
@@ -448,33 +394,29 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    /**
-     * Gọi API tìm tuyến xe từ A đến B.
-     * Thay thế bằng call API thật (Retrofit/OkHttp).
-     */
     private suspend fun searchBusRoutes(origin: LatLng, destination: LatLng): List<SuggestedRoute> {
-        delay(1500) // giả lập network
+        delay(1500)
         return listOf(
             SuggestedRoute(
-                routeId = "E01",
-                routeNumber = "E01",
-                routeName = "Bến xe Mỹ Đình → KĐT Ocean Park",
-                schedule = "05:00 - 21:00",
-                frequency = "12p/chuyến",
-                fare = "7.000đ",
-                boardAt = "Long Biên (Điểm E3.3)",
-                alightAt = "KĐT Ocean Park, Gia Lâm",
+                routeId = "101",
+                routeNumber = "M1",
+                routeName = "Bến Thành → Suối Tiên",
+                schedule = "05:00 - 22:00",
+                frequency = "10p/chuyến",
+                fare = "15.000đ",
+                boardAt = "Ga Bến Thành",
+                alightAt = "Ga Suối Tiên",
                 nextArrivalMin = 5
             ),
             SuggestedRoute(
-                routeId = "43",
-                routeNumber = "43",
-                routeName = "Kim Mã → Thị trấn Đông Anh",
-                schedule = "05:00 - 21:00",
-                frequency = "25p/chuyến",
-                fare = "9.000đ",
-                boardAt = "Bến xe Kim Mã",
-                alightAt = "Thị trấn Đông Anh",
+                routeId = "3",
+                routeNumber = "W01",
+                routeName = "Bạch Đằng → Linh Đông",
+                schedule = "06:00 - 19:00",
+                frequency = "30p/chuyến",
+                fare = "15.000đ",
+                boardAt = "Bến Bạch Đằng",
+                alightAt = "Bến Linh Đông",
                 nextArrivalMin = 12
             )
         )
@@ -486,10 +428,6 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.tvTotalTime.text = "~35 phút"
         binding.tvTotalFare.text = routes.firstOrNull()?.fare ?: "—"
     }
-
-    // ════════════════════════════════════════════════════════════════════════
-    //  Utilities
-    // ════════════════════════════════════════════════════════════════════════
 
     private fun showLoading(show: Boolean) {
         binding.layoutLoading.visibility = if (show) View.VISIBLE else View.GONE
@@ -505,12 +443,6 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
-
-    private fun Double.format(digits: Int) = "%.${digits}f".format(this)
-
-    // ════════════════════════════════════════════════════════════════════════
-    //  Data classes
-    // ════════════════════════════════════════════════════════════════════════
 
     data class PlaceSuggestion(
         val name: String,

@@ -1,4 +1,5 @@
 package com.example.citymove
+
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -23,6 +24,11 @@ class HomeActivity : AppCompatActivity() {
     // Transport selector state
     private var selectedTransport = "bus"
 
+    // Transport buttons — khai báo ở class level để dùng được trong applyTransportSelection
+    private lateinit var btnBus: LinearLayout
+    private lateinit var btnMetro: LinearLayout
+    private lateinit var btnWaterbus: LinearLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -37,6 +43,7 @@ class HomeActivity : AppCompatActivity() {
             return
         }
 
+        setupTransportSelector() // phải gọi trước loadUserData để btnBus/Metro/Waterbus đã được init
         loadUserData()
         setupBottomNav()
         setupClickListeners()
@@ -48,13 +55,19 @@ class HomeActivity : AppCompatActivity() {
     private fun loadUserData() {
         val uid = auth.currentUser?.uid ?: return
 
+        // Set ngày ngay lập tức, không cần chờ Firestore
+        val sdf = java.text.SimpleDateFormat("dd/MM", java.util.Locale("vi"))
+        findViewById<TextView>(R.id.tvTodayDate).text = sdf.format(java.util.Date())
+
         db.collection("users").document(uid)
             .get()
             .addOnSuccessListener { doc ->
                 if (doc != null && doc.exists()) {
+                    // ── Tên user ──────────────────────────────────────
                     val name = doc.getString("name") ?: doc.getString("email") ?: "Bạn"
                     findViewById<TextView>(R.id.tvUserName).text = "$name 👋"
 
+                    // ── Số dư & thống kê ──────────────────────────────
                     val balance = doc.getLong("balance") ?: 0L
                     findViewById<TextView>(R.id.tvBalance).text =
                         String.format("%,dđ", balance).replace(",", ".")
@@ -72,7 +85,25 @@ class HomeActivity : AppCompatActivity() {
 
                     val todayTrips = doc.getLong("todayTrips") ?: 0L
                     findViewById<TextView>(R.id.tvTripCount).text = "$todayTrips chuyến"
+
+                    // ── Load transport preference từ Firestore ─────────
+                    val preferred = doc.getString("preferredTransport") ?: "bus"
+                    applyTransportFromData(preferred)
+
+                    // ── Load quick chips từ Firestore ──────────────────
+                    @Suppress("UNCHECKED_CAST")
+                    val destinations = doc.get("quickDestinations") as? List<String>
+                    if (!destinations.isNullOrEmpty()) {
+                        updateQuickChips(destinations)
+                    }
                 }
+            }
+            .addOnFailureListener {
+                // Firestore lỗi → vẫn hiện tên từ FirebaseAuth nếu có
+                val displayName = auth.currentUser?.displayName
+                    ?: auth.currentUser?.email
+                    ?: "Bạn"
+                findViewById<TextView>(R.id.tvUserName).text = "$displayName 👋"
             }
 
         db.collection("users").document(uid)
@@ -149,18 +180,21 @@ class HomeActivity : AppCompatActivity() {
             } else false
         }
 
-        // ── Quick chips ───────────────────────────────────────
+        // ── Quick chips — listener mặc định (sẽ bị override nếu Firestore có data) ──
         findViewById<View>(R.id.chipDestinationBenThanh)?.setOnClickListener {
-            destinationInput?.setText("Bến Thành")
-            openSearchWithDestination("Bến Thành")
+            openSearchWithDestination(
+                (it as? TextView)?.text?.toString() ?: "Bến Thành"
+            )
         }
         findViewById<View>(R.id.chipDestinationSuoiTien)?.setOnClickListener {
-            destinationInput?.setText("Suối Tiên")
-            openSearchWithDestination("Suối Tiên")
+            openSearchWithDestination(
+                (it as? TextView)?.text?.toString() ?: "Suối Tiên"
+            )
         }
         findViewById<View>(R.id.chipDestinationTanSonNhat)?.setOnClickListener {
-            destinationInput?.setText("Sân bay Tân Sơn Nhất")
-            openSearchWithDestination("Sân bay Tân Sơn Nhất")
+            openSearchWithDestination(
+                (it as? TextView)?.text?.toString() ?: "Sân bay Tân Sơn Nhất"
+            )
         }
 
         // ── Header buttons ────────────────────────────────────
@@ -194,9 +228,6 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, HistoryActivity::class.java))
         }
 
-        // ── Transport mode selector (icon cards) ──────────────
-        setupTransportSelector()
-
         // ── Route tabs (Buýt / Metro / Waterbus) ─────────────
         setupRouteTabs()
     }
@@ -205,55 +236,88 @@ class HomeActivity : AppCompatActivity() {
     // TRANSPORT SELECTOR — 3 icon cards dưới search bar
     // ─────────────────────────────────────────────────────────
     private fun setupTransportSelector() {
-        val btnBus      = findViewById<LinearLayout>(R.id.btnTransportBus)
-        val btnMetro    = findViewById<LinearLayout>(R.id.btnTransportMetro)
-        val btnWaterbus = findViewById<LinearLayout>(R.id.btnTransportWaterbus)
+        btnBus      = findViewById(R.id.btnTransportBus)
+        btnMetro    = findViewById(R.id.btnTransportMetro)
+        btnWaterbus = findViewById(R.id.btnTransportWaterbus)
 
-        val allTransport = listOf(btnBus, btnMetro, btnWaterbus)
-
-        fun applyTransportSelection(selected: LinearLayout, type: String) {
-            selectedTransport = type
-            val activeColor   = ContextCompat.getColor(this, R.color.blue_primary)
-            val inactiveColor = ContextCompat.getColor(this, R.color.text_secondary)
-
-            allTransport.forEach { btn ->
-                val isSelected = btn == selected
-                btn?.setBackgroundResource(
-                    if (isSelected) R.drawable.bg_transport_selected
-                    else R.drawable.bg_transport_unselected
-                )
-                // FrameLayout (child 0) chứa icon → đổi background tint
-                // TextView (child 1) → đổi text color
-                btn?.let { ll ->
-                    val iconFrame = ll.getChildAt(0)
-                    val label    = ll.getChildAt(1) as? TextView
-                    label?.setTextColor(if (isSelected) activeColor else inactiveColor)
-                    label?.setTypeface(null,
-                        if (isSelected) android.graphics.Typeface.BOLD
-                        else android.graphics.Typeface.NORMAL
-                    )
-                    iconFrame?.backgroundTintList = ColorStateList.valueOf(
-                        if (isSelected)
-                            ContextCompat.getColor(this, R.color.blue_primary)
-                        else
-                            ContextCompat.getColor(this, R.color.bg_icon_gray)
-                    )
-                }
-            }
-
-        }
-
-        btnBus?.setOnClickListener {
+        // Mặc định chưa chọn gì — sẽ được set sau khi Firestore trả về
+        btnBus.setOnClickListener {
             applyTransportSelection(btnBus, "bus")
+            saveTransportPreference("bus")
             startActivity(Intent(this, BusRoutesActivity::class.java))
         }
-        btnMetro?.setOnClickListener {
+        btnMetro.setOnClickListener {
             applyTransportSelection(btnMetro, "metro")
+            saveTransportPreference("metro")
             startActivity(Intent(this, MetroRoutesActivity::class.java))
         }
-        btnWaterbus?.setOnClickListener {
+        btnWaterbus.setOnClickListener {
             applyTransportSelection(btnWaterbus, "waterbus")
+            saveTransportPreference("waterbus")
             startActivity(Intent(this, WaterbusRoutesActivity::class.java))
+        }
+    }
+
+    // Gọi từ loadUserData() sau khi lấy được preference từ Firestore
+    private fun applyTransportFromData(type: String) {
+        val selected = when (type) {
+            "metro"    -> btnMetro
+            "waterbus" -> btnWaterbus
+            else       -> btnBus
+        }
+        applyTransportSelection(selected, type)
+    }
+
+    private fun applyTransportSelection(selected: LinearLayout, type: String) {
+        selectedTransport = type
+        val activeColor   = ContextCompat.getColor(this, R.color.blue_primary)
+        val inactiveColor = ContextCompat.getColor(this, R.color.text_secondary)
+
+        listOf(btnBus, btnMetro, btnWaterbus).forEach { btn ->
+            val isSelected = btn == selected
+            btn.setBackgroundResource(
+                if (isSelected) R.drawable.bg_transport_selected
+                else R.drawable.bg_transport_unselected
+            )
+            val iconFrame = btn.getChildAt(0)
+            val label     = btn.getChildAt(1) as? TextView
+            label?.setTextColor(if (isSelected) activeColor else inactiveColor)
+            label?.setTypeface(null,
+                if (isSelected) android.graphics.Typeface.BOLD
+                else android.graphics.Typeface.NORMAL
+            )
+            iconFrame?.backgroundTintList = ColorStateList.valueOf(
+                if (isSelected) ContextCompat.getColor(this, R.color.blue_primary)
+                else ContextCompat.getColor(this, R.color.bg_icon_gray)
+            )
+        }
+    }
+
+    // Lưu preference khi user click vào transport
+    private fun saveTransportPreference(type: String) {
+        val uid = auth.currentUser?.uid ?: return
+        db.collection("users").document(uid)
+            .update("preferredTransport", type)
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // QUICK CHIPS — load động từ Firestore
+    // Firestore field: quickDestinations: ["Bến Thành", "Suối Tiên", "Sân bay Tân Sơn Nhất"]
+    // ─────────────────────────────────────────────────────────
+    private fun updateQuickChips(destinations: List<String>) {
+        val chips = listOf(
+            findViewById<TextView>(R.id.chipDestinationBenThanh),
+            findViewById<TextView>(R.id.chipDestinationSuoiTien),
+            findViewById<TextView>(R.id.chipDestinationTanSonNhat)
+        )
+
+        destinations.forEachIndexed { index, dest ->
+            if (index < chips.size) {
+                chips[index]?.text = dest
+                chips[index]?.setOnClickListener {
+                    openSearchWithDestination(dest)
+                }
+            }
         }
     }
 
@@ -279,8 +343,10 @@ class HomeActivity : AppCompatActivity() {
                     if (isSelected) ContextCompat.getColor(this, R.color.blue_primary)
                     else ContextCompat.getColor(this, R.color.text_secondary)
                 )
-                tv?.setTypeface(null, if (isSelected) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL)
-                // Update indicator logic if needed, usually via a custom view or bottom background
+                tv?.setTypeface(null,
+                    if (isSelected) android.graphics.Typeface.BOLD
+                    else android.graphics.Typeface.NORMAL
+                )
             }
             allPanels.forEachIndexed { i, layout ->
                 layout?.visibility = if (i == index) View.VISIBLE else View.GONE
@@ -291,7 +357,6 @@ class HomeActivity : AppCompatActivity() {
         tabMetro?.setOnClickListener    { activateTab(1) }
         tabWaterbus?.setOnClickListener { activateTab(2) }
 
-        // Default
         activateTab(0)
     }
 
