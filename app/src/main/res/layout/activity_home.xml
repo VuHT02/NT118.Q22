@@ -179,22 +179,26 @@
                         android:paddingEnd="12dp"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp">
+
+                        <!-- Cột 1: Tên người dùng -->
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:layout_marginEnd="12dp">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Xin chào,"
                                 android:textColor="#80FFFFFF"
                                 android:textSize="10sp"/>
+
                             <TextView
                                 android:id="@+id/tvUserName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Đang tải..."
+                                android:text="Người dùng"
                                 android:textColor="#FFFFFF"
                                 android:textSize="13sp"
                                 android:textStyle="bold"
@@ -207,26 +211,31 @@
                             android:background="#30FFFFFF"
                             android:layout_marginEnd="12dp"/>
 
+                        <!-- Cột 2: Ngày + số chuyến -->
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
+
                             <TextView
                                 android:id="@+id/tvTodayDate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Hôm nay"
+                                android:text="20/04/2026"
                                 android:textColor="#80FFFFFF"
                                 android:textSize="9sp"/>
+
                             <TextView
                                 android:id="@+id/tvTripCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:text="0 chuyến hôm nay"
                                 android:textColor="#F97316"
                                 android:textSize="13sp"
                                 android:textStyle="bold"
                                 android:layout_marginTop="1dp"/>
                         </LinearLayout>
+
                     </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
@@ -403,7 +412,6 @@
                     android:orientation="horizontal"
                     android:weightSum="3"
                     android:layout_marginBottom="20dp">
-
                     <!-- Xe buýt -->
                     <LinearLayout
                         android:id="@+id/btnTransportBus"
@@ -416,6 +424,7 @@
                         android:background="@drawable/bg_transport_unselected"
                         android:layout_marginEnd="6dp">
                         <FrameLayout
+                            android:id="@+id/ivTransportIconBus"
                             android:layout_width="44dp"
                             android:layout_height="44dp"
                             android:background="@drawable/bg_icon_gray">
@@ -426,6 +435,7 @@
                                 android:src="@drawable/ic_bus"/>
                         </FrameLayout>
                         <TextView
+                            android:id="@+id/tvTransportLabelBus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Xe buýt"
@@ -446,6 +456,7 @@
                         android:background="@drawable/bg_transport_unselected"
                         android:layout_marginEnd="6dp">
                         <FrameLayout
+                            android:id="@+id/ivTransportIconMetro"
                             android:layout_width="44dp"
                             android:layout_height="44dp"
                             android:background="@drawable/bg_icon_gray">
@@ -456,6 +467,7 @@
                                 android:src="@drawable/ic_metro"/>
                         </FrameLayout>
                         <TextView
+                            android:id="@+id/tvTransportLabelMetro"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Metro"
@@ -464,7 +476,7 @@
                             android:layout_marginTop="8dp"/>
                     </LinearLayout>
 
-                    <!-- Waterbus (selected by default) -->
+                    <!-- Waterbus -->
                     <LinearLayout
                         android:id="@+id/btnTransportWaterbus"
                         android:layout_width="0dp"
@@ -475,6 +487,7 @@
                         android:padding="12dp"
                         android:background="@drawable/bg_transport_selected">
                         <FrameLayout
+                            android:id="@+id/ivTransportIconWaterbus"
                             android:layout_width="44dp"
                             android:layout_height="44dp"
                             android:background="@drawable/bg_icon_blue">
@@ -485,6 +498,7 @@
                                 android:src="@drawable/ic_waterbus"/>
                         </FrameLayout>
                         <TextView
+                            android:id="@+id/tvTransportLabelWaterbus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Waterbus"
@@ -673,7 +687,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="🚌\nXe buýt"
+                        android:text="\nXe buýt"
                         android:textAlignment="center"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp"
@@ -686,7 +700,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="🚇\nMetro"
+                        android:text="\nMetro"
                         android:textAlignment="center"
                         android:textColor="#6B7280"
                         android:textSize="12sp"
@@ -699,7 +713,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="⛴\nWaterbus"
+                        android:text="\nWaterbus"
                         android:textAlignment="center"
                         android:textColor="#6B7280"
                         android:textSize="12sp"
@@ -1197,8 +1211,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_marginBottom="12dp">
+                            android:gravity="center_vertical" android:layout_marginBottom="12dp">
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                     android:text="Điểm thưởng TransGo" android:textColor="#60FFFFFF" android:textSize="10sp" android:layout_marginBottom="3dp"/>
@@ -1235,6 +1248,7 @@
 
             </LinearLayout>
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

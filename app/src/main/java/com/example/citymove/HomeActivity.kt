@@ -15,19 +15,27 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
-    // Transport selector state
-    private var selectedTransport = "bus"
+    private var selectedTransport = TRANSPORT_BUS
 
-    // Transport buttons — khai báo ở class level để dùng được trong applyTransportSelection
     private lateinit var btnBus: LinearLayout
     private lateinit var btnMetro: LinearLayout
     private lateinit var btnWaterbus: LinearLayout
+
+    companion object {
+        const val TRANSPORT_BUS        = "bus"
+        const val TRANSPORT_METRO      = "metro"
+        const val TRANSPORT_WATERBUS   = "waterbus"
+        const val FIELD_PREF_TRANSPORT = "preferredTransport"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +51,7 @@ class HomeActivity : AppCompatActivity() {
             return
         }
 
-        setupTransportSelector() // phải gọi trước loadUserData để btnBus/Metro/Waterbus đã được init
+        setupTransportSelector()
         loadUserData()
         setupBottomNav()
         setupClickListeners()
@@ -55,19 +63,16 @@ class HomeActivity : AppCompatActivity() {
     private fun loadUserData() {
         val uid = auth.currentUser?.uid ?: return
 
-        // Set ngày ngay lập tức, không cần chờ Firestore
-        val sdf = java.text.SimpleDateFormat("dd/MM", java.util.Locale("vi"))
-        findViewById<TextView>(R.id.tvTodayDate).text = sdf.format(java.util.Date())
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale("vi"))
+        findViewById<TextView>(R.id.tvTodayDate).text = "Hôm nay ${sdf.format(Date())}"
 
         db.collection("users").document(uid)
             .get()
             .addOnSuccessListener { doc ->
                 if (doc != null && doc.exists()) {
-                    // ── Tên user ──────────────────────────────────────
                     val name = doc.getString("name") ?: doc.getString("email") ?: "Bạn"
                     findViewById<TextView>(R.id.tvUserName).text = "$name 👋"
 
-                    // ── Số dư & thống kê ──────────────────────────────
                     val balance = doc.getLong("balance") ?: 0L
                     findViewById<TextView>(R.id.tvBalance).text =
                         String.format("%,dđ", balance).replace(",", ".")
@@ -75,22 +80,19 @@ class HomeActivity : AppCompatActivity() {
                     val monthlySpend = doc.getLong("monthlySpend") ?: 0L
                     val monthlyTrips = doc.getLong("monthlyTrips") ?: 0L
                     val co2Saved     = doc.getDouble("co2Saved") ?: 0.0
-                    val points       = doc.getLong("points") ?: 0L
+                    val points       = doc.getLong("Points") ?: 0L
+                    val todayTrips   = doc.getLong("todayTrips") ?: 0L
 
                     findViewById<TextView>(R.id.tvMonthlySpend).text =
                         String.format("%,dđ", monthlySpend).replace(",", ".")
                     findViewById<TextView>(R.id.tvMonthlyTrips).text = "$monthlyTrips chuyến"
                     findViewById<TextView>(R.id.tvCO2Saved).text     = "$co2Saved Kg"
                     findViewById<TextView>(R.id.tvPoints).text       = "$points điểm"
+                    findViewById<TextView>(R.id.tvTripCount).text    = "$todayTrips chuyến hôm nay"
 
-                    val todayTrips = doc.getLong("todayTrips") ?: 0L
-                    findViewById<TextView>(R.id.tvTripCount).text = "$todayTrips chuyến"
-
-                    // ── Load transport preference từ Firestore ─────────
-                    val preferred = doc.getString("preferredTransport") ?: "bus"
+                    val preferred = doc.getString(FIELD_PREF_TRANSPORT) ?: TRANSPORT_BUS
                     applyTransportFromData(preferred)
 
-                    // ── Load quick chips từ Firestore ──────────────────
                     @Suppress("UNCHECKED_CAST")
                     val destinations = doc.get("quickDestinations") as? List<String>
                     if (!destinations.isNullOrEmpty()) {
@@ -99,28 +101,10 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener {
-                // Firestore lỗi → vẫn hiện tên từ FirebaseAuth nếu có
                 val displayName = auth.currentUser?.displayName
                     ?: auth.currentUser?.email
                     ?: "Bạn"
                 findViewById<TextView>(R.id.tvUserName).text = "$displayName 👋"
-            }
-
-        db.collection("users").document(uid)
-            .collection("weeklyStats")
-            .document("current")
-            .get()
-            .addOnSuccessListener { doc ->
-                if (doc != null && doc.exists()) {
-                    val weekTrips = doc.getLong("trips") ?: 0L
-                    val weekCost  = doc.getLong("cost") ?: 0L
-                    val weekCO2   = doc.getDouble("co2") ?: 0.0
-
-                    findViewById<TextView>(R.id.tvWeekTrips).text = "$weekTrips"
-                    findViewById<TextView>(R.id.tvWeekCost).text  =
-                        String.format("%,dđ", weekCost).replace(",", ".")
-                    findViewById<TextView>(R.id.tvWeekCO2).text   = "$weekCO2 Kg"
-                }
             }
     }
 
@@ -146,6 +130,7 @@ class HomeActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
     }
 
     // ─────────────────────────────────────────────────────────
@@ -154,7 +139,6 @@ class HomeActivity : AppCompatActivity() {
     private fun setupClickListeners() {
         val destinationInput = findViewById<EditText>(R.id.etDestinationInput)
 
-        // ── Search ────────────────────────────────────────────
         findViewById<View>(R.id.searchBar)?.setOnClickListener {
             openSearchWithDestination(destinationInput?.text?.toString())
         }
@@ -180,24 +164,16 @@ class HomeActivity : AppCompatActivity() {
             } else false
         }
 
-        // ── Quick chips — listener mặc định (sẽ bị override nếu Firestore có data) ──
         findViewById<View>(R.id.chipDestinationBenThanh)?.setOnClickListener {
-            openSearchWithDestination(
-                (it as? TextView)?.text?.toString() ?: "Bến Thành"
-            )
+            openSearchWithDestination((it as? TextView)?.text?.toString() ?: "Bến Thành")
         }
         findViewById<View>(R.id.chipDestinationSuoiTien)?.setOnClickListener {
-            openSearchWithDestination(
-                (it as? TextView)?.text?.toString() ?: "Suối Tiên"
-            )
+            openSearchWithDestination((it as? TextView)?.text?.toString() ?: "Suối Tiên")
         }
         findViewById<View>(R.id.chipDestinationTanSonNhat)?.setOnClickListener {
-            openSearchWithDestination(
-                (it as? TextView)?.text?.toString() ?: "Sân bay Tân Sơn Nhất"
-            )
+            openSearchWithDestination((it as? TextView)?.text?.toString() ?: "Sân bay Tân Sơn Nhất")
         }
 
-        // ── Header buttons ────────────────────────────────────
         findViewById<View>(R.id.btnRoutePlanner)?.setOnClickListener {
             startActivity(Intent(this, AllRoutesActivity::class.java))
         }
@@ -209,7 +185,6 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, AccountActivity::class.java))
         }
 
-        // ── TransPass card ────────────────────────────────────
         findViewById<View>(R.id.tvCardDetail)?.setOnClickListener {
             startActivity(Intent(this, CardDetailActivity::class.java))
         }
@@ -217,7 +192,6 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, TopUpActivity::class.java))
         }
 
-        // ── Route items ───────────────────────────────────────
         findViewById<View>(R.id.busRouteItem1)?.setOnClickListener { openRouteDetail(1) }
         findViewById<View>(R.id.busRouteItem2)?.setOnClickListener { openRouteDetail(2) }
         findViewById<View>(R.id.busRouteItem3)?.setOnClickListener { openRouteDetail(3) }
@@ -228,42 +202,39 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, HistoryActivity::class.java))
         }
 
-        // ── Route tabs (Buýt / Metro / Waterbus) ─────────────
         setupRouteTabs()
     }
 
     // ─────────────────────────────────────────────────────────
-    // TRANSPORT SELECTOR — 3 icon cards dưới search bar
+    // TRANSPORT SELECTOR
     // ─────────────────────────────────────────────────────────
     private fun setupTransportSelector() {
         btnBus      = findViewById(R.id.btnTransportBus)
         btnMetro    = findViewById(R.id.btnTransportMetro)
         btnWaterbus = findViewById(R.id.btnTransportWaterbus)
 
-        // Mặc định chưa chọn gì — sẽ được set sau khi Firestore trả về
         btnBus.setOnClickListener {
-            applyTransportSelection(btnBus, "bus")
-            saveTransportPreference("bus")
+            applyTransportSelection(btnBus, TRANSPORT_BUS)
+            saveTransportPreference(TRANSPORT_BUS)
             startActivity(Intent(this, BusRoutesActivity::class.java))
         }
         btnMetro.setOnClickListener {
-            applyTransportSelection(btnMetro, "metro")
-            saveTransportPreference("metro")
+            applyTransportSelection(btnMetro, TRANSPORT_METRO)
+            saveTransportPreference(TRANSPORT_METRO)
             startActivity(Intent(this, MetroRoutesActivity::class.java))
         }
         btnWaterbus.setOnClickListener {
-            applyTransportSelection(btnWaterbus, "waterbus")
-            saveTransportPreference("waterbus")
+            applyTransportSelection(btnWaterbus, TRANSPORT_WATERBUS)
+            saveTransportPreference(TRANSPORT_WATERBUS)
             startActivity(Intent(this, WaterbusRoutesActivity::class.java))
         }
     }
 
-    // Gọi từ loadUserData() sau khi lấy được preference từ Firestore
     private fun applyTransportFromData(type: String) {
         val selected = when (type) {
-            "metro"    -> btnMetro
-            "waterbus" -> btnWaterbus
-            else       -> btnBus
+            TRANSPORT_METRO    -> btnMetro
+            TRANSPORT_WATERBUS -> btnWaterbus
+            else               -> btnBus
         }
         applyTransportSelection(selected, type)
     }
@@ -273,14 +244,23 @@ class HomeActivity : AppCompatActivity() {
         val activeColor   = ContextCompat.getColor(this, R.color.blue_primary)
         val inactiveColor = ContextCompat.getColor(this, R.color.text_secondary)
 
+        val transportMap = mapOf(
+            btnBus      to Pair(R.id.ivTransportIconBus,      R.id.tvTransportLabelBus),
+            btnMetro    to Pair(R.id.ivTransportIconMetro,    R.id.tvTransportLabelMetro),
+            btnWaterbus to Pair(R.id.ivTransportIconWaterbus, R.id.tvTransportLabelWaterbus)
+        )
+
         listOf(btnBus, btnMetro, btnWaterbus).forEach { btn ->
             val isSelected = btn == selected
             btn.setBackgroundResource(
                 if (isSelected) R.drawable.bg_transport_selected
                 else R.drawable.bg_transport_unselected
             )
-            val iconFrame = btn.getChildAt(0)
-            val label     = btn.getChildAt(1) as? TextView
+
+            val (iconId, labelId) = transportMap[btn] ?: return@forEach
+            val iconFrame = btn.findViewById<View>(iconId)
+            val label     = btn.findViewById<TextView>(labelId)
+
             label?.setTextColor(if (isSelected) activeColor else inactiveColor)
             label?.setTypeface(null,
                 if (isSelected) android.graphics.Typeface.BOLD
@@ -293,16 +273,17 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    // Lưu preference khi user click vào transport
     private fun saveTransportPreference(type: String) {
         val uid = auth.currentUser?.uid ?: return
         db.collection("users").document(uid)
-            .update("preferredTransport", type)
+            .update(FIELD_PREF_TRANSPORT, type)
+            .addOnFailureListener {
+                Toast.makeText(this, "Không lưu được tùy chọn", Toast.LENGTH_SHORT).show()
+            }
     }
 
     // ─────────────────────────────────────────────────────────
-    // QUICK CHIPS — load động từ Firestore
-    // Firestore field: quickDestinations: ["Bến Thành", "Suối Tiên", "Sân bay Tân Sơn Nhất"]
+    // QUICK CHIPS
     // ─────────────────────────────────────────────────────────
     private fun updateQuickChips(destinations: List<String>) {
         val chips = listOf(
@@ -310,19 +291,16 @@ class HomeActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.chipDestinationSuoiTien),
             findViewById<TextView>(R.id.chipDestinationTanSonNhat)
         )
-
         destinations.forEachIndexed { index, dest ->
             if (index < chips.size) {
                 chips[index]?.text = dest
-                chips[index]?.setOnClickListener {
-                    openSearchWithDestination(dest)
-                }
+                chips[index]?.setOnClickListener { openSearchWithDestination(dest) }
             }
         }
     }
 
     // ─────────────────────────────────────────────────────────
-    // ROUTE TABS — Buýt / Metro / Waterbus tab switcher
+    // ROUTE TABS
     // ─────────────────────────────────────────────────────────
     private fun setupRouteTabs() {
         val tabBus      = findViewById<TextView>(R.id.tabBus)
@@ -339,8 +317,13 @@ class HomeActivity : AppCompatActivity() {
         fun activateTab(index: Int) {
             allTabs.forEachIndexed { i, tv ->
                 val isSelected = (i == index)
+                // FIX: đổi background drawable thay vì chỉ đổi màu text
+                tv?.setBackgroundResource(
+                    if (isSelected) R.drawable.bg_tab_selected
+                    else R.drawable.bg_tab_unselected
+                )
                 tv?.setTextColor(
-                    if (isSelected) ContextCompat.getColor(this, R.color.blue_primary)
+                    if (isSelected) ContextCompat.getColor(this, R.color.white)
                     else ContextCompat.getColor(this, R.color.text_secondary)
                 )
                 tv?.setTypeface(null,
@@ -357,9 +340,12 @@ class HomeActivity : AppCompatActivity() {
         tabMetro?.setOnClickListener    { activateTab(1) }
         tabWaterbus?.setOnClickListener { activateTab(2) }
 
-        activateTab(0)
+        activateTab(0) // Bus selected by default
     }
 
+    // ─────────────────────────────────────────────────────────
+    // HELPERS
+    // ─────────────────────────────────────────────────────────
     private fun openSearchWithDestination(destination: String?) {
         val intent = Intent(this, SearchActivity::class.java)
         if (!destination.isNullOrEmpty()) {

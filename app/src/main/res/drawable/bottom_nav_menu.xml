@@ -4,22 +4,22 @@
 
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/ic_nav_home"
-        android:title="Trang chủ" />
-
-    <item
-        android:id="@+id/nav_notification"
-        android:icon="@drawable/ic_nav_bell"
-        android:title="Thông báo" />
+        android:icon="@drawable/ic_home"
+        android:title="Trang chủ"/>
 
     <item
         android:id="@+id/nav_favorite"
-        android:icon="@drawable/ic_nav_heart"
-        android:title="Yêu thích" />
+        android:icon="@drawable/ic_favorite"
+        android:title="Yêu thích"/>
+
+    <item
+        android:id="@+id/nav_notification"
+        android:icon="@drawable/ic_notification"
+        android:title="Thông báo"/>
 
     <item
         android:id="@+id/nav_account"
-        android:icon="@drawable/ic_nav_user"
-        android:title="Tài khoản" />
+        android:icon="@drawable/ic_account"
+        android:title="Tài khoản"/>
 
 </menu>

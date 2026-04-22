@@ -106,29 +106,31 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:background="@drawable/bg_points_card"
+                    android:orientation="vertical"
                     android:padding="12dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Điểm thưởng TransGo"
                             android:textColor="#80FFFFFF"
-                            android:textSize="11sp"/>
+                            android:textSize="11sp" />
+
                         <TextView
                             android:id="@+id/tvPointsProgress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="#F97316"
                             android:textSize="13sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <ProgressBar
@@ -137,15 +139,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="6dp"
                         android:max="100"
-                        android:progressDrawable="@drawable/bg_timer_progress"/>
+                        android:progressDrawable="@drawable/bg_timer_progress" />
 
                     <TextView
                         android:id="@+id/tvPointsHint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
                         android:textColor="#4DFFFFFF"
-                        android:textSize="10sp"
-                        android:layout_marginTop="5dp"/>
+                        android:textSize="10sp" />
                 </LinearLayout>
             </LinearLayout>
 
