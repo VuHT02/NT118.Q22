@@ -1,14 +1,14 @@
 package com.example.citymove
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
+import androidx.core.graphics.toColorInt
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -31,7 +31,6 @@ class NotificationActivity : AppCompatActivity() {
     private var currentTab = 0  // 0=All 1=Trip 2=Promo 3=System
 
     private val tabTypes = listOf(null, "trip", "promo", "system")
-    private val tabLabels = listOf("Tất cả", "Chuyến đi", "Khuyến mãi", "Hệ thống")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,17 +44,32 @@ class NotificationActivity : AppCompatActivity() {
 
     // ── Tabs ──────────────────────────────────────────────────────
     private fun setupTabs() {
-        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
-        tabLabels.forEach { tabLayout.addTab(tabLayout.newTab().setText(it)) }
+        val tabs = listOf(
+            findViewById<TextView>(R.id.tabAll),
+            findViewById<TextView>(R.id.tabTrip),
+            findViewById<TextView>(R.id.tabPromo),
+            findViewById<TextView>(R.id.tabSystem)
+        )
 
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                currentTab = tab.position
+        tabs.forEachIndexed { index, textView ->
+            textView?.setOnClickListener {
+                currentTab = index
+                updateTabUI(tabs)
                 renderList(filterByTab(allNotifications))
             }
-            override fun onTabUnselected(tab: TabLayout.Tab) {}
-            override fun onTabReselected(tab: TabLayout.Tab) {}
-        })
+        }
+        updateTabUI(tabs)
+    }
+
+    private fun updateTabUI(tabs: List<TextView?>) {
+        tabs.forEachIndexed { index, textView ->
+            val isSelected = (index == currentTab)
+            textView?.let {
+                it.setBackgroundResource(if (isSelected) R.drawable.bg_tab_selected else R.drawable.bg_tab_unselected)
+                it.setTextColor(if (isSelected) Color.WHITE else "#6B7280".toColorInt())
+                it.setTypeface(null, if (isSelected) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL)
+            }
+        }
     }
 
     // ── Load từ Firestore ─────────────────────────────────────────

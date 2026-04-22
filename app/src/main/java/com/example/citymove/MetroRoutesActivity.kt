@@ -7,26 +7,82 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MetroRoutesActivity : AppCompatActivity() {
 
-    private val routes = listOf(
-        RouteData(1, "MRT1", "Metro số 1", "Bến Thành", "Suối Tiên",     RouteType.METRO, "12.000đ", "18 phút"),
-        RouteData(8, "MRT1", "Metro số 1", "Bình Thái", "Tham Lương",    RouteType.METRO, "12.000đ", "18 phút"),
-    )
+    private lateinit var db: FirebaseFirestore
+    private lateinit var container: LinearLayout
+    private lateinit var progressBar: ProgressBar
+    private lateinit var tvEmpty: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_metro_routes)
         supportActionBar?.hide()
 
+        db = FirebaseFirestore.getInstance()
+
         findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
 
-        val container = findViewById<LinearLayout>(R.id.routeListContainer)
-        container.removeAllViews()
-        routes.forEach { container.addView(buildRouteCard(it)) }
+        container    = findViewById(R.id.routeListContainer)
+        progressBar  = findViewById(R.id.progressBar)
+        tvEmpty      = findViewById(R.id.tvEmpty)
+
+        loadRoutesFromFirestore()
     }
 
+    // ─────────────────────────────────────────────────────────
+    // LOAD TỪ FIRESTORE
+    // Cấu trúc Firestore:
+    // routes/{routeId} → { code, name, from, to, fare, duration, type: "metro" }
+    // ─────────────────────────────────────────────────────────
+    private fun loadRoutesFromFirestore() {
+        progressBar.visibility = View.VISIBLE
+        tvEmpty.visibility     = View.GONE
+        // container.removeAllViews() // Commented out to keep static cards if needed, or keep if you only want dynamic data.
+        // Usually, if we have static cards in XML and also load from Firestore, we might want to keep both or clear.
+        // Given the layout has cardMetro1, cardMetro2, cardMetro3, let's just append for now or the user can decide.
+        // If we want to support the search/tab functionality properly, we should probably clear.
+
+        db.collection("routes")
+            .whereEqualTo("type", "metro")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                progressBar.visibility = View.GONE
+
+                if (snapshot.isEmpty) {
+                    // If we have static cards, we might not want to show "Empty" if they are visible.
+                    // But usually dynamic loading replaces or adds to it.
+                    // tvEmpty.visibility = View.VISIBLE
+                    // tvEmpty.text       = "Không có tuyến Metro nào"
+                    return@addOnSuccessListener
+                }
+
+                snapshot.documents.forEach { doc ->
+                    val route = RouteData(
+                        id       = doc.getLong("id")?.toInt() ?: 0,
+                        code     = doc.getString("code") ?: "M",
+                        name     = doc.getString("name") ?: "",
+                        from     = doc.getString("from") ?: "",
+                        to       = doc.getString("to") ?: "",
+                        type     = RouteType.METRO,
+                        fare     = doc.getString("fare") ?: "0đ",
+                        duration = doc.getString("duration") ?: ""
+                    )
+                    container.addView(buildRouteCard(route))
+                }
+            }
+            .addOnFailureListener { e ->
+                progressBar.visibility = View.GONE
+                tvEmpty.visibility     = View.VISIBLE
+                tvEmpty.text           = "Lỗi tải dữ liệu: ${e.message}"
+            }
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // BUILD CARD
+    // ─────────────────────────────────────────────────────────
     private fun buildRouteCard(route: RouteData): View {
         val card = CardView(this).apply {
             radius = dpToPx(14).toFloat()

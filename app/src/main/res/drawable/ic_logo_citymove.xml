@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Background Layer: Gradient Navy -->
+    <path android:pathData="M54,54m-54,0a54,54 0 1,1 108,0a54,54 0 1,1 -108,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="90"
+                android:endY="90"
+                android:startX="18"
+                android:startY="18"
+                android:type="linear">
+                <item android:color="#1A2B45" android:offset="0" />
+                <item android:color="#0B1320" android:offset="1" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Subtle Glow Halo -->
+    <path
+        android:fillColor="#12F97316"
+        android:pathData="M54,54m-48,0a48,48 0 1,1 96,0a48,48 0 1,1 -96,0" />
+
+    <!-- Thin Accent Ring -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#25F97316"
+        android:strokeWidth="0.8"
+        android:pathData="M54,54m-44,0a44,44 0 1,1 88,0a44,44 0 1,1 -88,0" />
+
+    <!-- Stylized "A" (Main Body) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,30L34,70L42,70L54,46L66,70L74,70Z" />
+
+    <!-- Modern Crossbar (Orange Accent) -->
+    <path
+        android:fillColor="#F97316"
+        android:pathData="M44,58C43,58 43,61 44,61L64,61C65,61 65,58 64,58Z" />
+
+    <!-- Floating Pin/Location Marker above "A" -->
+    <path
+        android:fillColor="#F97316"
+        android:pathData="M54,18C51.5,18 49.5,20 49.5,22.5C49.5,26 54,31 54,31C54,31 58.5,26 58.5,22.5C58.5,20 56.5,18 54,18ZM54,24.5C52.9,24.5 52,23.6 52,22.5C52,21.4 52.9,20.5 54,20.5C55.1,20.5 56,21.4 56,22.5C56,23.6 55.1,24.5 54,24.5Z" />
+
+</vector>
