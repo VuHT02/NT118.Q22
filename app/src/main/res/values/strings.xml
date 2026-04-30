@@ -2,17 +2,6 @@
     <string name="app_name">CityMove</string>
 
     <!-- Thêm vào đây, trước thẻ đóng -->
-    <string name="back">Quay lại</string>
-    <string name="shield_icon_desc">Biểu tượng bảo mật</string>
-    <string name="new_password_title">Mật khẩu mới</string>
-    <string name="new_password_subtitle">Tạo mật khẩu mới cho tài khoản</string>
-    <string name="label_new_password">MẬT KHẨU MỚI</string>
-    <string name="label_confirm_password">XÁC NHẬN MẬT KHẨU</string>
-    <string name="hint_new_password">Nhập mật khẩu mới</string>
-    <string name="hint_confirm_password">Nhập lại mật khẩu</string>
-    <string name="password_strength">Độ mạnh mật khẩu</string>
-    <string name="strength_medium">Trung bình</string>
-    <string name="btn_reset_password">ĐẶT LẠI MẬT KHẨU</string>
     <string name="facebook_app_id">917242807738729</string>
     <string name="facebook_client_token">f3f97e1560ab1ffe069ead89c55d4db9</string>
     <string name="fb_login_protocol_scheme">fb917242807738729</string>
@@ -47,14 +36,5 @@
     <string name="default_web_client_id">587650640705-i4u8mvdu9df3222t18d5rj60j99mhe2v.apps.googleusercontent.com</string>
 
     <!-- HomeActivity Strings -->
-    <string name="welcome_user">%1$s 👋</string>
-    <string name="balance_format">%,dđ</string>
-    <string name="trips_count">%1$d chuyến</string>
-    <string name="co2_saved_format">%1$.1f Kg</string>
-    <string name="points_format">%1$d điểm</string>
-    <string name="current_location">Vị trí hiện tại</string>
-    <string name="destination_ben_thanh">Bến Thành</string>
-    <string name="destination_suoi_tien">Suối Tiên</string>
-    <string name="destination_tan_son_nhat">Sân bay Tân Sơn Nhất</string>
 
 </resources>

@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F4F8">
@@ -113,9 +114,10 @@
                             android:paddingEnd="8dp"
                             android:layout_marginEnd="8dp">
                             <ImageView
-                                android:layout_width="9dp"
-                                android:layout_height="9dp"
-                                android:src="@drawable/ic_location_dot"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:src="@drawable/ic_location_on"
+                                app:tint="#FFFFFF"
                                 android:layout_marginEnd="3dp"/>
                             <TextView
                                 android:layout_width="wrap_content"
@@ -125,9 +127,10 @@
                                 android:textSize="10sp"
                                 android:textStyle="bold"/>
                             <ImageView
-                                android:layout_width="9dp"
-                                android:layout_height="9dp"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
                                 android:src="@drawable/ic_chevron_down"
+                                app:tint="#FFFFFF"
                                 android:layout_marginStart="3dp"/>
                         </LinearLayout>
 
@@ -144,7 +147,8 @@
                                     android:layout_width="17dp"
                                     android:layout_height="17dp"
                                     android:layout_gravity="center"
-                                    android:src="@drawable/ic_bell"/>
+                                    android:src="@drawable/ic_bell"
+                                    app:tint="#FFFFFF"/>
                             </FrameLayout>
                             <View
                                 android:layout_width="8dp"
@@ -164,7 +168,8 @@
                                 android:layout_width="18dp"
                                 android:layout_height="18dp"
                                 android:layout_gravity="center"
-                                android:src="@drawable/ic_user"/>
+                                android:src="@drawable/ic_user"
+                                app:tint="#FFFFFF"/>
                         </FrameLayout>
                     </LinearLayout>
 
@@ -274,7 +279,8 @@
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
-                            android:src="@drawable/ic_transgo_logo"
+                            android:src="@drawable/ic_search"
+                            app:tint="#0b1928"
                             android:layout_marginEnd="10dp"/>
 
                         <EditText
@@ -432,7 +438,8 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
-                                android:src="@drawable/ic_bus"/>
+                                android:src="@drawable/ic_bus"
+                                app:tint="#64748B"/>
                         </FrameLayout>
                         <TextView
                             android:id="@+id/tvTransportLabelBus"
@@ -464,7 +471,8 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
-                                android:src="@drawable/ic_metro"/>
+                                android:src="@drawable/ic_metro"
+                                app:tint="#64748B"/>
                         </FrameLayout>
                         <TextView
                             android:id="@+id/tvTransportLabelMetro"
@@ -495,7 +503,8 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
-                                android:src="@drawable/ic_waterbus"/>
+                                android:src="@drawable/ic_waterbus"
+                                app:tint="#FFFFFF"/>
                         </FrameLayout>
                         <TextView
                             android:id="@+id/tvTransportLabelWaterbus"
@@ -549,9 +558,6 @@
                         android:orientation="horizontal"
                         android:padding="12dp">
 
-                        <!-- Balance -->
-
-                        <!-- Stats -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -616,18 +622,6 @@
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                     android:text="Tổng chi tháng này" android:textColor="#9aa5b4" android:textSize="10sp" android:layout_marginBottom="2dp"/>
                                 <TextView android:id="@+id/tvMonthlySpend" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:textColor="#0b1928" android:textSize="15sp" android:textStyle="bold"/>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:background="@drawable/bg_stat_card"
-                                android:padding="10dp"
-                                android:layout_marginBottom="6dp">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="Số chuyến tháng này" android:textColor="#9aa5b4" android:textSize="10sp" android:layout_marginBottom="2dp"/>
-                                <TextView android:id="@+id/tvMonthlyTrips" android:layout_width="wrap_content" android:layout_height="wrap_content"
                                     android:textColor="#0b1928" android:textSize="15sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout
@@ -721,307 +715,6 @@
                         android:background="@drawable/bg_tab_unselected"/>
 
                 </LinearLayout>
-                <!-- PANEL XE BUÝT -->
-                <LinearLayout
-                    android:id="@+id/panelBus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="3dp"
-                        app:cardBackgroundColor="#FFFFFF">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:id="@+id/busRouteItem1"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:padding="14dp"
-                                android:background="@drawable/bg_route_item_divider">
-                                <FrameLayout
-                                    android:layout_width="38dp"
-                                    android:layout_height="38dp"
-                                    android:background="@drawable/bg_transport_icon_orange"
-                                    android:layout_marginEnd="12dp">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:layout_gravity="center" android:text="01"
-                                        android:textColor="#F97316" android:textSize="12sp" android:textStyle="bold"/>
-                                </FrameLayout>
-                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Bến Thành → Suối Tiên" android:textColor="#0b1928" android:textSize="12sp" android:textStyle="bold"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Buýt số 01 · 23 phút · 10.000đ" android:textColor="#9aa5b4" android:textSize="10sp" android:layout_marginTop="2dp"/>
-                                </LinearLayout>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Mua vé" android:textColor="#FFFFFF" android:textSize="11sp" android:textStyle="bold"
-                                        style="@style/Widget.TransGo.Button.Orange" android:backgroundTint="@null"
-                                        android:paddingStart="12dp" android:paddingEnd="12dp" android:paddingTop="5dp" android:paddingBottom="5dp"
-                                        android:layout_marginBottom="3dp"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="12 phút nữa" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_gravity="end"/>
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/busRouteItem2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:padding="14dp"
-                                android:background="@drawable/bg_route_item_divider">
-                                <FrameLayout
-                                    android:layout_width="38dp"
-                                    android:layout_height="38dp"
-                                    android:background="@drawable/bg_transport_icon_orange"
-                                    android:layout_marginEnd="12dp">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:layout_gravity="center" android:text="36"
-                                        android:textColor="#F97316" android:textSize="12sp" android:textStyle="bold"/>
-                                </FrameLayout>
-                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Cơ quan → Nhà" android:textColor="#0b1928" android:textSize="12sp" android:textStyle="bold"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Buýt số 36 · 17 phút · 10.000đ" android:textColor="#9aa5b4" android:textSize="10sp" android:layout_marginTop="2dp"/>
-                                </LinearLayout>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Mua vé" android:textColor="#FFFFFF" android:textSize="11sp" android:textStyle="bold"
-                                        style="@style/Widget.TransGo.Button.Orange" android:backgroundTint="@null"
-                                        android:paddingStart="12dp" android:paddingEnd="12dp" android:paddingTop="5dp" android:paddingBottom="5dp"
-                                        android:layout_marginBottom="3dp"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="5 phút nữa" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_gravity="end"/>
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/busRouteItem3"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:padding="14dp">
-                                <FrameLayout
-                                    android:layout_width="38dp"
-                                    android:layout_height="38dp"
-                                    android:background="@drawable/bg_transport_icon_orange"
-                                    android:layout_marginEnd="12dp">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:layout_gravity="center" android:text="13"
-                                        android:textColor="#F97316" android:textSize="12sp" android:textStyle="bold"/>
-                                </FrameLayout>
-                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Tân Sơn Nhất → Q.1" android:textColor="#0b1928" android:textSize="12sp" android:textStyle="bold"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Buýt số 13 · 30 phút · 10.000đ" android:textColor="#9aa5b4" android:textSize="10sp" android:layout_marginTop="2dp"/>
-                                </LinearLayout>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Mua vé" android:textColor="#FFFFFF" android:textSize="11sp" android:textStyle="bold"
-                                        style="@style/Widget.TransGo.Button.Orange" android:backgroundTint="@null"
-                                        android:paddingStart="12dp" android:paddingEnd="12dp" android:paddingTop="5dp" android:paddingBottom="5dp"
-                                        android:layout_marginBottom="3dp"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="20 phút nữa" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_gravity="end"/>
-                                </LinearLayout>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
-
-                <!-- PANEL METRO -->
-                <LinearLayout
-                    android:id="@+id/panelMetro"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="3dp"
-                        app:cardBackgroundColor="#FFFFFF">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:id="@+id/metroRouteItem1"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:padding="14dp"
-                                android:background="@drawable/bg_route_item_divider">
-                                <FrameLayout
-                                    android:layout_width="38dp"
-                                    android:layout_height="38dp"
-                                    android:background="@drawable/bg_transport_icon_blue"
-                                    android:layout_marginEnd="12dp">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:layout_gravity="center" android:text="M1"
-                                        android:textColor="#1565C0" android:textSize="12sp" android:textStyle="bold"/>
-                                </FrameLayout>
-                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Bến Thành → Suối Tiên" android:textColor="#0b1928" android:textSize="12sp" android:textStyle="bold"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Metro số 1 · 19 phút · 12.000đ" android:textColor="#9aa5b4" android:textSize="10sp" android:layout_marginTop="2dp"/>
-                                </LinearLayout>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Mua vé" android:textColor="#FFFFFF" android:textSize="11sp" android:textStyle="bold"
-                                        android:background="@drawable/bg_btn_metro"
-                                        android:paddingStart="12dp" android:paddingEnd="12dp" android:paddingTop="5dp" android:paddingBottom="5dp"
-                                        android:layout_marginBottom="3dp"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="5 phút nữa" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_gravity="end"/>
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/metroRouteItem2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:padding="14dp">
-                                <FrameLayout
-                                    android:layout_width="38dp"
-                                    android:layout_height="38dp"
-                                    android:background="@drawable/bg_transport_icon_blue"
-                                    android:layout_marginEnd="12dp">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:layout_gravity="center" android:text="M1"
-                                        android:textColor="#1565C0" android:textSize="12sp" android:textStyle="bold"/>
-                                </FrameLayout>
-                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Bình Thái → Tham Lương" android:textColor="#0b1928" android:textSize="12sp" android:textStyle="bold"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Metro số 1 · 18 phút · 12.000đ" android:textColor="#9aa5b4" android:textSize="10sp" android:layout_marginTop="2dp"/>
-                                </LinearLayout>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Mua vé" android:textColor="#FFFFFF" android:textSize="11sp" android:textStyle="bold"
-                                        android:background="@drawable/bg_btn_metro"
-                                        android:paddingStart="12dp" android:paddingEnd="12dp" android:paddingTop="5dp" android:paddingBottom="5dp"
-                                        android:layout_marginBottom="3dp"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="10 phút nữa" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_gravity="end"/>
-                                </LinearLayout>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
-
-                <!-- PANEL WATERBUS -->
-                <LinearLayout
-                    android:id="@+id/panelWaterbus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="3dp"
-                        app:cardBackgroundColor="#FFFFFF">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:id="@+id/waterbusRouteItem1"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:padding="14dp"
-                                android:background="@drawable/bg_route_item_divider">
-                                <FrameLayout
-                                    android:layout_width="38dp"
-                                    android:layout_height="38dp"
-                                    android:background="@drawable/bg_transport_icon_teal"
-                                    android:layout_marginEnd="12dp">
-                                    <ImageView android:layout_width="22dp" android:layout_height="22dp"
-                                        android:layout_gravity="center" android:src="@drawable/ic_waterbus"/>
-                                </FrameLayout>
-                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Bạch Đằng → Linh Đông" android:textColor="#0b1928" android:textSize="12sp" android:textStyle="bold"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Waterbus W01 · 35 phút · 15.000đ" android:textColor="#9aa5b4" android:textSize="10sp" android:layout_marginTop="2dp"/>
-                                </LinearLayout>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Mua vé" android:textColor="#FFFFFF" android:textSize="11sp" android:textStyle="bold"
-                                        android:background="@drawable/bg_btn_waterbus"
-                                        android:paddingStart="12dp" android:paddingEnd="12dp" android:paddingTop="5dp" android:paddingBottom="5dp"
-                                        android:layout_marginBottom="3dp"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="20 phút nữa" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_gravity="end"/>
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/waterbusRouteItem2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:padding="14dp">
-                                <FrameLayout
-                                    android:layout_width="38dp"
-                                    android:layout_height="38dp"
-                                    android:background="@drawable/bg_transport_icon_teal"
-                                    android:layout_marginEnd="12dp">
-                                    <ImageView android:layout_width="22dp" android:layout_height="22dp"
-                                        android:layout_gravity="center" android:src="@drawable/ic_waterbus"/>
-                                </FrameLayout>
-                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Bạch Đằng → Thanh Đa" android:textColor="#0b1928" android:textSize="12sp" android:textStyle="bold"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Waterbus W02 · 20 phút · 15.000đ" android:textColor="#9aa5b4" android:textSize="10sp" android:layout_marginTop="2dp"/>
-                                </LinearLayout>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="Mua vé" android:textColor="#FFFFFF" android:textSize="11sp" android:textStyle="bold"
-                                        android:background="@drawable/bg_btn_waterbus"
-                                        android:paddingStart="12dp" android:paddingEnd="12dp" android:paddingTop="5dp" android:paddingBottom="5dp"
-                                        android:layout_marginBottom="3dp"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="8 phút nữa" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_gravity="end"/>
-                                </LinearLayout>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
 
                 <!-- ═══════════════════════════════════════ -->
                 <!-- 4. AI GỢI Ý                            -->
@@ -1074,7 +767,8 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="center_vertical">
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical"
+                                tools:ignore="UseCompoundDrawables">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                     android:text="Cơ quan → Nhà" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -1099,100 +793,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <!-- ═══════════════════════════════════════ -->
-                <!-- 5. THỐNG KÊ TUẦN                       -->
-                <!-- ═══════════════════════════════════════ -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Thống kê tuần này"
-                        android:textColor="#0b1928"
-                        android:textSize="15sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/tvSeeHistory"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Lịch sử →"
-                        android:textColor="#F97316"
-                        android:textSize="11sp"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="3dp"
-                    app:cardBackgroundColor="#FFFFFF">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="14dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:orientation="horizontal"
-                            android:gravity="bottom"
-                            android:layout_marginBottom="8dp">
-                            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="bottom|center_horizontal">
-                                <View android:layout_width="match_parent" android:layout_height="30dp" android:background="@drawable/bg_bar_active" android:layout_marginStart="3dp" android:layout_marginEnd="3dp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="T2" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_marginTop="3dp"/>
-                            </LinearLayout>
-                            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="bottom|center_horizontal">
-                                <View android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_bar_active" android:layout_marginStart="3dp" android:layout_marginEnd="3dp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="T3" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_marginTop="3dp"/>
-                            </LinearLayout>
-                            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="bottom|center_horizontal">
-                                <View android:layout_width="match_parent" android:layout_height="20dp" android:background="@drawable/bg_bar_active" android:alpha="0.4" android:layout_marginStart="3dp" android:layout_marginEnd="3dp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="T4" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_marginTop="3dp"/>
-                            </LinearLayout>
-                            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="bottom|center_horizontal">
-                                <View android:layout_width="match_parent" android:layout_height="56dp" android:background="@drawable/bg_bar_active" android:layout_marginStart="3dp" android:layout_marginEnd="3dp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="T5" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_marginTop="3dp"/>
-                            </LinearLayout>
-                            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="bottom|center_horizontal">
-                                <View android:layout_width="match_parent" android:layout_height="38dp" android:background="@drawable/bg_bar_active" android:alpha="0.6" android:layout_marginStart="3dp" android:layout_marginEnd="3dp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="T6" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_marginTop="3dp"/>
-                            </LinearLayout>
-                            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="bottom|center_horizontal">
-                                <View android:layout_width="match_parent" android:layout_height="14dp" android:background="@drawable/bg_bar_inactive" android:layout_marginStart="3dp" android:layout_marginEnd="3dp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="T7" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_marginTop="3dp"/>
-                            </LinearLayout>
-                            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="bottom|center_horizontal">
-                                <View android:layout_width="match_parent" android:layout_height="8dp" android:background="@drawable/bg_bar_inactive" android:layout_marginStart="3dp" android:layout_marginEnd="3dp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="CN" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_marginTop="3dp"/>
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:background="@drawable/bg_stat_card" android:padding="10dp" android:layout_marginEnd="6dp">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tổng chuyến" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_marginBottom="3dp"/>
-                                <TextView android:id="@+id/tvWeekTrips" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#0b1928" android:textSize="20sp" android:textStyle="bold"/>
-                            </LinearLayout>
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:background="@drawable/bg_stat_card" android:padding="10dp" android:layout_marginEnd="6dp">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Chi phí" android:textColor="#9aa5b4" android:textSize="9sp" android:layout_marginBottom="3dp"/>
-                                <TextView android:id="@+id/tvWeekCost" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#0b1928" android:textSize="15sp" android:textStyle="bold"/>
-                            </LinearLayout>
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:background="@drawable/bg_stat_green" android:padding="10dp">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="CO₂ giảm" android:textColor="#2E7D32" android:textSize="9sp" android:layout_marginBottom="3dp"/>
-                                <TextView android:id="@+id/tvWeekCO2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#2E7D32" android:textSize="15sp" android:textStyle="bold"/>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- ═══════════════════════════════════════ -->
-                <!-- 6. ĐIỂM THƯỞNG                         -->
+                <!-- 5. ĐIỂM THƯỞNG                         -->
                 <!-- ═══════════════════════════════════════ -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -1219,16 +820,9 @@
                                     android:textColor="#F97316" android:textSize="22sp" android:textStyle="bold" android:fontFamily="sans-serif-condensed"/>
                             </LinearLayout>
                             <FrameLayout android:layout_width="46dp" android:layout_height="46dp" android:background="@drawable/bg_icon_circle_orange">
-                                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/ic_star"/>
+                                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/ic_star"
+                                    app:tint="#FFFFFF"/>
                             </FrameLayout>
-                        </LinearLayout>
-
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                            android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="6dp">
-                            <TextView android:id="@+id/tvPointsProgress" android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:textColor="#50FFFFFF" android:textSize="10sp"/>
-                            <TextView android:id="@+id/tvPointsRank" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:textColor="#AAAAAA" android:textSize="10sp"/>
                         </LinearLayout>
 
                         <ProgressBar
@@ -1240,9 +834,6 @@
                             android:progress="62"
                             android:progressDrawable="@drawable/bg_timer_progress"
                             android:layout_marginBottom="6dp"/>
-
-                        <TextView android:id="@+id/tvPointsHint" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:textColor="#45FFFFFF" android:textSize="10sp"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
