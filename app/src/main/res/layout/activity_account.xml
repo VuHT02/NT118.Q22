@@ -39,8 +39,9 @@
                         android:id="@+id/btnEditAvatar"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:background="@drawable/bg_avatar_circle_large"
-                        android:layout_marginEnd="14dp">
+                        android:layout_marginEnd="14dp"
+                        android:background="@drawable/bg_badge_orange">
+
                         <TextView
                             android:id="@+id/tvAvatarInitials"
                             android:layout_width="wrap_content"
@@ -48,7 +49,7 @@
                             android:layout_gravity="center"
                             android:textColor="#FFFFFF"
                             android:textSize="22sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
                     </FrameLayout>
 
                     <LinearLayout
@@ -80,7 +81,8 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
-                            android:background="@drawable/bg_rank_pill"
+                            android:background="@drawable/bg_icon_circle_orange"
+                            android:backgroundTint="#2D3748"
                             android:paddingStart="10dp"
                             android:paddingEnd="10dp"
                             android:paddingTop="3dp"
@@ -90,6 +92,7 @@
                                 android:layout_width="10dp"
                                 android:layout_height="10dp"
                                 android:src="@drawable/ic_star"
+                                app:tint="#F97316"
                                 android:layout_marginEnd="4dp"/>
                             <TextView
                                 android:id="@+id/tvRank"
@@ -115,7 +118,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:orientation="horizontal">
-
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -123,7 +125,6 @@
                             android:text="Điểm thưởng TransGo"
                             android:textColor="#80FFFFFF"
                             android:textSize="11sp" />
-
                         <TextView
                             android:id="@+id/tvPointsProgress"
                             android:layout_width="wrap_content"
@@ -140,14 +141,6 @@
                         android:layout_height="6dp"
                         android:max="100"
                         android:progressDrawable="@drawable/bg_timer_progress" />
-
-                    <TextView
-                        android:id="@+id/tvPointsHint"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:textColor="#4DFFFFFF"
-                        android:textSize="10sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -158,7 +151,6 @@
                 android:orientation="vertical"
                 android:padding="14dp">
 
-                <!-- Section: Tài khoản -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -193,10 +185,12 @@
                             <FrameLayout
                                 android:layout_width="34dp"
                                 android:layout_height="34dp"
-                                android:background="@drawable/bg_transport_icon_orange"
+                                android:background="@drawable/bg_icon_circle_orange"
+                                android:backgroundTint="#FFF3E0"
                                 android:layout_marginEnd="12dp">
                                 <ImageView android:layout_width="16dp" android:layout_height="16dp"
-                                    android:layout_gravity="center" android:src="@drawable/ic_user"/>
+                                    android:layout_gravity="center" android:src="@drawable/ic_user"
+                                    app:tint="#F97316"/>
                             </FrameLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
                                 android:layout_weight="1" android:orientation="vertical">
@@ -208,7 +202,8 @@
                                     android:textSize="11sp" android:layout_marginTop="1dp"/>
                             </LinearLayout>
                             <ImageView android:layout_width="16dp" android:layout_height="16dp"
-                                android:src="@drawable/ic_chevron_right"/>
+                                android:src="@drawable/ic_keyboard_arrow_right"
+                                app:tint="#9aa5b4"/>
                         </LinearLayout>
 
                         <!-- Đổi mật khẩu -->
@@ -222,10 +217,12 @@
                             <FrameLayout
                                 android:layout_width="34dp"
                                 android:layout_height="34dp"
-                                android:background="@drawable/bg_transport_icon_blue"
+                                android:background="@drawable/bg_icon_blue"
+                                android:backgroundTint="#E3F2FD"
                                 android:layout_marginEnd="12dp">
                                 <ImageView android:layout_width="16dp" android:layout_height="16dp"
-                                    android:layout_gravity="center" android:src="@drawable/ic_lock"/>
+                                    android:layout_gravity="center" android:src="@drawable/ic_lock"
+                                    app:tint="#1565C0"/>
                             </FrameLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
                                 android:layout_weight="1" android:orientation="vertical">
@@ -237,7 +234,8 @@
                                     android:textSize="11sp" android:layout_marginTop="1dp"/>
                             </LinearLayout>
                             <ImageView android:layout_width="16dp" android:layout_height="16dp"
-                                android:src="@drawable/ic_chevron_right"/>
+                                android:src="@drawable/ic_keyboard_arrow_right"
+                                app:tint="#9aa5b4"/>
                         </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -277,10 +275,12 @@
                             <FrameLayout
                                 android:layout_width="34dp"
                                 android:layout_height="34dp"
-                                android:background="@drawable/bg_stat_green"
+                                android:background="@drawable/bg_icon_circle_teal"
+                                android:backgroundTint="#E0F2F1"
                                 android:layout_marginEnd="12dp">
                                 <ImageView android:layout_width="16dp" android:layout_height="16dp"
-                                    android:layout_gravity="center" android:src="@drawable/ic_history"/>
+                                    android:layout_gravity="center" android:src="@drawable/ic_history"
+                                    app:tint="#2E7D32"/>
                             </FrameLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
                                 android:layout_weight="1" android:orientation="vertical">
@@ -292,7 +292,8 @@
                                     android:textSize="11sp" android:layout_marginTop="1dp"/>
                             </LinearLayout>
                             <ImageView android:layout_width="16dp" android:layout_height="16dp"
-                                android:src="@drawable/ic_chevron_right"/>
+                                android:src="@drawable/ic_keyboard_arrow_right"
+                                app:tint="#9aa5b4"/>
                         </LinearLayout>
 
                         <!-- Điểm thưởng -->
@@ -306,10 +307,12 @@
                             <FrameLayout
                                 android:layout_width="34dp"
                                 android:layout_height="34dp"
-                                android:background="@drawable/bg_transport_icon_orange"
+                                android:background="@drawable/bg_icon_circle_orange"
+                                android:backgroundTint="#FFF3E0"
                                 android:layout_marginEnd="12dp">
                                 <ImageView android:layout_width="16dp" android:layout_height="16dp"
-                                    android:layout_gravity="center" android:src="@drawable/ic_star"/>
+                                    android:layout_gravity="center" android:src="@drawable/ic_star"
+                                    app:tint="#F97316"/>
                             </FrameLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
                                 android:layout_weight="1" android:orientation="vertical">
@@ -318,12 +321,14 @@
                                     android:textSize="13sp" android:textStyle="bold"/>
                                 <TextView
                                     android:id="@+id/tvPointsSub"
-                                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:textColor="#9aa5b4"
                                     android:textSize="11sp" android:layout_marginTop="1dp"/>
                             </LinearLayout>
                             <ImageView android:layout_width="16dp" android:layout_height="16dp"
-                                android:src="@drawable/ic_chevron_right"/>
+                                android:src="@drawable/ic_keyboard_arrow_right"
+                                app:tint="#9aa5b4"/>
                         </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -349,7 +354,8 @@
                             android:background="@drawable/bg_logout_icon"
                             android:layout_marginEnd="12dp">
                             <ImageView android:layout_width="16dp" android:layout_height="16dp"
-                                android:layout_gravity="center" android:src="@drawable/ic_logout"/>
+                                android:layout_gravity="center" android:src="@drawable/ic_logout"
+                                app:tint="#FF5252"/>
                         </FrameLayout>
                         <TextView
                             android:layout_width="wrap_content"
