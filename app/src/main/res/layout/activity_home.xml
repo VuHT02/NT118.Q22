@@ -46,7 +46,6 @@
                     android:orientation="vertical"
                     android:padding="14dp">
 
-                    <!-- Top bar: logo + actions -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
@@ -57,7 +56,7 @@
                         <FrameLayout
                             android:layout_width="34dp"
                             android:layout_height="34dp"
-                            android:background="@drawable/bg_logo_circle_orange"
+                            android:background="@drawable/bg_logo_circle"
                             android:layout_marginEnd="8dp">
                             <ImageView
                                 android:layout_width="18dp"
@@ -82,8 +81,7 @@
                                     android:textColor="#FFFFFF"
                                     android:textSize="18sp"
                                     android:textStyle="bold"
-                                    android:fontFamily="sans-serif-condensed"
-                                    android:includeFontPadding="false"/>
+                                    android:fontFamily="sans-serif-condensed"/>
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -91,8 +89,7 @@
                                     android:textColor="#F97316"
                                     android:textSize="18sp"
                                     android:textStyle="bold"
-                                    android:fontFamily="sans-serif-condensed"
-                                    android:includeFontPadding="false"/>
+                                    android:fontFamily="sans-serif-condensed"/>
                             </LinearLayout>
                             <TextView
                                 android:layout_width="wrap_content"
@@ -109,16 +106,17 @@
                             android:layout_height="28dp"
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
-                            android:background="@drawable/bg_location_pill"
-                            android:paddingStart="8dp"
-                            android:paddingEnd="8dp"
+                            android:background="@drawable/bg_button_rounded"
+                            android:backgroundTint="#2D3748"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
                             android:layout_marginEnd="8dp">
                             <ImageView
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:src="@drawable/ic_location_on"
                                 app:tint="#FFFFFF"
-                                android:layout_marginEnd="3dp"/>
+                                android:layout_marginEnd="4dp"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -126,12 +124,6 @@
                                 android:textColor="#FFFFFF"
                                 android:textSize="10sp"
                                 android:textStyle="bold"/>
-                            <ImageView
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:src="@drawable/ic_chevron_down"
-                                app:tint="#FFFFFF"
-                                android:layout_marginStart="3dp"/>
                         </LinearLayout>
 
                         <FrameLayout
@@ -153,7 +145,7 @@
                             <View
                                 android:layout_width="8dp"
                                 android:layout_height="8dp"
-                                android:background="@drawable/bg_notification_dot"
+                                android:background="@drawable/bg_badge_orange"
                                 android:layout_gravity="top|end"
                                 android:layout_marginTop="2dp"
                                 android:layout_marginEnd="2dp"/>
@@ -173,7 +165,6 @@
                         </FrameLayout>
                     </LinearLayout>
 
-                    <!-- Greeting + today trips -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -184,21 +175,17 @@
                         android:paddingEnd="12dp"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp">
-
-                        <!-- Cột 1: Tên người dùng -->
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:layout_marginEnd="12dp">
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Xin chào,"
                                 android:textColor="#80FFFFFF"
                                 android:textSize="10sp"/>
-
                             <TextView
                                 android:id="@+id/tvUserName"
                                 android:layout_width="wrap_content"
@@ -209,19 +196,15 @@
                                 android:textStyle="bold"
                                 android:layout_marginTop="1dp"/>
                         </LinearLayout>
-
                         <View
                             android:layout_width="1dp"
                             android:layout_height="24dp"
                             android:background="#30FFFFFF"
                             android:layout_marginEnd="12dp"/>
-
-                        <!-- Cột 2: Ngày + số chuyến -->
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
-
                             <TextView
                                 android:id="@+id/tvTodayDate"
                                 android:layout_width="wrap_content"
@@ -229,7 +212,6 @@
                                 android:text="20/04/2026"
                                 android:textColor="#80FFFFFF"
                                 android:textSize="9sp"/>
-
                             <TextView
                                 android:id="@+id/tvTripCount"
                                 android:layout_width="wrap_content"
@@ -240,22 +222,21 @@
                                 android:textStyle="bold"
                                 android:layout_marginTop="1dp"/>
                         </LinearLayout>
-
                     </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
 
-            <!-- ===== SEARCH CARD (overlap header) ===== -->
+            <!-- ===== SEARCH CARD (Giữ đúng Layout ban đầu) ===== -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
                 android:layout_marginEnd="14dp"
-                android:layout_marginTop="-18dp"
+                android:layout_marginTop="-24dp"
                 android:layout_marginBottom="14dp"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="12dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp"
                 app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
@@ -264,23 +245,22 @@
                     android:orientation="vertical"
                     android:padding="12dp">
 
-                    <!-- Input row -->
+                    <!-- Hàng 1: Input + Nút ĐI NGAY -->
                     <LinearLayout
-                        android:id="@+id/searchBar"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:background="@drawable/bg_input_field"
                         android:paddingStart="14dp"
-                        android:paddingEnd="8dp"
-                        android:layout_marginBottom="10dp">
+                        android:paddingEnd="6dp"
+                        android:layout_marginBottom="12dp">
 
                         <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
                             android:src="@drawable/ic_search"
-                            app:tint="#0b1928"
+                            app:tint="#64748B"
                             android:layout_marginEnd="10dp"/>
 
                         <EditText
@@ -290,31 +270,27 @@
                             android:layout_weight="1"
                             android:background="@android:color/transparent"
                             android:hint="Nhập điểm bạn muốn đến..."
-                            android:imeOptions="actionSearch"
-                            android:inputType="textCapWords"
-                            android:maxLines="1"
+                            android:inputType="text"
                             android:textColor="#0b1928"
-                            android:textColorHint="#BBBBBB"
-                            android:textSize="13sp"/>
+                            android:textColorHint="#9AA5B4"
+                            android:textSize="14sp"/>
 
                         <TextView
                             android:id="@+id/btnGoNow"
                             android:layout_width="wrap_content"
-                            android:layout_height="36dp"
-                            android:clickable="true"
-                            android:focusable="true"
+                            android:layout_height="38dp"
                             android:gravity="center"
-                            android:text="Đi ngay"
+                            android:text="ĐI NGAY"
                             android:textColor="#FFFFFF"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             android:textStyle="bold"
-                            style="@style/Widget.TransGo.Button.Orange"
-                            android:backgroundTint="@null"
-                            android:paddingStart="14dp"
-                            android:paddingEnd="14dp"/>
+                            android:background="@drawable/bg_button_rounded"
+                            android:backgroundTint="#F97316"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"/>
                     </LinearLayout>
 
-                    <!-- Quick chips row -->
+                    <!-- Hàng 2: Nút LỘ TRÌNH + Chips -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -324,17 +300,17 @@
                         <TextView
                             android:id="@+id/btnRoutePlanner"
                             android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            style="@style/Widget.TransGo.Button.Orange"
-                            android:backgroundTint="@null"
+                            android:layout_height="34dp"
                             android:gravity="center"
                             android:paddingStart="14dp"
                             android:paddingEnd="14dp"
-                            android:text="Lộ trình"
+                            android:text="LỘ TRÌNH"
                             android:textColor="#FFFFFF"
                             android:textSize="11sp"
                             android:textStyle="bold"
-                            android:layout_marginEnd="10dp"/>
+                            android:background="@drawable/bg_button_rounded"
+                            android:backgroundTint="#F97316"
+                            android:layout_marginEnd="12dp"/>
 
                         <HorizontalScrollView
                             android:layout_width="0dp"
@@ -353,46 +329,33 @@
                                     android:textColor="#E65100"
                                     android:textSize="11sp"
                                     android:textStyle="bold"
-                                    android:background="@drawable/bg_quick_route_active"
-                                    android:paddingStart="10dp"
-                                    android:paddingEnd="10dp"
-                                    android:paddingTop="5dp"
-                                    android:paddingBottom="5dp"
-                                    android:layout_marginEnd="6dp"/>
+                                    android:background="@drawable/bg_badge_orange"
+                                    android:paddingStart="12dp"
+                                    android:paddingEnd="12dp"
+                                    android:paddingTop="6dp"
+                                    android:paddingBottom="6dp"
+                                    android:layout_marginEnd="8dp"/>
                                 <TextView
                                     android:id="@+id/chipDestinationSuoiTien"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="🏫 Suối Tiên"
-                                    android:textColor="#4a6080"
+                                    android:textColor="#64748B"
                                     android:textSize="11sp"
                                     android:textStyle="bold"
-                                    android:background="@drawable/bg_quick_route"
-                                    android:paddingStart="10dp"
-                                    android:paddingEnd="10dp"
-                                    android:paddingTop="5dp"
-                                    android:paddingBottom="5dp"
-                                    android:layout_marginEnd="6dp"/>
-                                <TextView
-                                    android:id="@+id/chipDestinationTanSonNhat"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="✈️ Tân Sơn Nhất"
-                                    android:textColor="#4a6080"
-                                    android:textSize="11sp"
-                                    android:textStyle="bold"
-                                    android:background="@drawable/bg_quick_route"
-                                    android:paddingStart="10dp"
-                                    android:paddingEnd="10dp"
-                                    android:paddingTop="5dp"
-                                    android:paddingBottom="5dp"/>
+                                    android:background="@drawable/bg_button_rounded"
+                                    android:backgroundTint="#F1F5F9"
+                                    android:paddingStart="12dp"
+                                    android:paddingEnd="12dp"
+                                    android:paddingTop="6dp"
+                                    android:paddingBottom="6dp"/>
                             </LinearLayout>
                         </HorizontalScrollView>
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- ===== MAIN CONTENT ===== -->
+            <!-- ===== CHỌN PHƯƠNG TIỆN (Khớp ảnh) ===== -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -400,24 +363,22 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp">
 
-                <!-- ═══════════════════════════════════════ -->
-                <!-- 1. CHỌN PHƯƠNG TIỆN                    -->
-                <!-- ═══════════════════════════════════════ -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Chọn phương tiện"
                     android:textColor="#0b1928"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="16dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="3"
-                    android:layout_marginBottom="20dp">
+                    android:layout_marginBottom="24dp">
+
                     <!-- Xe buýt -->
                     <LinearLayout
                         android:id="@+id/btnTransportBus"
@@ -425,29 +386,25 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="12dp"
-                        android:background="@drawable/bg_transport_unselected"
-                        android:layout_marginEnd="6dp">
+                        android:gravity="center">
                         <FrameLayout
-                            android:id="@+id/ivTransportIconBus"
-                            android:layout_width="44dp"
-                            android:layout_height="44dp"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
                             android:background="@drawable/bg_icon_gray">
                             <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_bus"
                                 app:tint="#64748B"/>
                         </FrameLayout>
                         <TextView
-                            android:id="@+id/tvTransportLabelBus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Xe buýt"
                             android:textSize="12sp"
                             android:textColor="#64748B"
+                            android:textStyle="bold"
                             android:layout_marginTop="8dp"/>
                     </LinearLayout>
 
@@ -458,93 +415,51 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="12dp"
-                        android:background="@drawable/bg_transport_unselected"
-                        android:layout_marginEnd="6dp">
+                        android:gravity="center">
                         <FrameLayout
-                            android:id="@+id/ivTransportIconMetro"
-                            android:layout_width="44dp"
-                            android:layout_height="44dp"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
                             android:background="@drawable/bg_icon_gray">
                             <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_metro"
                                 app:tint="#64748B"/>
                         </FrameLayout>
                         <TextView
-                            android:id="@+id/tvTransportLabelMetro"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Metro"
                             android:textSize="12sp"
                             android:textColor="#64748B"
+                            android:textStyle="bold"
                             android:layout_marginTop="8dp"/>
                     </LinearLayout>
 
-                    <!-- Waterbus -->
+                    <!-- Waterbus (Selected) -->
                     <LinearLayout
                         android:id="@+id/btnTransportWaterbus"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="12dp"
-                        android:background="@drawable/bg_transport_selected">
+                        android:gravity="center">
                         <FrameLayout
-                            android:id="@+id/ivTransportIconWaterbus"
-                            android:layout_width="44dp"
-                            android:layout_height="44dp"
+                            android:layout_width="80dp"
+                            android:layout_height="64dp"
                             android:background="@drawable/bg_icon_blue">
                             <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_waterbus"
                                 app:tint="#FFFFFF"/>
                         </FrameLayout>
-                        <TextView
-                            android:id="@+id/tvTransportLabelWaterbus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Waterbus"
-                            android:textSize="12sp"
-                            android:textColor="#2563EB"
-                            android:textStyle="bold"
-                            android:layout_marginTop="8dp"/>
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- ═══════════════════════════════════════ -->
-                <!-- 2. THẺ TRANSPASS                       -->
-                <!-- ═══════════════════════════════════════ -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Thẻ TransPass của bạn"
-                        android:textColor="#0b1928"
-                        android:textSize="15sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/tvCardDetail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Chi tiết →"
-                        android:textColor="#F97316"
-                        android:textSize="11sp"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-
+                <!-- Cards stats -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -557,7 +472,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:padding="12dp">
-
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -566,32 +480,19 @@
                             android:background="@drawable/bg_balance_card"
                             android:orientation="vertical"
                             android:padding="12dp">
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="3dp"
                                 android:text="Số dư"
                                 android:textColor="#80FFFFFF"
                                 android:textSize="10sp" />
-
                             <TextView
                                 android:id="@+id/tvBalance"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-condensed"
                                 android:textColor="#F97316"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/tvBalanceEstimate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"
-                                android:textColor="#40FFFFFF"
-                                android:textSize="10sp" />
-
                             <TextView
                                 android:id="@+id/btnTopUp"
                                 style="@style/Widget.TransGo.Button.Orange"
@@ -604,9 +505,9 @@
                                 android:text="Nạp thêm"
                                 android:textColor="#FFFFFF"
                                 android:textSize="11sp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:layout_marginTop="10dp"/>
                         </LinearLayout>
-
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -620,7 +521,7 @@
                                 android:padding="10dp"
                                 android:layout_marginBottom="6dp">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="Tổng chi tháng này" android:textColor="#9aa5b4" android:textSize="10sp" android:layout_marginBottom="2dp"/>
+                                    android:text="Tổng chi tháng này" android:textColor="#9aa5b4" android:textSize="10sp"/>
                                 <TextView android:id="@+id/tvMonthlySpend" android:layout_width="wrap_content" android:layout_height="wrap_content"
                                     android:textColor="#0b1928" android:textSize="15sp" android:textStyle="bold"/>
                             </LinearLayout>
@@ -628,10 +529,11 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:background="@drawable/bg_stat_green"
+                                android:background="@drawable/bg_icon_circle_teal"
+                                android:backgroundTint="#E0F2F1"
                                 android:padding="10dp">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="CO₂ tiết kiệm" android:textColor="#2E7D32" android:textSize="10sp" android:layout_marginBottom="2dp"/>
+                                    android:text="CO₂ tiết kiệm" android:textColor="#2E7D32" android:textSize="10sp"/>
                                 <TextView android:id="@+id/tvCO2Saved" android:layout_width="wrap_content" android:layout_height="wrap_content"
                                     android:textColor="#2E7D32" android:textSize="15sp" android:textStyle="bold"/>
                             </LinearLayout>
@@ -639,207 +541,8 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- ═══════════════════════════════════════ -->
-                <!-- 3. TUYẾN HAY ĐI + TAB                  -->
-                <!-- ═══════════════════════════════════════ -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="10dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Tuyến hay đi của bạn"
-                        android:textColor="#0b1928"
-                        android:textSize="15sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/tvSeeAllRoutes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Xem tất cả →"
-                        android:textColor="#F97316"
-                        android:textSize="11sp"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-
-                <!-- Tab: Buýt | Metro | Waterbus -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/bg_tab_container"
-                    android:padding="4dp"
-                    android:layout_marginBottom="12dp">
-
-                    <TextView
-                        android:id="@+id/tabBus"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="\nXe buýt"
-                        android:textAlignment="center"
-                        android:textColor="#FFFFFF"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:background="@drawable/bg_tab_selected"/>
-
-                    <TextView
-                        android:id="@+id/tabMetro"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="\nMetro"
-                        android:textAlignment="center"
-                        android:textColor="#6B7280"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:background="@drawable/bg_tab_unselected"/>
-
-                    <TextView
-                        android:id="@+id/tabWaterbus"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="\nWaterbus"
-                        android:textAlignment="center"
-                        android:textColor="#6B7280"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:background="@drawable/bg_tab_unselected"/>
-
-                </LinearLayout>
-
-                <!-- ═══════════════════════════════════════ -->
-                <!-- 4. AI GỢI Ý                            -->
-                <!-- ═══════════════════════════════════════ -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="3dp"
-                    app:cardBackgroundColor="#0b1928">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_marginBottom="6dp">
-                            <View
-                                android:layout_width="7dp"
-                                android:layout_height="7dp"
-                                android:background="@drawable/bg_ai_dot"
-                                android:layout_marginEnd="6dp"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="AI GỢI Ý"
-                                android:textColor="#2dd4bf"
-                                android:textSize="10sp"
-                                android:textStyle="bold"
-                                android:letterSpacing="0.05"/>
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Dựa trên thói quen, lúc 17:30 bạn thường về nhà:"
-                            android:textColor="#80FFFFFF"
-                            android:textSize="12sp"
-                            android:layout_marginBottom="12dp"/>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical"
-                                tools:ignore="UseCompoundDrawables">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="Cơ quan → Nhà" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="Buýt 36 · Khởi hành 17:28" android:textColor="#F97316" android:textSize="12sp" android:layout_marginTop="3dp"/>
-                            </LinearLayout>
-                            <TextView
-                                android:id="@+id/btnAiBook"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Mua vé"
-                                android:textColor="#FFFFFF"
-                                android:textSize="13sp"
-                                android:textStyle="bold"
-                                style="@style/Widget.TransGo.Button.Orange"
-                                android:backgroundTint="@null"
-                                android:paddingStart="18dp"
-                                android:paddingEnd="18dp"
-                                android:paddingTop="11dp"
-                                android:paddingBottom="11dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- ═══════════════════════════════════════ -->
-                <!-- 5. ĐIỂM THƯỞNG                         -->
-                <!-- ═══════════════════════════════════════ -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="3dp"
-                    app:cardBackgroundColor="#0b1928">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical" android:layout_marginBottom="12dp">
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="Điểm thưởng TransGo" android:textColor="#60FFFFFF" android:textSize="10sp" android:layout_marginBottom="3dp"/>
-                                <TextView android:id="@+id/tvPoints" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:textColor="#F97316" android:textSize="22sp" android:textStyle="bold" android:fontFamily="sans-serif-condensed"/>
-                            </LinearLayout>
-                            <FrameLayout android:layout_width="46dp" android:layout_height="46dp" android:background="@drawable/bg_icon_circle_orange">
-                                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/ic_star"
-                                    app:tint="#FFFFFF"/>
-                            </FrameLayout>
-                        </LinearLayout>
-
-                        <ProgressBar
-                            android:id="@+id/progressPoints"
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="7dp"
-                            android:max="100"
-                            android:progress="62"
-                            android:progressDrawable="@drawable/bg_timer_progress"
-                            android:layout_marginBottom="6dp"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
             </LinearLayout>
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

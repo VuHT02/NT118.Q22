@@ -6,7 +6,6 @@
     ══════════════════════════════════════ -->
     <color name="blue_primary">#4BA8E8</color>
     <color name="blue_dark">#2B90D8</color>
-    <color name="blue_deeper">#1A3A5C</color>
     <color name="orange_accent">#FF7A1F</color>
 
     <!-- Aliases for compatibility -->
@@ -16,26 +15,17 @@
     ══════════════════════════════════════ -->
     <color name="text_primary">#1A3A5C</color>
     <color name="text_secondary">#5A90B8</color>
-    <color name="text_hint">#7AAAC8</color>
     <color name="text_disabled">#B8D4EC</color>
 
     <!-- Aliases ngắn dùng trong layout (map về text_*) -->
-    <color name="txt1">@color/text_primary</color>
-    <color name="txt2">@color/text_secondary</color>
-    <color name="txt3">@color/text_hint</color>
 
     <!-- ══════════════════════════════════════
          BACKGROUNDS
     ══════════════════════════════════════ -->
     <color name="bg_page">#F0F8FF</color>
-    <color name="bg_card">#FFFFFF</color>
     <color name="bg_icon_gray">#E2E8F0</color>
 
     <!-- Aliases ngắn dùng trong layout -->
-    <color name="bg">@color/bg_page</color>
-    <color name="surface">@color/bg_card</color>
-    <color name="surface2">#EAF3FB</color>
-    <color name="header_bg">@color/blue_deeper</color>
 
     <!-- ══════════════════════════════════════
          BORDERS
@@ -43,7 +33,6 @@
     <color name="border_default">#C8E0F4</color>
 
     <!-- Alias ngắn -->
-    <color name="border">@color/border_default</color>
 
     <!-- ══════════════════════════════════════
          SEMANTIC
@@ -52,25 +41,19 @@
     <color name="green_500">#2ECC71</color>
 
     <!-- Green dùng cho tag "Nhanh nhất" -->
-    <color name="green">#16A34A</color>
 
     <!-- ══════════════════════════════════════
          ORANGE OVERLAYS
     ══════════════════════════════════════ -->
     <color name="orange">@color/orange_accent</color>
-    <color name="orange_dim">#1AFF7A1F</color>
 
     <!-- ══════════════════════════════════════
          TRANSPORT TAGS
     ══════════════════════════════════════ -->
-    <color name="tag_bus_text">#2B8FD4</color>
-    <color name="tag_metro_text">#1A6AB8</color>
 
     <!-- Metro -->
-    <color name="metro_txt">@color/tag_metro_text</color>
 
     <!-- Bus -->
-    <color name="bus_txt">@color/tag_bus_text</color>
 
     <!-- Waterbus -->
 
@@ -78,8 +61,6 @@
          ALPHA OVERLAYS (dark header)
     ══════════════════════════════════════ -->
     <color name="white_10">#1AFFFFFF</color>
-    <color name="white_12">#1EFFFFFF</color>
-    <color name="white_55">#8CFFFFFF</color>
 
     <!-- Bottom nav -->
 

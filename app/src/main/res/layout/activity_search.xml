@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#F0F4F8">
 
-    <!-- Top bar — có background để che map khi scroll -->
+    <!-- Top bar -->
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="0dp"
@@ -33,7 +33,8 @@
                 android:layout_height="18dp"
                 android:layout_gravity="center"
                 android:contentDescription="@string/route_map_back"
-                android:src="@drawable/ic_arrow_back"/>
+                android:src="@drawable/ic_arrow_back"
+                app:tint="#FFFFFF"/>
         </FrameLayout>
 
         <TextView
@@ -94,7 +95,8 @@
                             android:layout_height="16dp"
                             android:layout_marginEnd="8dp"
                             android:contentDescription="@string/search_map_origin_label"
-                            android:src="@drawable/ic_location"/>
+                            android:src="@drawable/ic_location_on"
+                            app:tint="#9AA5B4"/>
                         <EditText
                             android:id="@+id/etOrigin"
                             android:layout_width="0dp"
@@ -131,7 +133,8 @@
                             android:layout_height="16dp"
                             android:layout_marginEnd="8dp"
                             android:contentDescription="@string/search_map_destination_label"
-                            android:src="@drawable/ic_location_dot"/>
+                            android:src="@drawable/ic_location_on"
+                            app:tint="#F97316"/>
                         <EditText
                             android:id="@+id/etDestination"
                             android:layout_width="0dp"
@@ -165,7 +168,8 @@
                         android:layout_height="16dp"
                         android:layout_gravity="center"
                         android:contentDescription="@null"
-                        android:src="@drawable/ic_swap_vertical"/>
+                        android:src="@drawable/ic_swap_vert"
+                        app:tint="#0b1928"/>
                 </FrameLayout>
             </LinearLayout>
 
@@ -211,7 +215,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Guideline tại 55% thay vì 60% — cân bằng hơn trên màn nhỏ -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/panelSplitGuide"
         android:layout_width="wrap_content"
@@ -219,7 +222,6 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.55"/>
 
-    <!-- Map container — có bo góc + clip -->
     <androidx.cardview.widget.CardView
         android:id="@+id/mapContainer"
         android:layout_width="0dp"
@@ -235,7 +237,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Fragment map sẽ được add vào đây bằng code -->
         <TextView
             android:id="@+id/tvMapFallback"
             android:layout_width="match_parent"
@@ -274,7 +275,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Drag handle -->
             <LinearLayout
                 android:id="@+id/panelHandleTapArea"
                 android:layout_width="match_parent"
@@ -291,7 +291,6 @@
                     android:background="@drawable/bg_panel_handle"/>
             </LinearLayout>
 
-            <!-- Origin -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -312,7 +311,6 @@
                 android:maxLines="1"
                 tools:text="Bến Thành"/>
 
-            <!-- Destination -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -334,7 +332,6 @@
                 android:maxLines="1"
                 tools:text="Suối Tiên"/>
 
-            <!-- Status -->
             <TextView
                 android:id="@+id/tvMapStatus"
                 android:layout_width="match_parent"
@@ -346,7 +343,6 @@
                 android:lineSpacingMultiplier="1.4"
                 tools:text="Nhập điểm đến và bấm Đi ngay để hiển thị bản đồ."/>
 
-            <!-- Open Google Maps button -->
             <TextView
                 android:id="@+id/btnOpenGoogleMaps"
                 android:layout_width="match_parent"

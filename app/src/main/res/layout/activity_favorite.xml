@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  TransGo — Màn hình "Địa điểm yêu thích"
-  Root layout: CoordinatorLayout để hỗ trợ AppBar collapsing + FAB
+  TransGo — Màn hình "Địa điểm yêu thích" v3
+  Đồng bộ design system với fragment_otp, fragment_signup, fragment_login:
+    - Nền: #0b1928
+    - Grid overlay alpha 0.4
+    - Card/input nền sáng (bg_input_field style)
+    - Accent: #F97316
+    - Label phụ: #4a6a8a
+    - Section label: ALL CAPS, #4a6a8a, letterSpacing
+    - Button: style Widget.TransGo.Button.Orange
+    - Font title: sans-serif-condensed
 -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -9,29 +17,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
+    android:background="#0b1928"
     tools:context=".YeuThichActivity">
 
+    <!-- Background grid overlay — same alpha as other screens -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_grid"
+        android:scaleType="fitXY"
+        android:alpha="0.4"
+        android:importantForAccessibility="no" />
+
     <!-- ══════════════════════════════════════
-         APP BAR (Header sticky)
+         APP BAR
     ══════════════════════════════════════ -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/header_bg"
-        app:elevation="4dp">
+        android:background="#0b1928"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp">
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="4dp">
 
-            <!-- Header top row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,66 +55,43 @@
                 android:gravity="center_vertical"
                 android:baselineAligned="false">
 
-                <!-- Icon ❤️ -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardBackgroundColor="@color/orange_dim"
-                    app:cardElevation="0dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="❤️"
-                        android:textSize="20sp"
-                        android:gravity="center"/>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Title + subtitle -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:paddingStart="12dp">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Địa điểm yêu thích"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
+                        android:textColor="#FFFFFF"
+                        android:textSize="30sp"
                         android:textStyle="bold"
-                        android:letterSpacing="-0.01"/>
+                        android:fontFamily="sans-serif-condensed"
+                        android:letterSpacing="-0.01" />
 
                     <TextView
                         android:id="@+id/tvSubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Khám phá Sài Gòn bằng PTCC"
-                        android:textColor="@color/white_55"
-                        android:textSize="12sp"
-                        android:layout_marginTop="2dp"/>
+                        android:textColor="#66FFFFFF"
+                        android:textSize="13sp"
+                        android:layout_marginTop="4dp" />
                 </LinearLayout>
 
-                <!-- Bell icon button -->
-                <androidx.cardview.widget.CardView
+                <!-- Notification icon — same style as back button area in other screens -->
+                <ImageView
                     android:id="@+id/btnNotification"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardBackgroundColor="@color/white_10"
-                    app:cardElevation="0dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="🔔"
-                        android:textSize="14sp"
-                        android:gravity="center"/>
-                </androidx.cardview.widget.CardView>
+                    android:src="@drawable/ic_bell"
+                    android:tint="#80FFFFFF"
+                    android:padding="8dp"
+                    android:background="@drawable/bg_input_field"
+                    android:scaleType="fitCenter" />
 
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
@@ -109,8 +102,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="16dp"
             android:paddingBottom="14dp">
 
             <com.google.android.material.chip.ChipGroup
@@ -123,58 +117,59 @@
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipAll"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="32dp"
                     android:text="Tất cả"
                     android:textSize="12.5sp"
                     android:textStyle="bold"
                     android:checked="true"
                     app:chipBackgroundColor="@color/orange"
+                    app:chipStrokeWidth="0dp"
                     app:checkedIconVisible="false"
-                    style="@style/Widget.Material3.Chip.Filter"/>
+                    style="@style/Widget.Material3.Chip.Filter" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipMetro"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:text="🚇 Metro"
+                    android:layout_height="32dp"
+                    android:text="Metro"
                     android:textSize="12.5sp"
                     android:textStyle="bold"
                     app:chipBackgroundColor="@color/white_12"
                     app:checkedIconVisible="false"
-                    style="@style/Widget.Material3.Chip.Filter"/>
+                    style="@style/Widget.Material3.Chip.Filter" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipBus"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:text="🚌 Xe buýt"
+                    android:layout_height="32dp"
+                    android:text="Xe buýt"
                     android:textSize="12.5sp"
                     android:textStyle="bold"
                     app:chipBackgroundColor="@color/white_12"
                     app:checkedIconVisible="false"
-                    style="@style/Widget.Material3.Chip.Filter"/>
+                    style="@style/Widget.Material3.Chip.Filter" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipWaterbus"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:text="⛵ Waterbus"
+                    android:layout_height="32dp"
+                    android:text="Waterbus"
                     android:textSize="12.5sp"
                     android:textStyle="bold"
                     app:chipBackgroundColor="@color/white_12"
                     app:checkedIconVisible="false"
-                    style="@style/Widget.Material3.Chip.Filter"/>
+                    style="@style/Widget.Material3.Chip.Filter" />
 
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
 
-        <!-- Thin divider -->
+        <!-- Divider -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/white_10"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"/>
+            android:background="#0FFFFFFF"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -185,7 +180,7 @@
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="100dp"
+        android:paddingBottom="80dp"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -194,463 +189,438 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- ── Search bar ── -->
-            <FrameLayout
+            <!-- ── Search bar — dùng cùng bg_input_field như các form khác ── -->
+            <LinearLayout
+                android:id="@+id/layoutSearch"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_input_field"
+                android:gravity="center_vertical"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="4dp">
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginTop="20dp">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardSearch"
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_search"
+                    android:tint="#9aa5b4"
+                    android:layout_marginEnd="12dp" />
+
+                <EditText
+                    android:id="@+id/etSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Tìm địa điểm yêu thích..."
+                    android:textColorHint="#9aa5b4"
+                    android:textColor="#0b1928"
+                    android:textSize="14sp"
+                    android:background="@null"
+                    android:inputType="text"
+                    android:imeOptions="actionSearch"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <!-- ── Section label: ĐỊA ĐIỂM HOT ── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="28dp"
+                android:paddingBottom="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="ĐỊA ĐIỂM HOT"
+                    android:textColor="#4a6a8a"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.15" />
+
+                <TextView
+                    android:id="@+id/tvHotSeeAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Xem tất cả"
+                    android:textColor="#F97316"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!--
+                Hot spots horizontal RecyclerView
+                item_hotspot.xml: dùng bg_input_field, icon 20dp tint #9aa5b4,
+                tên 13sp bold #0b1928, sub 11sp #9aa5b4, width ~110dp
+            -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvHotSpots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="4dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_hotspot" />
+
+            <!-- ── Section label: GỢI Ý LỘ TRÌNH ── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="28dp"
+                android:paddingBottom="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="GỢI Ý LỘ TRÌNH TỐI ƯU"
+                    android:textColor="#4a6a8a"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.15" />
+
+                <TextView
+                    android:id="@+id/tvRouteSeeAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Xem tất cả"
+                    android:textColor="#F97316"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Route cards — dùng bg_input_field như form fields -->
+            <LinearLayout
+                android:id="@+id/llRouteCards"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp">
+
+                <!-- Route card 1: Nhanh nhất -->
+                <LinearLayout
+                    android:id="@+id/cardRoute1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="14dp"
-                    app:cardBackgroundColor="@color/surface"
-                    app:cardElevation="1dp"
-                    app:strokeColor="@color/border"
-                    app:strokeWidth="1.5dp">
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_input_field"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+
+                    <!-- Top row: tag + time + price -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nhanh nhất"
+                            android:textColor="#16a34a"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/bg_tag_green"
+                            android:paddingStart="9dp"
+                            android:paddingEnd="9dp"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="23 phút"
+                            android:textColor="#0b1928"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="· 6.000đ"
+                            android:textColor="#9aa5b4"
+                            android:textSize="12sp"
+                            android:layout_marginStart="6dp" />
+                    </LinearLayout>
+
+                    <!-- Destination -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nhà thờ Đức Bà"
+                        android:textColor="#0b1928"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-condensed"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Badges + buy button -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="M1"
+                            android:textColor="#1d4ed8"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/bg_badge_metro"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_arrow_right_small"
+                            android:tint="#9aa5b4"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginEnd="6dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tuyến 36"
+                            android:textColor="#c2410c"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/bg_badge_bus"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:id="@+id/btnBuyRoute1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mua vé"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:backgroundTint="#F97316"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:paddingTop="7dp"
+                            android:paddingBottom="7dp"
+                            android:stateListAnimator="@null"
+                            style="@style/Widget.Material3.Button" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Route card 2: Rẻ nhất -->
+                <LinearLayout
+                    android:id="@+id/cardRoute2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_input_field"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp"
-                        android:paddingTop="12dp"
-                        android:paddingBottom="12dp"
-                        android:baselineAligned="false">
+                        android:layout_marginBottom="8dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🔍"
-                            android:textSize="15sp"/>
+                            android:text="Rẻ nhất"
+                            android:textColor="#c2410c"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/bg_tag_orange"
+                            android:paddingStart="9dp"
+                            android:paddingEnd="9dp"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp" />
 
-                        <EditText
-                            android:id="@+id/etSearch"
+                        <Space
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="10dp"
-                            android:hint="Tìm địa điểm yêu thích..."
-                            android:textColorHint="@color/txt3"
-                            android:textColor="@color/txt1"
-                            android:textSize="13.5sp"
-                            android:background="@null"
-                            android:inputType="text"
-                            android:imeOptions="actionSearch"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </FrameLayout>
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
 
-            <!-- ── Section: Hot spots ── -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="41 phút"
+                            android:textColor="#0b1928"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="· 3.000đ"
+                            android:textColor="#9aa5b4"
+                            android:textSize="12sp"
+                            android:layout_marginStart="6dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Bến Bạch Đằng"
+                        android:textColor="#0b1928"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-condensed"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tuyến 04"
+                            android:textColor="#c2410c"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/bg_badge_bus"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:id="@+id/btnBuyRoute2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mua vé"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:backgroundTint="#F97316"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:paddingTop="7dp"
+                            android:paddingBottom="7dp"
+                            android:stateListAnimator="@null"
+                            style="@style/Widget.Material3.Button" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- ── Section label: TẤT CẢ ĐỊA ĐIỂM ── -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:paddingTop="20dp"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="28dp"
                 android:paddingBottom="12dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="🔥 Địa điểm hot"
-                    android:textColor="@color/txt1"
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/tvHotSeeAll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Xem tất cả →"
-                    android:textColor="@color/orange"
-                    android:textSize="12sp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <!-- Hot spots horizontal list -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvHotSpots"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="4dp"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@drawable/item_hotspot"/>
-
-            <!-- ── Section: Route suggestions ── -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="12dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="🗺️ Gợi ý lộ trình tối ưu"
-                    android:textColor="@color/txt1"
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/tvRouteSeeAll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Xem tất cả →"
-                    android:textColor="@color/orange"
-                    android:textSize="12sp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <!-- Route cards (vertical, no RecyclerView needed) -->
-            <LinearLayout
-                android:id="@+id/llRouteCards"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-
-                <!-- Route card 1: Nhanh nhất -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardRoute1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    app:cardCornerRadius="18dp"
-                    app:cardBackgroundColor="@color/surface"
-                    app:cardElevation="1dp"
-                    app:strokeColor="@color/border"
-                    app:strokeWidth="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <!-- Top row: tag + time/price -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_marginBottom="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="⚡ Nhanh nhất"
-                                android:textColor="@color/green"
-                                android:textSize="10sp"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_tag_green"
-                                android:paddingStart="9dp"
-                                android:paddingEnd="9dp"
-                                android:paddingTop="3dp"
-                                android:paddingBottom="3dp"/>
-
-                            <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="23 phút"
-                                android:textColor="@color/txt1"
-                                android:textSize="14sp"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="· 6.000đ"
-                                android:textColor="@color/txt2"
-                                android:textSize="12sp"
-                                android:layout_marginStart="6dp"/>
-                        </LinearLayout>
-
-                        <!-- Destination -->
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Nhà thờ Đức Bà"
-                            android:textColor="@color/txt1"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="12dp"/>
-
-                        <!-- Transport badges + buy button -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="🚇 M1"
-                                android:textColor="@color/metro_txt"
-                                android:textSize="11.5sp"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_badge_metro"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="5dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="→"
-                                android:textColor="@color/txt3"
-                                android:textSize="11sp"
-                                android:layout_marginStart="6dp"
-                                android:layout_marginEnd="6dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="🚌 Tuyến 36"
-                                android:textColor="@color/bus_txt"
-                                android:textSize="11.5sp"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_transport_bus"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="5dp"/>
-
-                            <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1"/>
-
-                            <Button
-                                android:id="@+id/btnBuyRoute1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Mua vé"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"
-                                android:textStyle="bold"
-                                android:backgroundTint="@color/orange"
-                                android:paddingStart="16dp"
-                                android:paddingEnd="16dp"
-                                android:paddingTop="7dp"
-                                android:paddingBottom="7dp"
-                                style="@style/Widget.Material3.Button"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Route card 2: Rẻ nhất -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardRoute2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    app:cardCornerRadius="18dp"
-                    app:cardBackgroundColor="@color/surface"
-                    app:cardElevation="1dp"
-                    app:strokeColor="@color/border"
-                    app:strokeWidth="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <!-- Top row -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_marginBottom="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="💰 Rẻ nhất"
-                                android:textColor="@color/orange"
-                                android:textSize="10sp"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_circle_orange"
-                                android:paddingStart="9dp"
-                                android:paddingEnd="9dp"
-                                android:paddingTop="3dp"
-                                android:paddingBottom="3dp"/>
-
-                            <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="41 phút"
-                                android:textColor="@color/txt1"
-                                android:textSize="14sp"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="· 3.000đ"
-                                android:textColor="@color/txt2"
-                                android:textSize="12sp"
-                                android:layout_marginStart="6dp"/>
-                        </LinearLayout>
-
-                        <!-- Destination -->
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Bến Bạch Đằng"
-                            android:textColor="@color/txt1"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="12dp"/>
-
-                        <!-- Transport badges + buy button -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="🚌 Tuyến 04"
-                                android:textColor="@color/bus_txt"
-                                android:textSize="11.5sp"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_transport_bus"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="5dp"/>
-
-                            <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1"/>
-
-                            <Button
-                                android:id="@+id/btnBuyRoute2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Mua vé"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"
-                                android:textStyle="bold"
-                                android:backgroundTint="@color/orange"
-                                android:paddingStart="16dp"
-                                android:paddingEnd="16dp"
-                                android:paddingTop="7dp"
-                                android:paddingBottom="7dp"
-                                style="@style/Widget.Material3.Button"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-            <!-- ── Section: Tất cả địa điểm ── -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="10dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="📍 Tất cả địa điểm"
-                    android:textColor="@color/txt1"
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
+                    android:text="TẤT CẢ ĐỊA ĐIỂM"
+                    android:textColor="#4a6a8a"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.15" />
 
                 <TextView
                     android:id="@+id/tvSortBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="⇅ Sắp xếp"
-                    android:textColor="@color/txt2"
+                    android:text="Sắp xếp"
+                    android:textColor="#4a6a8a"
                     android:textSize="11sp"
                     android:textStyle="bold"
-                    android:background="@drawable/bg_sort_btn"
+                    android:background="@drawable/bg_input_field"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     android:paddingTop="4dp"
-                    android:paddingBottom="4dp"/>
+                    android:paddingBottom="4dp" />
             </LinearLayout>
 
-            <!-- Places list (RecyclerView) -->
+            <!--
+                Places list RecyclerView
+                item_place_row.xml: dùng bg_input_field, marginBottom 12dp,
+                icon tròn 38dp tint #9aa5b4, tên 14sp bold #0b1928,
+                sub 12sp #9aa5b4, chevron ic_arrow_right tint #9aa5b4
+            -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvPlaces"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_place_row"
-                tools:itemCount="5"/>
+                tools:itemCount="4" />
+
+            <!-- Bottom padding -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="24dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <!-- ══════════════════════════════════════
-         FAB — "Tìm từ vị trí của tôi"
-    ══════════════════════════════════════ -->
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fabFindLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="24dp"
-        android:text="📍 Tìm từ vị trí của tôi"
-        android:textColor="@color/white"
-        android:textSize="13.5sp"
-        android:textStyle="bold"
-        app:backgroundTint="@color/orange"
-        app:elevation="8dp"
-        app:fabSize="normal"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
-
-    <!-- ══════════════════════════════════════
-         BOTTOM NAV
+         BOTTOM NAVIGATION
     ══════════════════════════════════════ -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/surface"
+        android:background="#0b1928"
         app:itemTextColor="@color/bottom_nav_color"
         app:itemIconTint="@color/bottom_nav_color"
         app:selectedItemId="@id/nav_favorite"
         app:menu="@menu/bottom_nav_menu"
-        app:elevation="8dp"/>
+        app:elevation="0dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
