@@ -39,7 +39,8 @@
     ══════════════════════════════════════ -->
     <color name="white">#FFFFFF</color>
     <color name="green_500">#2ECC71</color>
-
+    <color name="orange_primary">#F97316</color>
+    <color name="text_hint">#9AA5B4</color>
     <!-- Green dùng cho tag "Nhanh nhất" -->
 
     <!-- ══════════════════════════════════════

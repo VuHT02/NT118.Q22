@@ -80,6 +80,7 @@
 
         <activity android:name=".HistoryActivity" />
         <activity android:name=".BookTicketActivity" />
+        <activity android:name=".TicketQrActivity" />
 
         <activity android:name=".SearchMapActivity"/>
         <activity android:name=".RouteListActivity" />

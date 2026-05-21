@@ -75,6 +75,9 @@ dependencies {
     // Biometric
     implementation("androidx.biometric:biometric:1.1.0")
 
+    // QR Code generation
+    implementation("com.google.zxing:core:3.5.3")
+
     // Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)

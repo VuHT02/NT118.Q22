@@ -58,13 +58,15 @@ class HomeActivity : AppCompatActivity() {
         setupSearchCard()
 
         binding.btnSeeAllRoutes.setOnClickListener {
-            val type = when (selectedTransport) {
-                TRANSPORT_METRO    -> TransportType.METRO
-                TRANSPORT_WATERBUS -> TransportType.WATER_BUS
-                else               -> TransportType.BUS
-            }
-            RouteListActivity.start(this, type)
+            RouteListActivity.start(this)
         }
+
+        // TODO: XÓA SAU KHI SEED XONG — nhấn avatar 5 giây để seed data
+        binding.btnProfile.setOnLongClickListener {
+            DataSeeder.seedRoutes(this)
+            true
+        }
+
         setupBottomNav()
     }
 
@@ -85,7 +87,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setupSearchCard() {
         binding.btnRoutePlanner.setOnClickListener {
-            startActivity(Intent(this, SearchMapActivity::class.java))
+            RouteListActivity.start(this)
         }
         binding.btnNearbyStops.setOnClickListener {
             startActivity(Intent(this, SearchMapActivity::class.java))

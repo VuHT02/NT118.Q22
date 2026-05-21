@@ -53,14 +53,24 @@ data class RouteModel(
     val path: List<LatLng>? = null,
     val stops: List<RouteStop>? = null
 ) {
-    val metaText get() = "${distanceKm} km · $stationCount ${when(type) {
-        TransportType.BUS -> "trạm"
-        TransportType.METRO -> "ga"
-        TransportType.WATER_BUS -> "bến"
-    }}"
+    val metaText get() = "$distanceKm km · $stationCount ${
+        when (type) {
+            TransportType.BUS        -> "trạm"
+            TransportType.METRO      -> "ga"
+            TransportType.WATER_BUS  -> "bến"
+        }
+    }"
+
     val durationText get() = if (status == RouteStatus.ACTIVE) "$durationMinutes phút" else "~$durationMinutes phút"
-    val priceOrDateText get() = if (status == RouteStatus.ACTIVE && price != null) "%,dđ".format(price)
-    else if (expectedOpenYear != null) "Dự kiến $expectedOpenYear" else ""
+
+    // FIX: "%,d₫".format(price) không hợp lệ trong Kotlin — phải dùng String.format()
+    val priceOrDateText get() = when {
+        status == RouteStatus.ACTIVE && price != null -> String.format("%,d₫", price)
+        expectedOpenYear != null                      -> "Dự kiến $expectedOpenYear"
+        else                                          -> ""
+    }
+
     val showPricePrefix get() = status == RouteStatus.ACTIVE
+
     val ctaText get() = if (status == RouteStatus.ACTIVE) "Mua vé" else "Theo dõi"
 }
