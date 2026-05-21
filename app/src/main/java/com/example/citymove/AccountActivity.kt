@@ -85,6 +85,9 @@ class AccountActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
 
+        findViewById<View>(R.id.menuPersonalInfo).setOnClickListener {
+            startActivity(Intent(this, PersonalInfoActivity::class.java))
+        }
 
         findViewById<View>(R.id.menuChangePassword).setOnClickListener {
             startActivity(Intent(this, ChangePasswordActivity::class.java))
