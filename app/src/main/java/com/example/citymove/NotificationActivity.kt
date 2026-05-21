@@ -17,7 +17,7 @@ data class NotificationItem(
     val id          : String  = "",
     val title       : String  = "",
     val description : String  = "",
-    val type        : String  = "system",   // "trip" | "promo" | "system" | "reward"
+    val type        : String  = "system",
     val isRead      : Boolean = false,
     val timestamp   : Long    = 0L,
 )
@@ -28,9 +28,10 @@ class NotificationActivity : AppCompatActivity() {
     private val db   = FirebaseFirestore.getInstance()
 
     private var allNotifications = listOf<NotificationItem>()
-    private var currentTab = 0  // 0=All 1=Trip 2=Promo 3=System
 
-    private val tabTypes = listOf(null, "trip", "promo", "system")
+    // FIX: Chỉ 2 tab theo XML (tabAll, tabTrip)
+    private var currentTab = 0
+    private val tabTypes = listOf(null, "trip")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,11 +45,10 @@ class NotificationActivity : AppCompatActivity() {
 
     // ── Tabs ──────────────────────────────────────────────────────
     private fun setupTabs() {
+        // FIX: Chỉ bind 2 tab có trong XML
         val tabs = listOf(
             findViewById<TextView>(R.id.tabAll),
-            findViewById<TextView>(R.id.tabTrip),
-            findViewById<TextView>(R.id.tabPromo),
-            findViewById<TextView>(R.id.tabSystem)
+            findViewById<TextView>(R.id.tabTrip)
         )
 
         tabs.forEachIndexed { index, textView ->
@@ -65,9 +65,18 @@ class NotificationActivity : AppCompatActivity() {
         tabs.forEachIndexed { index, textView ->
             val isSelected = (index == currentTab)
             textView?.let {
-                it.setBackgroundResource(if (isSelected) R.drawable.bg_tab_selected else R.drawable.bg_tab_unselected)
-                it.setTextColor(if (isSelected) Color.WHITE else "#6B7280".toColorInt())
-                it.setTypeface(null, if (isSelected) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL)
+                it.setBackgroundResource(
+                    if (isSelected) R.drawable.bg_tab_selected
+                    else R.drawable.bg_tab_unselected
+                )
+                it.setTextColor(
+                    if (isSelected) Color.WHITE else "#6B7280".toColorInt()
+                )
+                it.setTypeface(
+                    null,
+                    if (isSelected) android.graphics.Typeface.BOLD
+                    else android.graphics.Typeface.NORMAL
+                )
             }
         }
     }
@@ -105,33 +114,52 @@ class NotificationActivity : AppCompatActivity() {
 
     // ── Render ────────────────────────────────────────────────────
     private fun renderList(items: List<NotificationItem>) {
-        val now = System.currentTimeMillis()
+        val now   = System.currentTimeMillis()
         val dayMs = 86_400_000L
 
         val today     = items.filter { now - it.timestamp < dayMs }
         val yesterday = items.filter { it.timestamp in (now - 2 * dayMs)..(now - dayMs) }
         val older     = items.filter { now - it.timestamp >= 2 * dayMs }
 
-        val listToday     = findViewById<LinearLayout>(R.id.listToday)
-        val listYesterday = findViewById<LinearLayout>(R.id.listYesterday)
-        val listOlder     = findViewById<LinearLayout>(R.id.listOlder)
-        val labelToday    = findViewById<TextView>(R.id.labelToday)
-        val labelYesterday= findViewById<TextView>(R.id.labelYesterday)
-        val labelOlder    = findViewById<TextView>(R.id.labelOlder)
-        val layoutEmpty   = findViewById<LinearLayout>(R.id.layoutEmpty)
+        // FIX: XML chỉ có listToday + labelToday, không có yesterday/older
+        // → Tất cả đều render vào listToday, gom thành 1 list duy nhất
+        val listToday   = findViewById<LinearLayout>(R.id.listToday)
+        val labelToday  = findViewById<TextView>(R.id.labelToday)
+        val layoutEmpty = findViewById<LinearLayout>(R.id.layoutEmpty)
 
         listToday.removeAllViews()
-        listYesterday.removeAllViews()
-        listOlder.removeAllViews()
 
-        labelToday.visibility     = if (today.isNotEmpty()) View.VISIBLE else View.GONE
-        labelYesterday.visibility = if (yesterday.isNotEmpty()) View.VISIBLE else View.GONE
-        labelOlder.visibility     = if (older.isNotEmpty()) View.VISIBLE else View.GONE
-        layoutEmpty.visibility    = if (items.isEmpty()) View.VISIBLE else View.GONE
+        // Xóa sample item mặc định (nếu có từ XML preview)
+        // removeAllViews() đã xử lý rồi
 
-        today.forEach     { addNotifCard(listToday, it) }
-        yesterday.forEach { addNotifCard(listYesterday, it) }
-        older.forEach     { addNotifCard(listOlder, it) }
+        layoutEmpty.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+        labelToday.visibility  = if (items.isNotEmpty()) View.VISIBLE else View.GONE
+
+        // Gom tất cả vào 1 list, thêm divider label nếu cần
+        if (today.isNotEmpty()) {
+            addSectionLabel(listToday, "HÔM NAY")
+            today.forEach { addNotifCard(listToday, it) }
+        }
+        if (yesterday.isNotEmpty()) {
+            addSectionLabel(listToday, "HÔM QUA")
+            yesterday.forEach { addNotifCard(listToday, it) }
+        }
+        if (older.isNotEmpty()) {
+            addSectionLabel(listToday, "TRƯỚC ĐÓ")
+            older.forEach { addNotifCard(listToday, it) }
+        }
+    }
+
+    // Thêm label section động vào container
+    private fun addSectionLabel(container: LinearLayout, text: String) {
+        val label = TextView(this).apply {
+            this.text = text
+            setTextColor("#4a6a8a".toColorInt())
+            textSize = 11f
+            setTypeface(null, android.graphics.Typeface.BOLD)
+            setPadding(0, 24, 0, 8)
+        }
+        container.addView(label)
     }
 
     // ── Inflate card ──────────────────────────────────────────────
@@ -142,23 +170,20 @@ class NotificationActivity : AppCompatActivity() {
         view.findViewById<TextView>(R.id.tvDescription).text = item.description
         view.findViewById<TextView>(R.id.tvTime).text        = formatTime(item.timestamp)
 
-        // Unread state
         if (!item.isRead) {
             view.findViewById<View>(R.id.unreadDot).visibility = View.VISIBLE
-            view.findViewById<View>(R.id.unreadBar).visibility = View.VISIBLE
         }
 
-        // Icon theo type
         val iconView = view.findViewById<android.widget.ImageView>(R.id.ivIcon)
         val iconBg   = view.findViewById<android.widget.FrameLayout>(R.id.iconContainer)
         when (item.type) {
             "trip"   -> {
                 iconView.setImageResource(R.drawable.ic_transgo_logo)
-                iconBg.setBackgroundResource(R.drawable.bg_transport_icon_orange)
+                iconBg.setBackgroundResource(R.drawable.bg_badge_orange)
             }
             "promo"  -> {
                 iconView.setImageResource(R.drawable.ic_star)
-                iconBg.setBackgroundResource(R.drawable.bg_transport_icon_blue)
+                iconBg.setBackgroundResource(R.drawable.bg_icon_blue)
             }
             "reward" -> {
                 iconView.setImageResource(R.drawable.ic_star)
@@ -166,15 +191,13 @@ class NotificationActivity : AppCompatActivity() {
             }
             else     -> {
                 iconView.setImageResource(R.drawable.ic_bell)
-                iconBg.setBackgroundResource(R.drawable.bg_transport_icon_teal)
+                iconBg.setBackgroundResource(R.drawable.bg_icon_circle_teal)
             }
         }
 
-        // Click → đánh dấu đã đọc
         view.setOnClickListener {
             markAsRead(item.id)
             view.findViewById<View>(R.id.unreadDot).visibility = View.GONE
-            view.findViewById<View>(R.id.unreadBar).visibility = View.GONE
         }
 
         container.addView(view)
@@ -207,7 +230,7 @@ class NotificationActivity : AppCompatActivity() {
         renderList(filterByTab(allNotifications))
     }
 
-    // ── Unread badge ─────────────────────────────────────────────
+    // ── Unread badge ──────────────────────────────────────────────
     private fun updateUnreadBadge() {
         val count = allNotifications.count { !it.isRead }
         val badge = findViewById<TextView>(R.id.tvUnreadCount)
@@ -224,10 +247,10 @@ class NotificationActivity : AppCompatActivity() {
         if (timestamp == 0L) return ""
         val diff = System.currentTimeMillis() - timestamp
         return when {
-            diff < 60_000       -> "Vừa xong"
-            diff < 3_600_000    -> "${diff / 60_000} phút trước"
-            diff < 86_400_000   -> "${diff / 3_600_000} giờ trước"
-            diff < 172_800_000  -> "Hôm qua"
+            diff < 60_000      -> "Vừa xong"
+            diff < 3_600_000   -> "${diff / 60_000} phút trước"
+            diff < 86_400_000  -> "${diff / 3_600_000} giờ trước"
+            diff < 172_800_000 -> "Hôm qua"
             else -> {
                 val d = java.util.Date(timestamp)
                 java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault()).format(d)
@@ -242,12 +265,18 @@ class NotificationActivity : AppCompatActivity() {
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNav.selectedItemId = R.id.nav_notification
+        // FIX: Bỏ nav_favorite vì không có trong bottom_nav_menu.xml
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home         -> { startActivity(Intent(this, HomeActivity::class.java)); true }
-                R.id.nav_favorite     -> { startActivity(Intent(this, FavoriteActivity::class.java)); true }
+                R.id.nav_home         -> {
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    true
+                }
                 R.id.nav_notification -> true
-                R.id.nav_account      -> { startActivity(Intent(this, AccountActivity::class.java)); true }
+                R.id.nav_account      -> {
+                    startActivity(Intent(this, AccountActivity::class.java))
+                    true
+                }
                 else -> false
             }
         }

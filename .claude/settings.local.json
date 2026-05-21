@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(adb devices *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}

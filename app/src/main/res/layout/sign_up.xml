@@ -40,6 +40,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/ic_arrow_back"
+                app:tint="#FFFFFF"
                 android:layout_marginEnd="6dp" />
 
             <TextView
@@ -98,7 +99,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_user"
-                android:tint="#9aa5b4"
+                app:tint="#0b1928"
                 android:layout_marginEnd="12dp" />
 
             <EditText
@@ -136,6 +137,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_email"
+                app:tint="#0b1928"
                 android:layout_marginEnd="12dp" />
 
             <EditText
@@ -151,7 +153,7 @@
                 android:singleLine="true" />
         </LinearLayout>
 
-        <!-- ✅ Email error -->
+        <!-- Email error -->
         <TextView
             android:id="@+id/tvEmailError"
             android:layout_width="0dp"
@@ -187,6 +189,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_lock"
+                app:tint="#0b1928"
                 android:layout_marginEnd="12dp" />
 
             <EditText
@@ -223,6 +226,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_lock"
+                app:tint="#0b1928"
                 android:layout_marginEnd="12dp" />
 
             <EditText
@@ -259,6 +263,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_phone"
+                app:tint="#0b1928"
                 android:layout_marginEnd="12dp" />
 
             <EditText

@@ -57,7 +57,7 @@ dependencies {
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.8.5")
-
+    implementation("com.google.android.material:material:1.11.0")
     // Firebase BOM
     implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
     implementation("com.google.firebase:firebase-auth")
@@ -74,6 +74,9 @@ dependencies {
 
     // Biometric
     implementation("androidx.biometric:biometric:1.1.0")
+
+    // QR Code generation
+    implementation("com.google.zxing:core:3.5.3")
 
     // Compose
     implementation(platform(libs.androidx.compose.bom))

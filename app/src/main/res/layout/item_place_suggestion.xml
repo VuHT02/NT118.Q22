@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="12dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="10dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- Location icon -->
+    <ImageView
+        android:id="@+id/ivLocationIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:contentDescription="Location"
+        android:src="@drawable/ic_location_on"
+        android:scaleType="centerInside"
+        app:tint="#9AA5B4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <!-- Place info container -->
+    <LinearLayout
+        android:id="@+id/placeInfoContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@id/ivLocationIcon"
+        app:layout_constraintEnd_toStartOf="@id/ivChevron"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Place name -->
+        <TextView
+            android:id="@+id/tvPlaceName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tên địa điểm"
+            android:textColor="#0b1928"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="Tạo Đình Cầu Giấy"/>
+
+        <!-- Place address -->
+        <TextView
+            android:id="@+id/tvPlaceAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Địa chỉ"
+            android:textColor="#9AA5B4"
+            android:textSize="12sp"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="Quận Cầu Giấy, Hà Nội"/>
+    </LinearLayout>
+
+    <!-- Chevron icon -->
+    <ImageView
+        android:id="@+id/ivChevron"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="Navigate"
+        android:src="@drawable/ic_keyboard_arrow_right"
+        android:scaleType="centerInside"
+        app:tint="#CBCFD6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#E2E8F0"
+        app:layout_constraintStart_toStartOf="@id/ivLocationIcon"
+        app:layout_constraintEnd_toEndOf="@id/ivChevron"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

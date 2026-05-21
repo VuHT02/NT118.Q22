@@ -94,7 +94,7 @@
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:drawableStart="@drawable/ic_email"
-                android:drawableTint="#80FFFFFF"
+                android:drawableTint="#0b1928"
                 android:drawablePadding="12dp" />
         </LinearLayout>
 
@@ -119,7 +119,7 @@
                 android:hint="Mật khẩu"
                 android:inputType="textPassword"
                 android:drawableStart="@drawable/ic_lock"
-                android:drawableTint="#80FFFFFF"
+                android:drawableTint="#0b1928"
                 android:drawablePadding="12dp" />
         </LinearLayout>
 

@@ -39,29 +39,14 @@
     ══════════════════════════════════════ -->
     <color name="white">#FFFFFF</color>
     <color name="green_500">#2ECC71</color>
-
+    <color name="orange_primary">#F97316</color>
+    <color name="text_hint">#9AA5B4</color>
     <!-- Green dùng cho tag "Nhanh nhất" -->
 
     <!-- ══════════════════════════════════════
          ORANGE OVERLAYS
     ══════════════════════════════════════ -->
     <color name="orange">@color/orange_accent</color>
-
-    <!-- ══════════════════════════════════════
-         TRANSPORT TAGS
-    ══════════════════════════════════════ -->
-
-    <!-- Metro -->
-
-    <!-- Bus -->
-
-    <!-- Waterbus -->
-
-    <!-- ══════════════════════════════════════
-         ALPHA OVERLAYS (dark header)
-    ══════════════════════════════════════ -->
     <color name="white_10">#1AFFFFFF</color>
-
-    <!-- Bottom nav -->
-
+    <color name="white_12">#1FFFFFFF</color>
 </resources>

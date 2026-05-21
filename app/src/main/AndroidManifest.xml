@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!-- Queries for Android 11+ (API 30+) -->
     <queries>
@@ -64,23 +66,24 @@
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".FavoriteActivity" />
+
         <activity android:name=".NotificationActivity" />
         <activity android:name=".AccountActivity" />
-        <activity android:name=".PersonalInfoActivity" />
+
         <activity android:name=".ChangePasswordActivity" />
-        <activity android:name=".RewardsActivity" />
+        <activity android:name=".PersonalInfoActivity" />
+
         <activity android:name=".SearchActivity" />
         <activity android:name=".CardDetailActivity" />
-        <activity android:name=".TopUpActivity" />
+
         <activity android:name=".RouteDetailActivity" />
-        <activity android:name=".AllRoutesActivity" />
+
         <activity android:name=".HistoryActivity" />
         <activity android:name=".BookTicketActivity" />
-        <activity android:name=".BusRoutesActivity"/>
-        <activity android:name=".MetroRoutesActivity"/>
-        <activity android:name=".WaterbusRoutesActivity"/>
+        <activity android:name=".TicketQrActivity" />
+
         <activity android:name=".SearchMapActivity"/>
+        <activity android:name=".RouteListActivity" />
 
         <!-- ─── Facebook Login ───────────────────────────────── -->
         <activity

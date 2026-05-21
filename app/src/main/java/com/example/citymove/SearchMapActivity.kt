@@ -14,9 +14,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.citymove.adapter.PlaceSuggestion
 import com.example.citymove.adapter.PlaceSuggestionAdapter
+import com.example.citymove.adapter.SuggestedRoute
 import com.example.citymove.adapter.SuggestedRouteAdapter
-import com.example.citymove.databinding.ActivitySearchMapBinding
+import com.example.citymove.databinding.SearchMapActivityBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -24,21 +26,20 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import java.util.Locale
 
 class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // ─── ViewBinding ────────────────────────────────────────────────────────
-    private lateinit var binding: ActivitySearchMapBinding
+    private lateinit var binding: SearchMapActivityBinding
 
     // ─── Google Maps ────────────────────────────────────────────────────────
     private lateinit var googleMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     // ─── Bottom Sheet ────────────────────────────────────────────────────────
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     // ─── Adapters ────────────────────────────────────────────────────────────
     private lateinit var suggestionAdapter: PlaceSuggestionAdapter
@@ -57,14 +58,14 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST = 1001
-        // Mặc định: TP.HCM (Quận 1)
+        // Default: Ho Chi Minh City (District 1)
         private val DEFAULT_LOCATION = LatLng(10.7769, 106.7009)
         private const val DEFAULT_ZOOM = 13f
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySearchMapBinding.inflate(layoutInflater)
+        binding = SearchMapActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -248,14 +249,11 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun initBottomSheet() {
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetRoutes)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        bottomSheetBehavior.peekHeight = 0
+        binding.bottomSheetRoutes.visibility = View.GONE
     }
 
     private fun showBottomSheet() {
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        bottomSheetBehavior.peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek)
+        binding.bottomSheetRoutes.visibility = View.VISIBLE
     }
 
     private fun setupSearchInputs() {
@@ -319,7 +317,7 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
             routePolyline?.remove()
             routePolyline = null
             binding.btnClearDest.visibility = View.GONE
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            binding.bottomSheetRoutes.visibility = View.GONE
         }
 
         binding.btnSearchRoute.setOnClickListener { performRouteSearch() }
@@ -434,31 +432,11 @@ class SearchMapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun showError(message: String) {
-        com.google.android.material.snackbar.Snackbar
-            .make(binding.root, message, com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
-            .show()
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
     }
 
     private fun hideKeyboard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
-
-    data class PlaceSuggestion(
-        val name: String,
-        val address: String,
-        val latLng: LatLng
-    )
-
-    data class SuggestedRoute(
-        val routeId: String,
-        val routeNumber: String,
-        val routeName: String,
-        val schedule: String,
-        val frequency: String,
-        val fare: String,
-        val boardAt: String,
-        val alightAt: String,
-        val nextArrivalMin: Int
-    )
 }

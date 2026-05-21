@@ -84,6 +84,7 @@ class AccountActivity : AppCompatActivity() {
         String.format("%,d", n).replace(",", ".")
 
     private fun setupClickListeners() {
+
         findViewById<View>(R.id.menuPersonalInfo).setOnClickListener {
             startActivity(Intent(this, PersonalInfoActivity::class.java))
         }
@@ -96,9 +97,7 @@ class AccountActivity : AppCompatActivity() {
             startActivity(Intent(this, HistoryActivity::class.java))
         }
 
-        findViewById<View>(R.id.menuRewards).setOnClickListener {
-            startActivity(Intent(this, RewardsActivity::class.java))
-        }
+
 
         findViewById<View>(R.id.menuLogout).setOnClickListener {
             showLogoutDialog()
@@ -127,7 +126,7 @@ class AccountActivity : AppCompatActivity() {
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home         -> { startActivity(Intent(this, HomeActivity::class.java)); true }
-                R.id.nav_favorite     -> { startActivity(Intent(this, FavoriteActivity::class.java)); true }
+
                 R.id.nav_notification -> { startActivity(Intent(this, NotificationActivity::class.java)); true }
                 R.id.nav_account      -> true
                 else -> false

@@ -5,12 +5,46 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.citymove.SearchMapActivity
 import com.example.citymove.databinding.ItemSuggestedRouteBinding
 
+data class SuggestedRoute(
+    val routeId: String,
+    val routeNumber: String,
+    val routeName: String,
+    val schedule: String,
+    val frequency: String,
+    val fare: String,
+    val boardAt: String,
+    val alightAt: String,
+    val nextArrivalMin: Int,
+    val distance: String = "",
+    val duration: String = "",
+    val transfers: Int = 0
+)
+
 class SuggestedRouteAdapter(
-    private val onItemClick: (SearchMapActivity.SuggestedRoute) -> Unit
-) : ListAdapter<SearchMapActivity.SuggestedRoute, SuggestedRouteAdapter.ViewHolder>(DiffCallback) {
+    private val onItemClick: (SuggestedRoute) -> Unit
+) : ListAdapter<SuggestedRoute, SuggestedRouteAdapter.ViewHolder>(DiffCallback()) {
+
+    class ViewHolder(
+        private val binding: ItemSuggestedRouteBinding,
+        private val onItemClick: (SuggestedRoute) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: SuggestedRoute) {
+            binding.tvRouteNumber.text = item.routeNumber
+            binding.tvRouteName.text = item.routeName
+            binding.tvFare.text = item.fare
+
+            binding.tvDistance.text = item.distance
+            binding.tvTime.text = item.duration
+            binding.tvTransfers.text = "${item.transfers} chuyến"
+
+            binding.root.setOnClickListener {
+                onItemClick(item)
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -18,7 +52,8 @@ class SuggestedRouteAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ),
+            onItemClick
         )
     }
 
@@ -26,29 +61,13 @@ class SuggestedRouteAdapter(
         holder.bind(getItem(position))
     }
 
-    inner class ViewHolder(private val binding: ItemSuggestedRouteBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: SearchMapActivity.SuggestedRoute) {
-            binding.tvRouteNumber.text = item.routeNumber
-            binding.tvRouteName.text = item.routeName
-            binding.tvNextArrival.text = "${item.nextArrivalMin}p nữa"
-            binding.tvBoardAt.text = item.boardAt
-            binding.tvAlightAt.text = item.alightAt
-            
-            binding.root.setOnClickListener { onItemClick(item) }
+    class DiffCallback : DiffUtil.ItemCallback<SuggestedRoute>() {
+        override fun areItemsTheSame(oldItem: SuggestedRoute, newItem: SuggestedRoute): Boolean {
+            return oldItem.routeId == newItem.routeId
         }
-    }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<SearchMapActivity.SuggestedRoute>() {
-        override fun areItemsTheSame(
-            oldItem: SearchMapActivity.SuggestedRoute,
-            newItem: SearchMapActivity.SuggestedRoute
-        ): Boolean = oldItem.routeId == newItem.routeId
-
-        override fun areContentsTheSame(
-            oldItem: SearchMapActivity.SuggestedRoute,
-            newItem: SearchMapActivity.SuggestedRoute
-        ): Boolean = oldItem == newItem
+        override fun areContentsTheSame(oldItem: SuggestedRoute, newItem: SuggestedRoute): Boolean {
+            return oldItem == newItem
+        }
     }
 }
