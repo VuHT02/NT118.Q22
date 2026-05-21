@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="12dp"
+    android:paddingTop="12dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="12dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- Route number badge -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/routeNumberBadge"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:cardBackgroundColor="#F97316"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvRouteNumber"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="01"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            tools:text="01"/>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Route info container -->
+    <LinearLayout
+        android:id="@+id/routeInfoContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@id/routeNumberBadge"
+        app:layout_constraintEnd_toStartOf="@id/infoPanel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Route name/description -->
+        <TextView
+            android:id="@+id/tvRouteName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tên tuyến xe"
+            android:textColor="#0b1928"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="Tuyến 01: Bến xe Mỹ Đình - Bến xe Yên Nghĩa"/>
+
+        <!-- Route details: distance, time, fare -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="6dp">
+
+            <!-- Distance -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:contentDescription="Distance"
+                    android:src="@drawable/ic_location_on"
+                    android:scaleType="centerInside"
+                    app:tint="#9AA5B4"
+                    android:layout_marginEnd="4dp"/>
+                <TextView
+                    android:id="@+id/tvDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textColor="#9AA5B4"
+                    android:textSize="12sp"
+                    tools:text="12 km"/>
+            </LinearLayout>
+
+            <!-- Time -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:contentDescription="Time"
+                    android:src="@drawable/ic_history"
+                    android:scaleType="centerInside"
+                    app:tint="#9AA5B4"
+                    android:layout_marginEnd="4dp"/>
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textColor="#9AA5B4"
+                    android:textSize="12sp"
+                    tools:text="45 phút"/>
+            </LinearLayout>
+
+            <!-- Transfers count -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:contentDescription="Transfers"
+                    android:src="@drawable/ic_route"
+                    android:scaleType="centerInside"
+                    app:tint="#9AA5B4"
+                    android:layout_marginEnd="4dp"/>
+                <TextView
+                    android:id="@+id/tvTransfers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textColor="#9AA5B4"
+                    android:textSize="12sp"
+                    tools:text="0 chuyến"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Right info panel: fare and arrow -->
+    <LinearLayout
+        android:id="@+id/infoPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:orientation="vertical"
+        android:gravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Fare price -->
+        <TextView
+            android:id="@+id/tvFare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="—"
+            android:textColor="#F97316"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:gravity="end"
+            tools:text="50K"/>
+
+        <!-- Chevron right -->
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription="Select"
+            android:src="@drawable/ic_arrow_forward"
+            android:scaleType="centerInside"
+            app:tint="#CBCFD6"
+            android:layout_marginTop="6dp"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#E2E8F0"
+        app:layout_constraintStart_toStartOf="@id/routeNumberBadge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

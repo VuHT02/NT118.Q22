@@ -64,22 +64,20 @@
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".FavoriteActivity" />
+
         <activity android:name=".NotificationActivity" />
         <activity android:name=".AccountActivity" />
-        <activity android:name=".PersonalInfoActivity" />
+
         <activity android:name=".ChangePasswordActivity" />
-        <activity android:name=".RewardsActivity" />
+
         <activity android:name=".SearchActivity" />
         <activity android:name=".CardDetailActivity" />
-        <activity android:name=".TopUpActivity" />
+
         <activity android:name=".RouteDetailActivity" />
-        <activity android:name=".AllRoutesActivity" />
+
         <activity android:name=".HistoryActivity" />
         <activity android:name=".BookTicketActivity" />
-        <activity android:name=".BusRoutesActivity"/>
-        <activity android:name=".MetroRoutesActivity"/>
-        <activity android:name=".WaterbusRoutesActivity"/>
+
         <activity android:name=".SearchMapActivity"/>
 
         <!-- ─── Facebook Login ───────────────────────────────── -->

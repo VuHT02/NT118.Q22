@@ -110,8 +110,10 @@ class OtpFragment : Fragment() {
         val focused = fields.indexOfFirst { it.isFocused }
         fields.forEachIndexed { i, et ->
             et.background = when {
-                i == focused -> ContextCompat.getDrawable(requireContext(), R.drawable.bg_otp_box_active)
-                et.text.isNotEmpty() -> ContextCompat.getDrawable(requireContext(), R.drawable.bg_otp_box)
+                i == focused -> ContextCompat.getDrawable(requireContext(), R.drawable.dot_active
+                )
+                et.text.isNotEmpty() -> ContextCompat.getDrawable(requireContext(),  R.drawable.bg_otp_box_empty
+                )
                 else -> ContextCompat.getDrawable(requireContext(), R.drawable.bg_otp_box_empty)
             }
         }

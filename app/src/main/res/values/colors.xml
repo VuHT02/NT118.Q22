@@ -46,22 +46,6 @@
          ORANGE OVERLAYS
     ══════════════════════════════════════ -->
     <color name="orange">@color/orange_accent</color>
-
-    <!-- ══════════════════════════════════════
-         TRANSPORT TAGS
-    ══════════════════════════════════════ -->
-
-    <!-- Metro -->
-
-    <!-- Bus -->
-
-    <!-- Waterbus -->
-
-    <!-- ══════════════════════════════════════
-         ALPHA OVERLAYS (dark header)
-    ══════════════════════════════════════ -->
     <color name="white_10">#1AFFFFFF</color>
-
-    <!-- Bottom nav -->
-
+    <color name="white_12">#1FFFFFFF</color>
 </resources>

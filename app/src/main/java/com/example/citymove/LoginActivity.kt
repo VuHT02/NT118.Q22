@@ -185,10 +185,9 @@ class LoginActivity : AppCompatActivity() {
                     }
             } else {
                 // User cũ → chỉ cập nhật name/email nếu thay đổi, giữ nguyên số dư
-                userRef.set(
-                    mapOf("name" to name, "email" to email),
-                    SetOptions.merge()
-                )
+                val updateMap = mutableMapOf<String, Any>("email" to email)
+                if (name.isNotEmpty()) updateMap["name"] = name
+                userRef.set(updateMap, SetOptions.merge())
                 goHome()
             }
         }.addOnFailureListener {

@@ -141,6 +141,14 @@
                         android:layout_height="6dp"
                         android:max="100"
                         android:progressDrawable="@drawable/bg_timer_progress" />
+
+                    <TextView
+                        android:id="@+id/tvPointsHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#80FFFFFF"
+                        android:textSize="11sp"
+                        android:layout_marginTop="8dp" />
                 </LinearLayout>
             </LinearLayout>
 

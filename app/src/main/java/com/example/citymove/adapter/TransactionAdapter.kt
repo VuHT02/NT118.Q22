@@ -32,15 +32,19 @@ class TransactionAdapter(private var list: List<Transaction>) :
         val sdf = SimpleDateFormat("dd/MM/yyyy · HH:mm", Locale.getDefault())
         holder.tvDate.text = sdf.format(Date(item.timestamp))
 
+
         if (item.type == "PAYMENT") {
             holder.tvAmount.text = "- ${formatCurrency(item.amount)}"
             holder.tvAmount.setTextColor(0xFFFF5252.toInt())
-            holder.iconBg.setBackgroundResource(R.drawable.bg_transport_icon_orange)
+            // Tái sử dụng hình tròn màu cam nhạt
+            holder.iconBg.setBackgroundResource(R.drawable.bg_icon_circle_orange)
         } else {
             holder.tvAmount.text = "+ ${formatCurrency(item.amount)}"
             holder.tvAmount.setTextColor(0xFF4CAF50.toInt())
-            holder.iconBg.setBackgroundResource(R.drawable.bg_stat_green)
+            // Tái sử dụng hình tròn màu xanh (teal)
+            holder.iconBg.setBackgroundResource(R.drawable.bg_icon_circle_teal)
         }
+
     }
 
     override fun getItemCount() = list.size

@@ -23,21 +23,21 @@ class HomeRepository {
                 .collection("weeklyStats").document("current").get().await()
 
             val profile = UserProfile(
-                name         = userDoc.getString("name")
+                name = userDoc.getString("name")
                     ?: userDoc.getString("email")
                     ?: "Bạn",
-                balance      = userDoc.getLong("balance") ?: 0L,
+                balance = userDoc.getLong("balance") ?: 0L,
                 monthlySpend = userDoc.getLong("monthlySpend") ?: 0L,
                 monthlyTrips = userDoc.getLong("monthlyTrips") ?: 0L,
-                co2Saved     = userDoc.getDouble("co2Saved") ?: 0.0,
-                points       = userDoc.getLong("points") ?: 0L,
-                todayTrips   = userDoc.getLong("todayTrips") ?: 0L,
+                co2Saved = userDoc.getDouble("co2Saved") ?: 0.0,
+                points = userDoc.getLong("points") ?: 0L,
+                todayTrips = userDoc.getLong("todayTrips") ?: 0L,
             )
 
             val weekly = WeeklyStats(
                 trips = statsDoc.getLong("trips") ?: 0L,
-                cost  = statsDoc.getLong("cost") ?: 0L,
-                co2   = statsDoc.getDouble("co2") ?: 0.0,
+                cost = statsDoc.getLong("cost") ?: 0L,
+                co2 = statsDoc.getDouble("co2") ?: 0.0,
             )
 
             Result.success(HomeData(profile, weekly))

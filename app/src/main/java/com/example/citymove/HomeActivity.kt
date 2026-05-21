@@ -3,32 +3,30 @@ package com.example.citymove
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.view.KeyEvent
-import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
+import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.citymove.adapter.RouteAdapter
+import com.example.citymove.data.model.RouteModel
+import com.example.citymove.data.model.RouteStatus
+import com.example.citymove.data.model.TransportType
+import com.example.citymove.databinding.ActivityHomeBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
+    private lateinit var binding: ActivityHomeBinding
+    private lateinit var routeAdapter: RouteAdapter
 
     private var selectedTransport = TRANSPORT_BUS
-
-    private lateinit var btnBus: LinearLayout
-    private lateinit var btnMetro: LinearLayout
-    private lateinit var btnWaterbus: LinearLayout
 
     companion object {
         const val TRANSPORT_BUS        = "bus"
@@ -39,7 +37,8 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.hide()
 
         auth = FirebaseAuth.getInstance()
@@ -52,311 +51,231 @@ class HomeActivity : AppCompatActivity() {
         }
 
         setupTransportSelector()
+        setupFilterChips()
+        setupPopularRoutes()
         loadUserData()
+        setupHeaderButtons()
+        setupSearchCard()
+
+        binding.btnSeeAllRoutes.setOnClickListener {
+            val type = when (selectedTransport) {
+                TRANSPORT_METRO    -> TransportType.METRO
+                TRANSPORT_WATERBUS -> TransportType.WATER_BUS
+                else               -> TransportType.BUS
+            }
+            RouteListActivity.start(this, type)
+        }
         setupBottomNav()
-        setupClickListeners()
     }
 
-    // ─────────────────────────────────────────────────────────
-    // LOAD DATA TỪ FIRESTORE
-    // ─────────────────────────────────────────────────────────
-    private fun loadUserData() {
-        val uid = auth.currentUser?.uid ?: return
-
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale("vi"))
-        findViewById<TextView>(R.id.tvTodayDate).text = "Hôm nay ${sdf.format(Date())}"
-
-        db.collection("users").document(uid)
-            .get()
-            .addOnSuccessListener { doc ->
-                if (doc != null && doc.exists()) {
-                    val name = doc.getString("name") ?: doc.getString("email") ?: "Bạn"
-                    findViewById<TextView>(R.id.tvUserName).text = "$name 👋"
-
-                    val balance = doc.getLong("balance") ?: 0L
-                    findViewById<TextView>(R.id.tvBalance).text =
-                        String.format("%,dđ", balance).replace(",", ".")
-
-                    val monthlySpend = doc.getLong("monthlySpend") ?: 0L
-                    val monthlyTrips = doc.getLong("monthlyTrips") ?: 0L
-                    val co2Saved     = doc.getDouble("co2Saved") ?: 0.0
-                    val points       = doc.getLong("Points") ?: 0L
-                    val todayTrips   = doc.getLong("todayTrips") ?: 0L
-
-                    findViewById<TextView>(R.id.tvMonthlySpend).text =
-                        String.format("%,dđ", monthlySpend).replace(",", ".")
-                    findViewById<TextView>(R.id.tvMonthlyTrips).text = "$monthlyTrips chuyến"
-                    findViewById<TextView>(R.id.tvCO2Saved).text     = "$co2Saved Kg"
-                    findViewById<TextView>(R.id.tvPoints).text       = "$points điểm"
-                    findViewById<TextView>(R.id.tvTripCount).text    = "$todayTrips chuyến hôm nay"
-
-                    val preferred = doc.getString(FIELD_PREF_TRANSPORT) ?: TRANSPORT_BUS
-                    applyTransportFromData(preferred)
-
-                    @Suppress("UNCHECKED_CAST")
-                    val destinations = doc.get("quickDestinations") as? List<String>
-                    if (!destinations.isNullOrEmpty()) {
-                        updateQuickChips(destinations)
-                    }
-                }
-            }
-            .addOnFailureListener {
-                val displayName = auth.currentUser?.displayName
-                    ?: auth.currentUser?.email
-                    ?: "Bạn"
-                findViewById<TextView>(R.id.tvUserName).text = "$displayName 👋"
-            }
+    private fun setupHeaderButtons() {
+        binding.btnNotification.setOnClickListener {
+            startActivity(Intent(this, NotificationActivity::class.java))
+        }
+        binding.btnProfile.setOnClickListener {
+            startActivity(Intent(this, AccountActivity::class.java))
+        }
+        binding.fabAI.setOnClickListener {
+            startActivity(Intent(this, SearchMapActivity::class.java))
+        }
+        binding.btnTopUp.setOnClickListener {
+            startActivity(Intent(this, CardDetailActivity::class.java))
+        }
     }
 
-    // ─────────────────────────────────────────────────────────
-    // BOTTOM NAV
-    // ─────────────────────────────────────────────────────────
-    private fun setupBottomNav() {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottomNav.selectedItemId = R.id.nav_home
-
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home         -> true
-                R.id.nav_favorite     -> {
-                    startActivity(Intent(this, FavoriteActivity::class.java)); true
-                }
-                R.id.nav_notification -> {
-                    startActivity(Intent(this, NotificationActivity::class.java)); true
-                }
-                R.id.nav_account      -> {
-                    startActivity(Intent(this, AccountActivity::class.java)); true
-                }
-                else -> false
-            }
+    private fun setupSearchCard() {
+        binding.btnRoutePlanner.setOnClickListener {
+            startActivity(Intent(this, SearchMapActivity::class.java))
         }
-
-    }
-
-    // ─────────────────────────────────────────────────────────
-    // CLICK LISTENERS
-    // ─────────────────────────────────────────────────────────
-    private fun setupClickListeners() {
-        val destinationInput = findViewById<EditText>(R.id.etDestinationInput)
-
-        findViewById<View>(R.id.searchBar)?.setOnClickListener {
-            openSearchWithDestination(destinationInput?.text?.toString())
+        binding.btnNearbyStops.setOnClickListener {
+            startActivity(Intent(this, SearchMapActivity::class.java))
         }
-        findViewById<View>(R.id.btnGoNow)?.setOnClickListener {
-            val destination = destinationInput?.text?.toString().orEmpty().trim()
-            if (destination.isEmpty()) {
-                Toast.makeText(this, getString(R.string.search_map_empty_destination), Toast.LENGTH_SHORT).show()
-            } else {
-                openSearchWithDestination(destination)
-            }
+        binding.btnSearchNow.setOnClickListener {
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.etSearchRoute.windowToken, 0)
+            startActivity(Intent(this, SearchMapActivity::class.java))
         }
-
-        destinationInput?.setOnEditorActionListener { _, actionId, event ->
-            val isKeyboardSubmit = actionId == EditorInfo.IME_ACTION_SEARCH ||
-                    actionId == EditorInfo.IME_ACTION_GO ||
-                    actionId == EditorInfo.IME_ACTION_DONE ||
-                    (event?.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER)
-
-            if (isKeyboardSubmit) {
-                val destination = destinationInput.text?.toString().orEmpty().trim()
-                if (destination.isNotEmpty()) openSearchWithDestination(destination)
+        binding.etSearchRoute.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                startActivity(Intent(this, SearchMapActivity::class.java))
                 true
             } else false
         }
-
-        findViewById<View>(R.id.chipDestinationBenThanh)?.setOnClickListener {
-            openSearchWithDestination((it as? TextView)?.text?.toString() ?: "Bến Thành")
-        }
-        findViewById<View>(R.id.chipDestinationSuoiTien)?.setOnClickListener {
-            openSearchWithDestination((it as? TextView)?.text?.toString() ?: "Suối Tiên")
-        }
-        findViewById<View>(R.id.chipDestinationTanSonNhat)?.setOnClickListener {
-            openSearchWithDestination((it as? TextView)?.text?.toString() ?: "Sân bay Tân Sơn Nhất")
-        }
-
-        findViewById<View>(R.id.btnRoutePlanner)?.setOnClickListener {
-            startActivity(Intent(this, AllRoutesActivity::class.java))
-        }
-        findViewById<View>(R.id.btnLocation)?.setOnClickListener { openRouteDetail(1) }
-        findViewById<View>(R.id.btnNotification)?.setOnClickListener {
-            startActivity(Intent(this, NotificationActivity::class.java))
-        }
-        findViewById<View>(R.id.btnProfile)?.setOnClickListener {
-            startActivity(Intent(this, AccountActivity::class.java))
-        }
-
-        findViewById<View>(R.id.tvCardDetail)?.setOnClickListener {
-            startActivity(Intent(this, CardDetailActivity::class.java))
-        }
-        findViewById<View>(R.id.btnTopUp)?.setOnClickListener {
-            startActivity(Intent(this, TopUpActivity::class.java))
-        }
-
-        findViewById<View>(R.id.busRouteItem1)?.setOnClickListener { openRouteDetail(1) }
-        findViewById<View>(R.id.busRouteItem2)?.setOnClickListener { openRouteDetail(2) }
-        findViewById<View>(R.id.busRouteItem3)?.setOnClickListener { openRouteDetail(3) }
-        findViewById<View>(R.id.tvSeeAllRoutes)?.setOnClickListener {
-            startActivity(Intent(this, AllRoutesActivity::class.java))
-        }
-        findViewById<View>(R.id.tvSeeHistory)?.setOnClickListener {
-            startActivity(Intent(this, HistoryActivity::class.java))
-        }
-
-        setupRouteTabs()
     }
 
-    // ─────────────────────────────────────────────────────────
-    // TRANSPORT SELECTOR
-    // ─────────────────────────────────────────────────────────
     private fun setupTransportSelector() {
-        btnBus      = findViewById(R.id.btnTransportBus)
-        btnMetro    = findViewById(R.id.btnTransportMetro)
-        btnWaterbus = findViewById(R.id.btnTransportWaterbus)
-
-        btnBus.setOnClickListener {
-            applyTransportSelection(btnBus, TRANSPORT_BUS)
+        binding.btnTransportBus.setOnClickListener {
+            applyTransportSelection(TRANSPORT_BUS)
             saveTransportPreference(TRANSPORT_BUS)
-            startActivity(Intent(this, BusRoutesActivity::class.java))
+            loadPopularRoutesFromFirestore(TransportType.BUS)
         }
-        btnMetro.setOnClickListener {
-            applyTransportSelection(btnMetro, TRANSPORT_METRO)
+        binding.btnTransportMetro.setOnClickListener {
+            applyTransportSelection(TRANSPORT_METRO)
             saveTransportPreference(TRANSPORT_METRO)
-            startActivity(Intent(this, MetroRoutesActivity::class.java))
+            loadPopularRoutesFromFirestore(TransportType.METRO)
         }
-        btnWaterbus.setOnClickListener {
-            applyTransportSelection(btnWaterbus, TRANSPORT_WATERBUS)
+        binding.btnTransportWaterbus.setOnClickListener {
+            applyTransportSelection(TRANSPORT_WATERBUS)
             saveTransportPreference(TRANSPORT_WATERBUS)
-            startActivity(Intent(this, WaterbusRoutesActivity::class.java))
+            loadPopularRoutesFromFirestore(TransportType.WATER_BUS)
         }
+        applyTransportSelection(TRANSPORT_BUS)
     }
 
-    private fun applyTransportFromData(type: String) {
-        val selected = when (type) {
-            TRANSPORT_METRO    -> btnMetro
-            TRANSPORT_WATERBUS -> btnWaterbus
-            else               -> btnBus
-        }
-        applyTransportSelection(selected, type)
-    }
-
-    private fun applyTransportSelection(selected: LinearLayout, type: String) {
+    private fun applyTransportSelection(type: String) {
         selectedTransport = type
-        val activeColor   = ContextCompat.getColor(this, R.color.blue_primary)
-        val inactiveColor = ContextCompat.getColor(this, R.color.text_secondary)
 
-        val transportMap = mapOf(
-            btnBus      to Pair(R.id.ivTransportIconBus,      R.id.tvTransportLabelBus),
-            btnMetro    to Pair(R.id.ivTransportIconMetro,    R.id.tvTransportLabelMetro),
-            btnWaterbus to Pair(R.id.ivTransportIconWaterbus, R.id.tvTransportLabelWaterbus)
+        val orange = ContextCompat.getColor(this, R.color.orange_primary)
+        val blue   = ContextCompat.getColor(this, R.color.blue_primary)
+        val green  = android.graphics.Color.parseColor("#10B981")
+        val gray   = ContextCompat.getColor(this, R.color.text_secondary)
+
+        data class TabCfg(val btn: LinearLayout, val key: String, val color: Int, val iconBg: Int)
+        val tabs = listOf(
+            TabCfg(binding.btnTransportBus,      TRANSPORT_BUS,      orange, android.graphics.Color.parseColor("#FFF3E0")),
+            TabCfg(binding.btnTransportMetro,    TRANSPORT_METRO,    blue,   android.graphics.Color.parseColor("#EFF6FF")),
+            TabCfg(binding.btnTransportWaterbus, TRANSPORT_WATERBUS, green,  android.graphics.Color.parseColor("#ECFDF5"))
         )
 
-        listOf(btnBus, btnMetro, btnWaterbus).forEach { btn ->
-            val isSelected = btn == selected
-            btn.setBackgroundResource(
-                if (isSelected) R.drawable.bg_transport_selected
-                else R.drawable.bg_transport_unselected
-            )
+        tabs.forEach { tab ->
+            val sel = tab.key == type
+            tab.btn.setBackgroundResource(if (sel) R.drawable.bg_tab_selected else R.drawable.bg_tab_unselected)
 
-            val (iconId, labelId) = transportMap[btn] ?: return@forEach
-            val iconFrame = btn.findViewById<View>(iconId)
-            val label     = btn.findViewById<TextView>(labelId)
+            val iconFrame = tab.btn.getChildAt(0) as? FrameLayout
+            val labelTv   = tab.btn.getChildAt(1) as? TextView
+            val priceTv   = tab.btn.getChildAt(2) as? TextView
 
-            label?.setTextColor(if (isSelected) activeColor else inactiveColor)
-            label?.setTypeface(null,
-                if (isSelected) android.graphics.Typeface.BOLD
-                else android.graphics.Typeface.NORMAL
-            )
             iconFrame?.backgroundTintList = ColorStateList.valueOf(
-                if (isSelected) ContextCompat.getColor(this, R.color.blue_primary)
-                else ContextCompat.getColor(this, R.color.bg_icon_gray)
+                if (sel) tab.iconBg else ContextCompat.getColor(this, R.color.bg_icon_gray)
             )
+            (iconFrame?.getChildAt(0) as? android.widget.ImageView)?.imageTintList =
+                ColorStateList.valueOf(if (sel) tab.color else gray)
+
+            labelTv?.setTextColor(if (sel) tab.color else gray)
+            labelTv?.setTypeface(null, if (sel) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL)
+            priceTv?.setTextColor(if (sel) tab.color else ContextCompat.getColor(this, R.color.text_hint))
         }
+    }
+
+    private fun setupFilterChips() {
+        binding.chipFastest.setOnClickListener { /* TODO sort fastest */ }
+        binding.chipCheapest.setOnClickListener { /* TODO sort cheapest */ }
+        binding.chipEcoFriendly.setOnClickListener { /* TODO filter eco */ }
+    }
+
+    private fun setupPopularRoutes() {
+        routeAdapter = RouteAdapter(
+            onCardClick = { route ->
+                val intent = Intent(this, RouteDetailActivity::class.java)
+                intent.putExtra("ROUTE_ID", route.id)
+                startActivity(intent)
+            },
+            onCtaClick = {
+                route ->
+                val intent = Intent(this, BookTicketActivity::class.java)
+                intent.putExtra("ROUTE_ID", route.id)
+                startActivity(intent)
+            }
+        )
+        binding.recyclerPopularRoutes.apply {
+            layoutManager = LinearLayoutManager(this@HomeActivity)
+            adapter = routeAdapter
+            isNestedScrollingEnabled = false
+        }
+        loadPopularRoutesFromFirestore(TransportType.BUS)
+    }
+
+    private fun loadPopularRoutesFromFirestore(type: TransportType = TransportType.BUS) {
+        db.collection("routes")
+            .whereEqualTo("type", type.name)
+            .whereEqualTo("status", "ACTIVE")
+            .limit(5)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val routes = snapshot.documents.mapNotNull { doc ->
+                    try {
+                        RouteModel(
+                            id               = doc.id,
+                            type             = TransportType.fromString(doc.getString("type") ?: "BUS"),
+                            lineCode         = doc.getString("lineCode") ?: "",
+                            name             = doc.getString("name") ?: "",
+                            startStation     = doc.getString("startStation") ?: "",
+                            endStation       = doc.getString("endStation") ?: "",
+                            distanceKm       = doc.getDouble("distanceKm") ?: 0.0,
+                            stationCount     = (doc.getLong("stationCount") ?: 0).toInt(),
+                            durationMinutes  = (doc.getLong("durationMinutes") ?: 0).toInt(),
+                            status           = if (doc.getString("status") == "ACTIVE") RouteStatus.ACTIVE else RouteStatus.UPCOMING,
+                            lineColor        = doc.getString("lineColor") ?: "#F97316",
+                            price            = doc.getLong("price")?.toInt(),
+                            expectedOpenYear = doc.getLong("expectedOpenYear")?.toInt()
+                        )
+                    } catch (e: Exception) { null }
+                }
+                routeAdapter.submitList(routes.ifEmpty { fallbackRoutes(type) })
+            }
+            .addOnFailureListener { routeAdapter.submitList(fallbackRoutes(type)) }
+    }
+
+    private fun fallbackRoutes(type: TransportType = TransportType.BUS) = when (type) {
+        TransportType.BUS -> listOf(
+            RouteModel("1", TransportType.BUS, "01", "Bến Thành - Chợ Lớn",
+                "Hàm Nghi", "Ga Chợ Lớn", 8.5, 12, 35, RouteStatus.ACTIVE, "#F97316", 7000, null),
+            RouteModel("2", TransportType.BUS, "150", "Chợ Lớn - Ngã 3 Tân Vạn",
+                "Ga Chợ Lớn", "Tân Vạn", 25.0, 45, 80, RouteStatus.ACTIVE, "#2563EB", 7000, null)
+        )
+        TransportType.METRO -> listOf(
+            RouteModel("m1", TransportType.METRO, "M1", "Bến Thành - Suối Tiên",
+                "Bến Thành", "Suối Tiên", 19.7, 14, 34, RouteStatus.ACTIVE, "#2563EB", 6000, null),
+            RouteModel("m2", TransportType.METRO, "M2", "Bến Thành - Tham Lương",
+                "Bến Thành", "Tham Lương", 11.3, 9, 20, RouteStatus.UPCOMING, "#7C3AED", null, 2028)
+        )
+        TransportType.WATER_BUS -> listOf(
+            RouteModel("w1", TransportType.WATER_BUS, "WB01", "Bạch Đằng - Linh Đông",
+                "Bến Bạch Đằng", "Linh Đông", 10.8, 6, 30, RouteStatus.ACTIVE, "#10B981", 15000, null),
+            RouteModel("w2", TransportType.WATER_BUS, "WB02", "Bạch Đằng - Lò Gốm",
+                "Bến Bạch Đằng", "Lò Gốm", 9.6, 6, 35, RouteStatus.ACTIVE, "#0EA5E9", 15000, null)
+        )
+    }
+
+    private fun loadUserData() {
+        val uid = auth.currentUser?.uid ?: return
+        db.collection("users").document(uid).get()
+            .addOnSuccessListener { doc ->
+                val name = doc.getString("name")?.takeIf { it.isNotEmpty() }
+                    ?: doc.getString("email")?.substringBefore("@")?.takeIf { it.isNotEmpty() }
+                    ?: auth.currentUser?.displayName?.takeIf { it.isNotEmpty() }
+                    ?: "Người dùng"
+                binding.tvUserName.text = name
+
+                if (doc.exists()) {
+                    val pref = doc.getString(FIELD_PREF_TRANSPORT) ?: TRANSPORT_BUS
+                    applyTransportSelection(pref)
+                    loadPopularRoutesFromFirestore(when (pref) {
+                        TRANSPORT_METRO    -> TransportType.METRO
+                        TRANSPORT_WATERBUS -> TransportType.WATER_BUS
+                        else               -> TransportType.BUS
+                    })
+                }
+            }
+            .addOnFailureListener {
+                binding.tvUserName.text =
+                    auth.currentUser?.displayName?.takeIf { it.isNotEmpty() } ?: "Người dùng"
+            }
     }
 
     private fun saveTransportPreference(type: String) {
         val uid = auth.currentUser?.uid ?: return
-        db.collection("users").document(uid)
-            .update(FIELD_PREF_TRANSPORT, type)
-            .addOnFailureListener {
-                Toast.makeText(this, "Không lưu được tùy chọn", Toast.LENGTH_SHORT).show()
-            }
+        db.collection("users").document(uid).update(FIELD_PREF_TRANSPORT, type)
     }
 
-    // ─────────────────────────────────────────────────────────
-    // QUICK CHIPS
-    // ─────────────────────────────────────────────────────────
-    private fun updateQuickChips(destinations: List<String>) {
-        val chips = listOf(
-            findViewById<TextView>(R.id.chipDestinationBenThanh),
-            findViewById<TextView>(R.id.chipDestinationSuoiTien),
-            findViewById<TextView>(R.id.chipDestinationTanSonNhat)
-        )
-        destinations.forEachIndexed { index, dest ->
-            if (index < chips.size) {
-                chips[index]?.text = dest
-                chips[index]?.setOnClickListener { openSearchWithDestination(dest) }
+    private fun setupBottomNav() {
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> true
+                R.id.nav_notification -> { startActivity(Intent(this, NotificationActivity::class.java)); true }
+                R.id.nav_account      -> { startActivity(Intent(this, AccountActivity::class.java)); true }
+                else -> false
             }
         }
-    }
-
-    // ─────────────────────────────────────────────────────────
-    // ROUTE TABS
-    // ─────────────────────────────────────────────────────────
-    private fun setupRouteTabs() {
-        val tabBus      = findViewById<TextView>(R.id.tabBus)
-        val tabMetro    = findViewById<TextView>(R.id.tabMetro)
-        val tabWaterbus = findViewById<TextView>(R.id.tabWaterbus)
-
-        val panelBus      = findViewById<LinearLayout>(R.id.panelBus)
-        val panelMetro    = findViewById<LinearLayout>(R.id.panelMetro)
-        val panelWaterbus = findViewById<LinearLayout>(R.id.panelWaterbus)
-
-        val allTabs   = listOf(tabBus, tabMetro, tabWaterbus)
-        val allPanels = listOf(panelBus, panelMetro, panelWaterbus)
-
-        fun activateTab(index: Int) {
-            allTabs.forEachIndexed { i, tv ->
-                val isSelected = (i == index)
-                // FIX: đổi background drawable thay vì chỉ đổi màu text
-                tv?.setBackgroundResource(
-                    if (isSelected) R.drawable.bg_tab_selected
-                    else R.drawable.bg_tab_unselected
-                )
-                tv?.setTextColor(
-                    if (isSelected) ContextCompat.getColor(this, R.color.white)
-                    else ContextCompat.getColor(this, R.color.text_secondary)
-                )
-                tv?.setTypeface(null,
-                    if (isSelected) android.graphics.Typeface.BOLD
-                    else android.graphics.Typeface.NORMAL
-                )
-            }
-            allPanels.forEachIndexed { i, layout ->
-                layout?.visibility = if (i == index) View.VISIBLE else View.GONE
-            }
-        }
-
-        tabBus?.setOnClickListener      { activateTab(0) }
-        tabMetro?.setOnClickListener    { activateTab(1) }
-        tabWaterbus?.setOnClickListener { activateTab(2) }
-
-        activateTab(0) // Bus selected by default
-    }
-
-    // ─────────────────────────────────────────────────────────
-    // HELPERS
-    // ─────────────────────────────────────────────────────────
-    private fun openSearchWithDestination(destination: String?) {
-        val intent = Intent(this, SearchActivity::class.java)
-        if (!destination.isNullOrEmpty()) {
-            intent.putExtra("DESTINATION_NAME", destination)
-        }
-        startActivity(intent)
-    }
-
-    private fun openRouteDetail(routeId: Int) {
-        val intent = Intent(this, RouteDetailActivity::class.java)
-        intent.putExtra("ROUTE_ID", routeId)
-        startActivity(intent)
     }
 }
