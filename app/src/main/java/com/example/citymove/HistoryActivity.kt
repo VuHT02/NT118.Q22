@@ -49,8 +49,7 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun updateSummary(list: List<Transaction>) {
-        // Tính tổng nạp (không phải là PAYMENT) và tổng chi (là PAYMENT)
-        val totalTopup = list.filter { it.type != "PAYMENT" }.sumOf { it.amount }
+        val totalTopup = list.filter { it.type == "TOP_UP" }.sumOf { it.amount }
         val totalSpent = list.filter { it.type == "PAYMENT" }.sumOf { it.amount }
 
         findViewById<TextView>(R.id.tvTotalTransactions).text = list.size.toString()

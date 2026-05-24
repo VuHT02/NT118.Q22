@@ -3,6 +3,7 @@ package com.example.citymove.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.citymove.R
@@ -14,10 +15,11 @@ class TransactionAdapter(private var list: List<Transaction>) :
     RecyclerView.Adapter<TransactionAdapter.VH>() {
 
     class VH(v: View) : RecyclerView.ViewHolder(v) {
-        val tvTitle: TextView = v.findViewById(R.id.tvTitle)
-        val tvDate: TextView = v.findViewById(R.id.tvDate)
+        val tvTitle: TextView  = v.findViewById(R.id.tvTitle)
+        val tvDate: TextView   = v.findViewById(R.id.tvDate)
         val tvAmount: TextView = v.findViewById(R.id.tvAmount)
-        val iconBg: View = v.findViewById(R.id.layoutIcon)
+        val iconBg: View       = v.findViewById(R.id.layoutIcon)
+        val ivIcon: ImageView  = v.findViewById(R.id.ivIcon)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -28,31 +30,28 @@ class TransactionAdapter(private var list: List<Transaction>) :
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = list[position]
         holder.tvTitle.text = item.title
-
-        val sdf = SimpleDateFormat("dd/MM/yyyy · HH:mm", Locale.getDefault())
-        holder.tvDate.text = sdf.format(Date(item.timestamp))
-
+        holder.tvDate.text  = SimpleDateFormat("dd/MM/yyyy · HH:mm", Locale.getDefault())
+            .format(Date(item.timestamp))
 
         if (item.type == "PAYMENT") {
             holder.tvAmount.text = "- ${formatCurrency(item.amount)}"
             holder.tvAmount.setTextColor(0xFFFF5252.toInt())
-            // Tái sử dụng hình tròn màu cam nhạt
             holder.iconBg.setBackgroundResource(R.drawable.bg_icon_circle_orange)
+            holder.ivIcon.setImageResource(R.drawable.ic_ticket)
         } else {
             holder.tvAmount.text = "+ ${formatCurrency(item.amount)}"
             holder.tvAmount.setTextColor(0xFF4CAF50.toInt())
-            // Tái sử dụng hình tròn màu xanh (teal)
             holder.iconBg.setBackgroundResource(R.drawable.bg_icon_circle_teal)
+            holder.ivIcon.setImageResource(R.drawable.ic_add)
         }
-
     }
 
     override fun getItemCount() = list.size
 
     fun updateData(newList: List<Transaction>) {
-        this.list = newList
+        list = newList
         notifyDataSetChanged()
     }
 
-    private fun formatCurrency(n: Long): String = String.format("%,dđ", n).replace(",", ".")
+    private fun formatCurrency(n: Long): String = String.format("%,d₫", n).replace(",", ".")
 }

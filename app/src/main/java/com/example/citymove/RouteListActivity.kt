@@ -39,6 +39,7 @@ class RouteListActivity : AppCompatActivity() {
     private lateinit var tvTotalLines:   TextView
     private lateinit var recyclerView:   RecyclerView
     private lateinit var layoutEmpty:    View
+    private lateinit var tvEmpty:        TextView
     private lateinit var progressBar:    View
     private lateinit var etSearch:       EditText
     private lateinit var btnClearSearch: ImageButton
@@ -82,6 +83,7 @@ class RouteListActivity : AppCompatActivity() {
         tvTotalLines   = findViewById(R.id.tvTotalLines)
         recyclerView   = findViewById(R.id.recyclerView)
         layoutEmpty    = findViewById(R.id.layoutEmpty)
+        tvEmpty        = findViewById(R.id.tvEmpty)
         progressBar    = findViewById(R.id.progressBar)
         etSearch       = findViewById(R.id.etSearch)
         btnClearSearch = findViewById(R.id.btnClearSearch)
@@ -234,49 +236,50 @@ class RouteListActivity : AppCompatActivity() {
         adapter.submitList(emptyList())
         tvTotalLines.text = "0"
 
+        val typeFilters = listOf(transportType.name, transportType.name.lowercase(), transportType.name.lowercase().replace("_", ""))
+
         db.collection("routes")
-            .whereEqualTo("type", transportType.name)
-            .get(Source.SERVER)
+            .whereIn("type", typeFilters)
+            .get()
             .addOnSuccessListener { snapshot ->
                 progressBar.visibility = View.GONE
+                
+                // FIX LẶP DỮ LIỆU: Thêm distinctBy để lọc các mã tuyến trùng nhau
                 allRoutes = snapshot.documents.mapNotNull { doc ->
                     try {
+                        val lineCode = doc.getString("lineCode") ?: doc.getString("code") ?: ""
+                        val priceStr = doc.get("fare")?.toString()?.replace(Regex("[^0-9]"), "")
+                        val price = doc.getLong("price")?.toInt() ?: priceStr?.toIntOrNull()
+                        val durationMinutes = (doc.getLong("durationMinutes") 
+                                              ?: doc.getString("duration")?.replace(Regex("[^0-9]"), "")?.toLongOrNull() 
+                                              ?: 0).toInt()
+
                         RouteModel(
                             id              = doc.id,
-                            type            = TransportType.fromString(doc.getString("type") ?: "BUS"),
-                            lineCode        = doc.getString("lineCode") ?: "",
+                            type            = transportType,
+                            lineCode        = lineCode,
                             name            = doc.getString("name") ?: "",
-                            startStation    = doc.getString("startStation") ?: "",
-                            endStation      = doc.getString("endStation") ?: "",
-                            distanceKm      = doc.getDouble("distanceKm")
-                                              ?: doc.getLong("distanceKm")?.toDouble()
-                                              ?: 0.0,
-                            stationCount    = doc.getLong("stationCount")?.toInt()
-                                              ?: doc.getDouble("stationCount")?.toInt()
-                                              ?: 0,
-                            durationMinutes = doc.getLong("durationMinutes")?.toInt()
-                                              ?: doc.getDouble("durationMinutes")?.toInt()
-                                              ?: 0,
+                            startStation    = doc.getString("startStation") ?: doc.getString("from") ?: "",
+                            endStation      = doc.getString("endStation") ?: doc.getString("to") ?: "",
+                            distanceKm      = doc.getDouble("distanceKm") ?: 0.0,
+                            stationCount    = (doc.getLong("stationCount") ?: 0).toInt(),
+                            durationMinutes = durationMinutes,
                             status          = try {
-                                RouteStatus.valueOf(
-                                    doc.getString("status")?.uppercase() ?: "ACTIVE"
-                                )
+                                RouteStatus.valueOf(doc.getString("status")?.uppercase() ?: "ACTIVE")
                             } catch (e: Exception) { RouteStatus.ACTIVE },
                             lineColor       = doc.getString("lineColor") ?: "#F97316",
-                            price           = doc.getLong("price")?.toInt()
-                                              ?: doc.getDouble("price")?.toInt(),
+                            price           = price,
                             expectedOpenYear = doc.getLong("expectedOpenYear")?.toInt()
                         )
-                    } catch (e: Exception) {
-                        null
-                    }
-                }
+                    } catch (e: Exception) { null }
+                }.distinctBy { it.lineCode } // <--- DÒNG QUAN TRỌNG ĐỂ HẾT LẶP
+
                 tvTotalLines.text = allRoutes.size.toString()
                 applyFilterAndSearch(etSearch.text.toString())
 
                 if (allRoutes.isEmpty()) {
                     layoutEmpty.visibility = View.VISIBLE
-                    findViewById<TextView>(R.id.tvEmpty).text = "Chưa có tuyến ${transportType.displayName}"
+                    tvEmpty.text = "Chưa có tuyến ${transportType.displayName}"
                 }
             }
             .addOnFailureListener { e ->

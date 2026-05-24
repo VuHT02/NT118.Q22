@@ -27,6 +27,7 @@
             android:background="@drawable/bg_tag_green">
 
             <ImageView
+                android:id="@+id/ivIcon"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_gravity="center"

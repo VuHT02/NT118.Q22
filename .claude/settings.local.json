@@ -3,7 +3,8 @@
     "allow": [
       "Bash(adb devices *)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(git push *)"
     ]
   }
 }

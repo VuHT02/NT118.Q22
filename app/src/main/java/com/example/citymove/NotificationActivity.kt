@@ -121,21 +121,17 @@ class NotificationActivity : AppCompatActivity() {
         val yesterday = items.filter { it.timestamp in (now - 2 * dayMs)..(now - dayMs) }
         val older     = items.filter { now - it.timestamp >= 2 * dayMs }
 
-        // FIX: XML chỉ có listToday + labelToday, không có yesterday/older
-        // → Tất cả đều render vào listToday, gom thành 1 list duy nhất
         val listToday   = findViewById<LinearLayout>(R.id.listToday)
+        val cardToday   = findViewById<View>(R.id.cardToday)
         val labelToday  = findViewById<TextView>(R.id.labelToday)
         val layoutEmpty = findViewById<LinearLayout>(R.id.layoutEmpty)
 
         listToday.removeAllViews()
 
-        // Xóa sample item mặc định (nếu có từ XML preview)
-        // removeAllViews() đã xử lý rồi
-
         layoutEmpty.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
-        labelToday.visibility  = if (items.isNotEmpty()) View.VISIBLE else View.GONE
+        cardToday.visibility   = if (items.isEmpty()) View.GONE    else View.VISIBLE
+        labelToday.visibility  = View.GONE  // section labels added dynamically below
 
-        // Gom tất cả vào 1 list, thêm divider label nếu cần
         if (today.isNotEmpty()) {
             addSectionLabel(listToday, "HÔM NAY")
             today.forEach { addNotifCard(listToday, it) }
