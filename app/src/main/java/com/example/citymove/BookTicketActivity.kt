@@ -139,13 +139,20 @@ class BookTicketActivity : AppCompatActivity() {
                     return@addOnSuccessListener
                 }
 
+                // FIX: Parse giá tiền từ cả trường 'price' (số) và 'fare' (chuỗi)
+                val lineCode = doc.getString("lineCode") ?: doc.getString("code") ?: ""
+                val priceStr = doc.get("fare")?.toString()?.replace(Regex("[^0-9]"), "")
+                val price = doc.getLong("price")?.toInt() 
+                            ?: doc.getDouble("price")?.toInt() 
+                            ?: priceStr?.toIntOrNull()
+
                 val r = RouteModel(
                     id              = doc.id,
                     type            = TransportType.fromString(doc.getString("type") ?: "BUS"),
-                    lineCode        = doc.getString("lineCode") ?: "",
+                    lineCode        = lineCode,
                     name            = doc.getString("name") ?: "",
-                    startStation    = doc.getString("startStation") ?: "",
-                    endStation      = doc.getString("endStation") ?: "",
+                    startStation    = doc.getString("startStation") ?: doc.getString("from") ?: "",
+                    endStation      = doc.getString("endStation") ?: doc.getString("to") ?: "",
                     distanceKm      = doc.getDouble("distanceKm")
                                       ?: doc.getLong("distanceKm")?.toDouble() ?: 0.0,
                     stationCount    = doc.getLong("stationCount")?.toInt() ?: 0,
@@ -154,14 +161,13 @@ class BookTicketActivity : AppCompatActivity() {
                         RouteStatus.valueOf(doc.getString("status")?.uppercase() ?: "ACTIVE")
                     } catch (e: Exception) { RouteStatus.ACTIVE },
                     lineColor       = doc.getString("lineColor") ?: "#F97316",
-                    price           = doc.getLong("price")?.toInt()
-                                      ?: doc.getDouble("price")?.toInt(),
+                    price           = price,
                     expectedOpenYear = doc.getLong("expectedOpenYear")?.toInt()
                 )
 
-                if (r.status != RouteStatus.ACTIVE || r.price == null) {
+                if (r.price == null) {
                     progressBar.visibility = View.GONE
-                    Toast.makeText(this, "Tuyến này chưa mở bán vé", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Tuyến này chưa có thông tin giá vé", Toast.LENGTH_SHORT).show()
                     finish()
                     return@addOnSuccessListener
                 }
@@ -204,7 +210,7 @@ class BookTicketActivity : AppCompatActivity() {
     private fun confirmPurchase() {
         val currentUser = auth.currentUser
         if (currentUser == null) {
-            Toast.makeText(this, "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Vui lòng đăng nhập để mua vé", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -213,46 +219,62 @@ class BookTicketActivity : AppCompatActivity() {
         val total = price * quantity
 
         btnBuyTicket.isEnabled = false
-        btnBuyTicket.text = "Đang xử lý..."
+        btnBuyTicket.text = "Đang xử lý thanh toán..."
 
-        val ticketCode = generateTicketCode()
-        val now = System.currentTimeMillis()
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-        val dateStr = sdf.format(Date(now))
-
-        val transaction = mapOf(
-            "title"     to "Vé ${r.type.displayName} ${r.lineCode}",
-            "amount"    to -total.toLong(),
-            "type"      to "PAYMENT",
-            "timestamp" to now,
-            "date"      to dateStr,
-            "routeId"   to r.id,
-            "routeName" to r.name,
-            "quantity"  to quantity,
-            "ticketCode" to ticketCode
-        )
-
-        db.collection("users").document(currentUser.uid)
-            .collection("transactions")
-            .add(transaction)
-            .addOnSuccessListener {
-                btnBuyTicket.isEnabled = true
-                btnBuyTicket.text = "Xác nhận mua vé"
-
-                val intent = Intent(this, TicketQrActivity::class.java).apply {
-                    putExtra(TicketQrActivity.EXTRA_TICKET_CODE, ticketCode)
-                    putExtra(TicketQrActivity.EXTRA_ROUTE_NAME,  "${r.lineCode} · ${r.name}")
-                    putExtra(TicketQrActivity.EXTRA_QUANTITY,    quantity)
-                    putExtra(TicketQrActivity.EXTRA_TOTAL_PRICE, total)
-                    putExtra(TicketQrActivity.EXTRA_DATE,        dateStr)
+        // Kiểm tra số dư người dùng trước khi trừ tiền (giả định có trường balance trong document user)
+        db.collection("users").document(currentUser.uid).get()
+            .addOnSuccessListener { userDoc ->
+                val currentBalance = userDoc.getLong("balance") ?: 0L
+                if (currentBalance < total) {
+                    btnBuyTicket.isEnabled = true
+                    btnBuyTicket.text = "Xác nhận mua vé"
+                    Toast.makeText(this, "Số dư không đủ. Vui lòng nạp thêm tiền!", Toast.LENGTH_LONG).show()
+                    return@addOnSuccessListener
                 }
-                startActivity(intent)
-                finish()
-            }
-            .addOnFailureListener { e ->
-                btnBuyTicket.isEnabled = true
-                btnBuyTicket.text = "Xác nhận mua vé"
-                Toast.makeText(this, "Lỗi thanh toán: ${e.message}", Toast.LENGTH_LONG).show()
+
+                // Thực hiện giao dịch: Trừ tiền và thêm lịch sử
+                val batch = db.batch()
+                val userRef = db.collection("users").document(currentUser.uid)
+                batch.update(userRef, "balance", currentBalance - total)
+
+                val ticketCode = generateTicketCode()
+                val now = System.currentTimeMillis()
+                val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+                val dateStr = sdf.format(Date(now))
+
+                val transaction = mapOf(
+                    "title"     to "Vé ${r.type.displayName} ${r.lineCode}",
+                    "amount"    to -total.toLong(),
+                    "type"      to "PAYMENT",
+                    "timestamp" to now,
+                    "date"      to dateStr,
+                    "routeId"   to r.id,
+                    "routeName" to r.name,
+                    "quantity"  to quantity,
+                    "ticketCode" to ticketCode
+                )
+
+                val transRef = userRef.collection("transactions").document()
+                batch.set(transRef, transaction)
+
+                batch.commit().addOnSuccessListener {
+                    btnBuyTicket.isEnabled = true
+                    btnBuyTicket.text = "Xác nhận mua vé"
+
+                    val intent = Intent(this, TicketQrActivity::class.java).apply {
+                        putExtra(TicketQrActivity.EXTRA_TICKET_CODE, ticketCode)
+                        putExtra(TicketQrActivity.EXTRA_ROUTE_NAME,  "${r.lineCode} · ${r.name}")
+                        putExtra(TicketQrActivity.EXTRA_QUANTITY,    quantity)
+                        putExtra(TicketQrActivity.EXTRA_TOTAL_PRICE, total)
+                        putExtra(TicketQrActivity.EXTRA_DATE,        dateStr)
+                    }
+                    startActivity(intent)
+                    finish()
+                }.addOnFailureListener { e ->
+                    btnBuyTicket.isEnabled = true
+                    btnBuyTicket.text = "Xác nhận mua vé"
+                    Toast.makeText(this, "Lỗi khi xử lý giao dịch: ${e.message}", Toast.LENGTH_LONG).show()
+                }
             }
     }
 

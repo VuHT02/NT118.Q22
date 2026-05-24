@@ -11,6 +11,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import com.example.citymove.adapter.RouteAdapter
 import com.example.citymove.data.model.RouteModel
 import com.example.citymove.data.model.RouteStatus
@@ -56,14 +59,16 @@ class HomeActivity : AppCompatActivity() {
         loadUserData()
         setupHeaderButtons()
         setupSearchCard()
+        binding.tvTodayDate.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
         binding.btnSeeAllRoutes.setOnClickListener {
             RouteListActivity.start(this)
         }
 
-        // TODO: XÓA SAU KHI SEED XONG — nhấn avatar 5 giây để seed data
+        // TODO: XÓA SAU KHI SEED XONG — nhấn giữ avatar để seed data
         binding.btnProfile.setOnLongClickListener {
             DataSeeder.seedRoutes(this)
+            DataSeeder.seedStops(this)
             true
         }
 
@@ -188,31 +193,40 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun loadPopularRoutesFromFirestore(type: TransportType = TransportType.BUS) {
+        val typeFilters = listOf(type.name, type.name.lowercase(), type.name.lowercase().replace("_", ""))
+
         db.collection("routes")
-            .whereEqualTo("type", type.name)
-            .whereEqualTo("status", "ACTIVE")
-            .limit(5)
+            .whereIn("type", typeFilters)
+            .limit(20)
             .get()
             .addOnSuccessListener { snapshot ->
                 val routes = snapshot.documents.mapNotNull { doc ->
                     try {
+                        val lineCode = doc.getString("lineCode") ?: doc.getString("code") ?: ""
+                        val priceStr = doc.get("fare")?.toString()?.replace(Regex("[^0-9]"), "")
+                        val price = doc.getLong("price")?.toInt() ?: priceStr?.toIntOrNull()
+                        val durationMinutes = (doc.getLong("durationMinutes") 
+                                              ?: doc.getString("duration")?.replace(Regex("[^0-9]"), "")?.toLongOrNull() 
+                                              ?: 0).toInt()
+
                         RouteModel(
                             id               = doc.id,
-                            type             = TransportType.fromString(doc.getString("type") ?: "BUS"),
-                            lineCode         = doc.getString("lineCode") ?: "",
+                            type             = type,
+                            lineCode         = lineCode,
                             name             = doc.getString("name") ?: "",
-                            startStation     = doc.getString("startStation") ?: "",
-                            endStation       = doc.getString("endStation") ?: "",
+                            startStation     = doc.getString("startStation") ?: doc.getString("from") ?: "",
+                            endStation       = doc.getString("endStation") ?: doc.getString("to") ?: "",
                             distanceKm       = doc.getDouble("distanceKm") ?: 0.0,
                             stationCount     = (doc.getLong("stationCount") ?: 0).toInt(),
-                            durationMinutes  = (doc.getLong("durationMinutes") ?: 0).toInt(),
-                            status           = if (doc.getString("status") == "ACTIVE") RouteStatus.ACTIVE else RouteStatus.UPCOMING,
+                            durationMinutes  = durationMinutes,
+                            status           = if (doc.getString("status")?.uppercase() == "UPCOMING") RouteStatus.UPCOMING else RouteStatus.ACTIVE,
                             lineColor        = doc.getString("lineColor") ?: "#F97316",
-                            price            = doc.getLong("price")?.toInt(),
+                            price            = price,
                             expectedOpenYear = doc.getLong("expectedOpenYear")?.toInt()
                         )
                     } catch (e: Exception) { null }
-                }
+                }.distinctBy { it.lineCode } // Fix lặp data ở Trang chủ
+
                 routeAdapter.submitList(routes.ifEmpty { fallbackRoutes(type) })
             }
             .addOnFailureListener { routeAdapter.submitList(fallbackRoutes(type)) }
@@ -235,7 +249,7 @@ class HomeActivity : AppCompatActivity() {
             RouteModel("w1", TransportType.WATER_BUS, "WB01", "Bạch Đằng - Linh Đông",
                 "Bến Bạch Đằng", "Linh Đông", 10.8, 6, 30, RouteStatus.ACTIVE, "#10B981", 15000, null),
             RouteModel("w2", TransportType.WATER_BUS, "WB02", "Bạch Đằng - Lò Gốm",
-                "Bến Bạch Đằng", "Lò Gốm", 9.6, 6, 35, RouteStatus.ACTIVE, "#0EA5E9", 15000, null)
+                "Bến Bạch Đằng", "Linh Đông", 9.6, 6, 35, RouteStatus.ACTIVE, "#0EA5E9", 15000, null)
         )
     }
 
@@ -248,6 +262,11 @@ class HomeActivity : AppCompatActivity() {
                     ?: auth.currentUser?.displayName?.takeIf { it.isNotEmpty() }
                     ?: "Người dùng"
                 binding.tvUserName.text = name
+
+                val balance = doc.getLong("balance") ?: 0L
+                val monthlySpend = doc.getLong("monthlySpend") ?: 0L
+                binding.tvBalance.text = formatAmount(balance)
+                binding.tvMonthlySpend.text = formatAmount(monthlySpend)
 
                 if (doc.exists()) {
                     val pref = doc.getString(FIELD_PREF_TRANSPORT) ?: TRANSPORT_BUS
@@ -269,6 +288,9 @@ class HomeActivity : AppCompatActivity() {
         val uid = auth.currentUser?.uid ?: return
         db.collection("users").document(uid).update(FIELD_PREF_TRANSPORT, type)
     }
+
+    private fun formatAmount(amount: Long): String =
+        String.format("%,d₫", amount).replace(",", ".")
 
     private fun setupBottomNav() {
         binding.bottomNav.setOnItemSelectedListener { item ->
