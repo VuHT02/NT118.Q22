@@ -3,7 +3,6 @@ package com.example.citymove
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -11,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -26,6 +26,7 @@ class CardDetailActivity : AppCompatActivity() {
     private lateinit var etCustomAmount: EditText
     private lateinit var btnConfirm: TextView
     private lateinit var quickAmountViews: List<TextView>
+    private var balanceListener: ListenerRegistration? = null
 
     private val quickAmounts = listOf(50_000L, 100_000L, 200_000L, 500_000L, 1_000_000L)
     private var selectedAmount = 0L
@@ -40,7 +41,17 @@ class CardDetailActivity : AppCompatActivity() {
 
         initViews()
         setupListeners()
+    }
+
+    override fun onStart() {
+        super.onStart()
         loadBalance()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        balanceListener?.remove()
+        balanceListener = null
     }
 
     private fun initViews() {
@@ -98,10 +109,22 @@ class CardDetailActivity : AppCompatActivity() {
 
     private fun loadBalance() {
         val uid = auth.currentUser?.uid ?: return
-        db.collection("users").document(uid).get().addOnSuccessListener { doc ->
-            tvCurrentBalance.text = formatAmount(doc.getLong("balance") ?: 0L)
-        }
+        balanceListener?.remove()
+        balanceListener = db.collection("users").document(uid)
+            .addSnapshotListener { doc, _ ->
+                if (doc != null && doc.exists()) {
+                    tvCurrentBalance.text = formatAmount(doc.getLong("balance") ?: 0L)
+                } else {
+                    tvCurrentBalance.text = formatAmount(0L)
+                }
+            }
     }
+
+    override fun onDestroy() {
+        balanceListener?.remove()
+        balanceListener = null
+        super.onDestroy()
+        }
 
     private fun topUp() {
         if (selectedAmount < 10_000) {

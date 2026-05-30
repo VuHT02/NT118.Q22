@@ -21,6 +21,7 @@ import com.example.citymove.data.model.TransportType
 import com.example.citymove.databinding.ActivityHomeBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 
 class HomeActivity : AppCompatActivity() {
 
@@ -28,6 +29,8 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private lateinit var binding: ActivityHomeBinding
     private lateinit var routeAdapter: RouteAdapter
+    private var userListener: ListenerRegistration? = null
+    private var prefsLoaded = false
 
     private var selectedTransport = TRANSPORT_BUS
 
@@ -56,7 +59,6 @@ class HomeActivity : AppCompatActivity() {
         setupTransportSelector()
         setupFilterChips()
         setupPopularRoutes()
-        loadUserData()
         setupHeaderButtons()
         setupSearchCard()
         binding.tvTodayDate.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
@@ -73,6 +75,18 @@ class HomeActivity : AppCompatActivity() {
         }
 
         setupBottomNav()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        startUserListener()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        userListener?.remove()
+        userListener = null
+        prefsLoaded = false
     }
 
     private fun setupHeaderButtons() {
@@ -253,34 +267,39 @@ class HomeActivity : AppCompatActivity() {
         )
     }
 
-    private fun loadUserData() {
+    private fun startUserListener() {
         val uid = auth.currentUser?.uid ?: return
-        db.collection("users").document(uid).get()
-            .addOnSuccessListener { doc ->
-                val name = doc.getString("name")?.takeIf { it.isNotEmpty() }
-                    ?: doc.getString("email")?.substringBefore("@")?.takeIf { it.isNotEmpty() }
-                    ?: auth.currentUser?.displayName?.takeIf { it.isNotEmpty() }
-                    ?: "Người dùng"
-                binding.tvUserName.text = name
+        userListener?.remove()
+        userListener = db.collection("users").document(uid)
+            .addSnapshotListener { doc, _ ->
+                if (doc != null && doc.exists()) {
+                    val name = doc.getString("name")?.takeIf { it.isNotEmpty() }
+                        ?: doc.getString("email")?.substringBefore("@")?.takeIf { it.isNotEmpty() }
+                        ?: auth.currentUser?.displayName?.takeIf { it.isNotEmpty() }
+                        ?: "Người dùng"
+                    binding.tvUserName.text = name
 
-                val balance = doc.getLong("balance") ?: 0L
-                val monthlySpend = doc.getLong("monthlySpend") ?: 0L
-                binding.tvBalance.text = formatAmount(balance)
-                binding.tvMonthlySpend.text = formatAmount(monthlySpend)
+                    val balance = doc.getLong("balance") ?: 0L
+                    val monthlySpend = doc.getLong("monthlySpend") ?: 0L
+                    binding.tvBalance.text = formatAmount(balance)
+                    binding.tvMonthlySpend.text = formatAmount(monthlySpend)
 
-                if (doc.exists()) {
-                    val pref = doc.getString(FIELD_PREF_TRANSPORT) ?: TRANSPORT_BUS
-                    applyTransportSelection(pref)
-                    loadPopularRoutesFromFirestore(when (pref) {
-                        TRANSPORT_METRO    -> TransportType.METRO
-                        TRANSPORT_WATERBUS -> TransportType.WATER_BUS
-                        else               -> TransportType.BUS
-                    })
+                    if (!prefsLoaded) {
+                        val pref = doc.getString(FIELD_PREF_TRANSPORT) ?: TRANSPORT_BUS
+                        applyTransportSelection(pref)
+                        loadPopularRoutesFromFirestore(when (pref) {
+                            TRANSPORT_METRO    -> TransportType.METRO
+                            TRANSPORT_WATERBUS -> TransportType.WATER_BUS
+                            else               -> TransportType.BUS
+                        })
+                        prefsLoaded = true
+                    }
+                } else {
+                    binding.tvUserName.text =
+                        auth.currentUser?.displayName?.takeIf { it.isNotEmpty() } ?: "Người dùng"
+                    binding.tvBalance.text = formatAmount(0L)
+                    binding.tvMonthlySpend.text = formatAmount(0L)
                 }
-            }
-            .addOnFailureListener {
-                binding.tvUserName.text =
-                    auth.currentUser?.displayName?.takeIf { it.isNotEmpty() } ?: "Người dùng"
             }
     }
 
