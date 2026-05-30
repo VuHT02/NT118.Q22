@@ -248,10 +248,12 @@ class BookTicketActivity : AppCompatActivity() {
                     "type"      to "PAYMENT",
                     "timestamp" to now,
                     "date"      to dateStr,
+                    "routeName" to "${r.lineCode} · ${r.name}",
                     "routeId"   to r.id,
-                    "routeName" to r.name,
                     "quantity"  to quantity,
-                    "ticketCode" to ticketCode
+                    "ticketCode" to ticketCode,
+                    "ticketType" to "single",
+                    "transport" to r.type.displayName.lowercase(Locale.getDefault())
                 )
 
                 val transRef = userRef.collection("transactions").document()

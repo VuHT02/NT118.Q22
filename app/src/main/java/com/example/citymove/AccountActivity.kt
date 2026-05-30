@@ -97,6 +97,10 @@ class AccountActivity : AppCompatActivity() {
             startActivity(Intent(this, HistoryActivity::class.java))
         }
 
+        findViewById<View>(R.id.menuMyTickets).setOnClickListener {
+            startActivity(Intent(this, MyTicketsActivity::class.java))
+        }
+
 
 
         findViewById<View>(R.id.menuLogout).setOnClickListener {

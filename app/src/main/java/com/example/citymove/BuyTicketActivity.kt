@@ -232,8 +232,11 @@ class BuyTicketActivity : AppCompatActivity() {
                 "type" to "PAYMENT",
                 "timestamp" to System.currentTimeMillis(),
                 "date" to dateStr,
+                "routeName" to "$transportName · $typeName",
                 "quantity" to quantity,
-                "ticketCode" to ticketCode
+                "ticketCode" to ticketCode,
+                "ticketType" to selectedTicketType,
+                "transport" to selectedTransport
             )
             batch.set(userRef.collection("transactions").document(), transaction)
 

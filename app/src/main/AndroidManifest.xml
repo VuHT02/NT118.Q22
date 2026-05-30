@@ -79,6 +79,7 @@
         <activity android:name=".RouteDetailActivity" />
 
         <activity android:name=".HistoryActivity" />
+        <activity android:name=".MyTicketsActivity" />
         <activity android:name=".BookTicketActivity" />
         <activity android:name=".TicketQrActivity" />
 
