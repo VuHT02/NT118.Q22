@@ -281,8 +281,15 @@ class HomeActivity : AppCompatActivity() {
 
                     val balance = doc.getLong("balance") ?: 0L
                     val monthlySpend = doc.getLong("monthlySpend") ?: 0L
+                    val points = doc.getLong("points") ?: 0L
+
                     binding.tvBalance.text = formatAmount(balance)
                     binding.tvMonthlySpend.text = formatAmount(monthlySpend)
+                    
+                    // CẬP NHẬT ĐIỂM THƯỞNG LÊN GIAO DIỆN CHÍNH
+                    try {
+                        binding.tvPoints.text = "$points điểm"
+                    } catch (e: Exception) {}
 
                     if (!prefsLoaded) {
                         val pref = doc.getString(FIELD_PREF_TRANSPORT) ?: TRANSPORT_BUS
