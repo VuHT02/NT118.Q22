@@ -28,13 +28,24 @@ class AccountRepository {
                 ?: "User"
 
             if (doc.exists()) {
+                var points = doc.getLong("points") ?: 0L
+                val monthlySpend = doc.getLong("monthlySpend") ?: 0L
+                
+                // ─── TỰ ĐỘNG ĐỒNG BỘ ĐIỂM THƯỞNG ───
+                // Nếu điểm đang là 0 nhưng đã có chi tiêu, ta tính lại (1000đ = 1 điểm)
+                if (points == 0L && monthlySpend > 0L) {
+                    points = monthlySpend / 1000
+                    // Cập nhật lên Firestore để lần sau không phải tính lại
+                    db.collection("users").document(currentUser.uid).update("points", points)
+                }
+
                 Result.success(UserProfile(
                     name         = doc.getString("name")?.takeIf { it.isNotEmpty() } ?: nameFromAuth,
                     balance      = doc.getLong("balance")      ?: 0L,
-                    monthlySpend = doc.getLong("monthlySpend") ?: 0L,
+                    monthlySpend = monthlySpend,
                     monthlyTrips = doc.getLong("monthlyTrips") ?: 0L,
                     co2Saved     = doc.getDouble("co2Saved")   ?: 0.0,
-                    points       = doc.getLong("points")       ?: 0L,
+                    points       = points,
                     todayTrips   = doc.getLong("todayTrips")   ?: 0L
                 ))
             } else {
