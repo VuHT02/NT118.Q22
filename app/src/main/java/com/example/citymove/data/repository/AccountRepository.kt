@@ -18,10 +18,9 @@ class AccountRepository {
             ?: return Result.failure(Exception("Chưa đăng nhập"))
 
         return try {
-            // Force-refresh token để tránh lỗi token hết hạn
             currentUser.getIdToken(true).await()
-
-            val doc = db.collection("users").document(currentUser.uid).get().await()
+            val userRef = db.collection("users").document(currentUser.uid)
+            val doc = userRef.get().await()
 
             val nameFromAuth = currentUser.displayName?.takeIf { it.isNotEmpty() }
                 ?: currentUser.email?.substringBefore("@")
@@ -29,14 +28,34 @@ class AccountRepository {
 
             if (doc.exists()) {
                 var points = doc.getLong("points") ?: 0L
-                val monthlySpend = doc.getLong("monthlySpend") ?: 0L
+                var monthlySpend = doc.getLong("monthlySpend") ?: 0L
                 
-                // ─── TỰ ĐỘNG ĐỒNG BỘ ĐIỂM THƯỞNG ───
-                // Nếu điểm đang là 0 nhưng đã có chi tiêu, ta tính lại (1000đ = 1 điểm)
-                if (points == 0L && monthlySpend > 0L) {
-                    points = monthlySpend / 1000
-                    // Cập nhật lên Firestore để lần sau không phải tính lại
-                    db.collection("users").document(currentUser.uid).update("points", points)
+                // ─── LOGIC FIX ĐIỂM SÂU: QUÉT GIAO DỊCH ───
+                // Nếu điểm bằng 0, ta kiểm tra danh sách giao dịch để tính lại
+                if (points == 0L) {
+                    val transSnapshot = userRef.collection("transactions")
+                        .whereEqualTo("type", "PAYMENT")
+                        .get().await()
+                    
+                    if (!transSnapshot.isEmpty) {
+                        var totalPaid = 0L
+                        for (transDoc in transSnapshot.documents) {
+                            val amt = transDoc.getLong("amount") ?: 0L
+                            totalPaid += Math.abs(amt) // Lấy giá trị dương của số tiền thanh toán
+                        }
+                        
+                        if (totalPaid > 0) {
+                            monthlySpend = totalPaid
+                            points = totalPaid / 1000
+                            
+                            // Cập nhật lại database để đồng bộ
+                            val updates = mapOf(
+                                "monthlySpend" to monthlySpend,
+                                "points" to points
+                            )
+                            userRef.update(updates)
+                        }
+                    }
                 }
 
                 Result.success(UserProfile(
@@ -49,34 +68,7 @@ class AccountRepository {
                     todayTrips   = doc.getLong("todayTrips")   ?: 0L
                 ))
             } else {
-                // Document chưa có → fallback từ Firebase Auth
-                Result.success(UserProfile(
-                    name         = nameFromAuth,
-                    balance      = 0L,
-                    monthlySpend = 0L,
-                    monthlyTrips = 0L,
-                    co2Saved     = 0.0,
-                    points       = 0L,
-                    todayTrips   = 0L
-                ))
-            }
-        } catch (e: FirebaseFirestoreException) {
-            if (e.code == FirebaseFirestoreException.Code.PERMISSION_DENIED) {
-                // Firestore rules chặn → hiển thị thông tin cơ bản từ Firebase Auth
-                val nameFromAuth = currentUser.displayName?.takeIf { it.isNotEmpty() }
-                    ?: currentUser.email?.substringBefore("@")
-                    ?: "User"
-                Result.success(UserProfile(
-                    name         = nameFromAuth,
-                    balance      = 0L,
-                    monthlySpend = 0L,
-                    monthlyTrips = 0L,
-                    co2Saved     = 0.0,
-                    points       = 0L,
-                    todayTrips   = 0L
-                ))
-            } else {
-                Result.failure(e)
+                Result.success(UserProfile(name = nameFromAuth, balance = 0L, monthlySpend = 0L, monthlyTrips = 0L, co2Saved = 0.0, points = 0L, todayTrips = 0L))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -94,11 +86,6 @@ class AccountRepository {
                 .get().await()
             val list = docs.map { it.toObject(Transaction::class.java).copy(id = it.id) }
             Result.success(list)
-        } catch (e: FirebaseFirestoreException) {
-            if (e.code == FirebaseFirestoreException.Code.PERMISSION_DENIED)
-                Result.success(emptyList())
-            else
-                Result.failure(e)
         } catch (e: Exception) {
             Result.failure(e)
         }

@@ -219,8 +219,8 @@ class HomeActivity : AppCompatActivity() {
                         val lineCode = doc.getString("lineCode") ?: doc.getString("code") ?: ""
                         val priceStr = doc.get("fare")?.toString()?.replace(Regex("[^0-9]"), "")
                         val price = doc.getLong("price")?.toInt() ?: priceStr?.toIntOrNull()
-                        val durationMinutes = (doc.getLong("durationMinutes") 
-                                              ?: doc.getString("duration")?.replace(Regex("[^0-9]"), "")?.toLongOrNull() 
+                        val durationMinutes = (doc.getLong("durationMinutes")
+                                              ?: doc.getString("duration")?.replace(Regex("[^0-9]"), "")?.toLongOrNull()
                                               ?: 0).toInt()
 
                         RouteModel(
@@ -281,15 +281,17 @@ class HomeActivity : AppCompatActivity() {
 
                     val balance = doc.getLong("balance") ?: 0L
                     val monthlySpend = doc.getLong("monthlySpend") ?: 0L
-                    val points = doc.getLong("points") ?: 0L
+                    var points = doc.getLong("points") ?: 0L
+
+                    // ─── TỰ ĐỘNG FIX ĐIỂM NGAY TẠI TRANG CHỦ ───
+                    if (points == 0L && monthlySpend > 0L) {
+                        points = monthlySpend / 1000
+                        db.collection("users").document(uid).update("points", points)
+                    }
 
                     binding.tvBalance.text = formatAmount(balance)
                     binding.tvMonthlySpend.text = formatAmount(monthlySpend)
-                    
-                    // CẬP NHẬT ĐIỂM THƯỞNG LÊN GIAO DIỆN CHÍNH
-                    try {
-                        binding.tvPoints.text = "$points điểm"
-                    } catch (e: Exception) {}
+                    binding.tvPoints.text = "$points điểm"
 
                     if (!prefsLoaded) {
                         val pref = doc.getString(FIELD_PREF_TRANSPORT) ?: TRANSPORT_BUS
@@ -306,6 +308,7 @@ class HomeActivity : AppCompatActivity() {
                         auth.currentUser?.displayName?.takeIf { it.isNotEmpty() } ?: "Người dùng"
                     binding.tvBalance.text = formatAmount(0L)
                     binding.tvMonthlySpend.text = formatAmount(0L)
+                    binding.tvPoints.text = "0 điểm"
                 }
             }
     }
