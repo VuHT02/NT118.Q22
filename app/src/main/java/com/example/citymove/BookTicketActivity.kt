@@ -139,7 +139,6 @@ class BookTicketActivity : AppCompatActivity() {
                     return@addOnSuccessListener
                 }
 
-                // FIX: Parse giá tiền từ cả trường 'price' (số) và 'fare' (chuỗi)
                 val lineCode = doc.getString("lineCode") ?: doc.getString("code") ?: ""
                 val priceStr = doc.get("fare")?.toString()?.replace(Regex("[^0-9]"), "")
                 val price = doc.getLong("price")?.toInt() 
@@ -221,7 +220,6 @@ class BookTicketActivity : AppCompatActivity() {
         btnBuyTicket.isEnabled = false
         btnBuyTicket.text = "Đang xử lý thanh toán..."
 
-        // Kiểm tra số dư người dùng trước khi trừ tiền (giả định có trường balance trong document user)
         db.collection("users").document(currentUser.uid).get()
             .addOnSuccessListener { userDoc ->
                 val currentBalance = userDoc.getLong("balance") ?: 0L
@@ -232,28 +230,43 @@ class BookTicketActivity : AppCompatActivity() {
                     return@addOnSuccessListener
                 }
 
-                // Thực hiện giao dịch: Trừ tiền và thêm lịch sử
+                // ─── LOGIC TÍNH ĐIỂM THƯỞNG ───
+                val earnedPoints = (total / 1000) // 1.000đ = 1 điểm
+                val currentPoints = userDoc.getLong("points") ?: 0L
+                val currentMonthlySpend = userDoc.getLong("monthlySpend") ?: 0L
+                val currentMonthlyTrips = userDoc.getLong("monthlyTrips") ?: 0L
+                val currentTodayTrips   = userDoc.getLong("todayTrips") ?: 0L
+
                 val batch = db.batch()
                 val userRef = db.collection("users").document(currentUser.uid)
-                batch.update(userRef, "balance", currentBalance - total)
+                
+                // Cập nhật Profile User
+                val userUpdates = mapOf(
+                    "balance"      to (currentBalance - total),
+                    "points"       to (currentPoints + earnedPoints),
+                    "monthlySpend" to (currentMonthlySpend + total),
+                    "monthlyTrips" to (currentMonthlyTrips + quantity),
+                    "todayTrips"   to (currentTodayTrips + quantity)
+                )
+                batch.update(userRef, userUpdates)
 
+                // Lưu lịch sử giao dịch
                 val ticketCode = generateTicketCode()
                 val now = System.currentTimeMillis()
                 val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
                 val dateStr = sdf.format(Date(now))
 
                 val transaction = mapOf(
-                    "title"     to "Vé ${r.type.displayName} ${r.lineCode}",
-                    "amount"    to -total.toLong(),
-                    "type"      to "PAYMENT",
-                    "timestamp" to now,
-                    "date"      to dateStr,
-                    "routeName" to "${r.lineCode} · ${r.name}",
-                    "routeId"   to r.id,
-                    "quantity"  to quantity,
+                    "title"      to "Vé ${r.type.displayName} ${r.lineCode}",
+                    "amount"     to -total.toLong(),
+                    "type"       to "PAYMENT",
+                    "timestamp"  to now,
+                    "date"       to dateStr,
+                    "routeName"  to "${r.lineCode} · ${r.name}",
+                    "routeId"    to r.id,
+                    "quantity"   to quantity,
                     "ticketCode" to ticketCode,
-                    "ticketType" to "single",
-                    "transport" to r.type.displayName.lowercase(Locale.getDefault())
+                    "earnedPoints" to earnedPoints
                 )
 
                 val transRef = userRef.collection("transactions").document()
@@ -262,6 +275,7 @@ class BookTicketActivity : AppCompatActivity() {
                 batch.commit().addOnSuccessListener {
                     btnBuyTicket.isEnabled = true
                     btnBuyTicket.text = "Xác nhận mua vé"
+                    Toast.makeText(this, "Thanh toán thành công! +$earnedPoints điểm", Toast.LENGTH_SHORT).show()
 
                     val intent = Intent(this, TicketQrActivity::class.java).apply {
                         putExtra(TicketQrActivity.EXTRA_TICKET_CODE, ticketCode)
@@ -275,7 +289,7 @@ class BookTicketActivity : AppCompatActivity() {
                 }.addOnFailureListener { e ->
                     btnBuyTicket.isEnabled = true
                     btnBuyTicket.text = "Xác nhận mua vé"
-                    Toast.makeText(this, "Lỗi khi xử lý giao dịch: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Lỗi: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
     }

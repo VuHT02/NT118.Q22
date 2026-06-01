@@ -101,7 +101,10 @@ class AccountActivity : AppCompatActivity() {
             startActivity(Intent(this, MyTicketsActivity::class.java))
         }
 
-
+        // FIX: Thêm sự kiện click cho menu Điểm thưởng
+        findViewById<View>(R.id.menuRewards).setOnClickListener {
+            startActivity(Intent(this, RewardsActivity::class.java))
+        }
 
         findViewById<View>(R.id.menuLogout).setOnClickListener {
             showLogoutDialog()
