@@ -18,7 +18,8 @@ import kotlin.math.abs
 
 class MyTicketAdapter(
     initialList: List<Transaction> = emptyList(),
-    private val onClick: (Transaction) -> Unit
+    private val onClick: (Transaction) -> Unit,
+    private val onFeedbackClick: (Transaction) -> Unit
 ) : ListAdapter<Transaction, MyTicketAdapter.VH>(Diff) {
 
     init {
@@ -53,20 +54,20 @@ class MyTicketAdapter(
             SimpleDateFormat("dd/MM/yyyy · HH:mm", Locale.getDefault()).format(Date(item.timestamp))
         }
         val accentColor = resolveAccentColor(holder.itemView, item)
+        val orangeColor = ContextCompat.getColor(holder.itemView.context, R.color.orange_primary)
         val mutedColor = ContextCompat.getColor(holder.itemView.context, R.color.text_hint)
         val secondaryColor = ContextCompat.getColor(holder.itemView.context, R.color.text_secondary)
+        
         val statusText = when {
             item.isUsed -> "Đã sử dụng"
             isExpired -> "Hết hạn"
             else -> getExpiryText(item.expiryDate)
         }
-        val statusTextColor = when {
-            item.isUsed -> secondaryColor
-            isExpired -> ContextCompat.getColor(holder.itemView.context, R.color.white)
-            else -> ContextCompat.getColor(holder.itemView.context, R.color.white)
-        }
+        
+        // Logic mới cho nút Action
         val actionText = when {
-            effectiveUsed -> "Đã sử dụng"
+            item.isUsed -> "Đánh giá"
+            isExpired -> "Đã hết hạn"
             item.ticketCode.isNotBlank() -> "Xem QR"
             else -> "Chưa có QR"
         }
@@ -78,34 +79,36 @@ class MyTicketAdapter(
         holder.tvAmount.text = formatCurrency(abs(item.amount))
         holder.tvStatus.text = statusText
         holder.tvAction.text = actionText
-        holder.tvAction.isEnabled = !effectiveUsed && item.ticketCode.isNotBlank()
+        
+        // Cấu hình trạng thái nút
+        if (item.isUsed) {
+            holder.tvAction.isEnabled = true
+            holder.tvAction.setBackgroundResource(R.drawable.bg_tab_selected)
+            holder.tvAction.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
+            holder.tvAction.backgroundTintList = android.content.res.ColorStateList.valueOf(orangeColor)
+        } else {
+            val canViewQr = !isExpired && item.ticketCode.isNotBlank()
+            holder.tvAction.isEnabled = canViewQr
+            holder.tvAction.setBackgroundResource(if (canViewQr) R.drawable.bg_tab_selected else R.drawable.bg_tab_unselected)
+            holder.tvAction.setTextColor(if (canViewQr) ContextCompat.getColor(holder.itemView.context, R.color.white) else secondaryColor)
+        }
 
         holder.tvTitle.setTextColor(if (effectiveUsed) secondaryColor else accentColor)
         holder.tvAmount.setTextColor(if (effectiveUsed) mutedColor else accentColor)
-        holder.tvCode.setTextColor(if (effectiveUsed) mutedColor else secondaryColor)
-        holder.tvDate.setTextColor(if (effectiveUsed) mutedColor else secondaryColor)
-
-        holder.tvStatus.setBackgroundResource(
-            if (effectiveUsed) R.drawable.bg_tab_unselected else if (isExpired) R.drawable.bg_tab_unselected else R.drawable.bg_tab_selected
-        )
-        holder.tvStatus.setTextColor(statusTextColor)
-
-        holder.tvAction.setBackgroundResource(
-            if (effectiveUsed) R.drawable.bg_tab_unselected else R.drawable.bg_tab_selected
-        )
-        holder.tvAction.setTextColor(
-            if (effectiveUsed) secondaryColor else ContextCompat.getColor(holder.itemView.context, R.color.white)
-        )
-
-        holder.iconBg.setBackgroundResource(R.drawable.bg_icon_circle_orange)
+        
         holder.iconBg.backgroundTintList = android.content.res.ColorStateList.valueOf(
             if (effectiveUsed) ContextCompat.getColor(holder.itemView.context, R.color.bg_icon_gray) else accentColor
         )
-        holder.ivIcon.setImageResource(R.drawable.ic_ticket)
-        holder.ivIcon.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.white))
 
+        holder.tvAction.setOnClickListener {
+            if (item.isUsed) {
+                onFeedbackClick(item)
+            } else {
+                onClick(item)
+            }
+        }
+        
         holder.itemView.setOnClickListener { onClick(item) }
-        holder.tvAction.setOnClickListener { onClick(item) }
     }
 
     fun updateData(newList: List<Transaction>) {
@@ -120,11 +123,7 @@ class MyTicketAdapter(
             "bus" -> ContextCompat.getColor(context, R.color.orange_primary)
             "metro" -> ContextCompat.getColor(context, R.color.blue_primary)
             "waterbus", "water_bus" -> ContextCompat.getColor(context, R.color.green_500)
-            else -> when (item.ticketType.lowercase(Locale.getDefault())) {
-                "month", "monthly" -> ContextCompat.getColor(context, R.color.blue_primary)
-                "single" -> ContextCompat.getColor(context, R.color.orange_primary)
-                else -> ContextCompat.getColor(context, R.color.orange_primary)
-            }
+            else -> ContextCompat.getColor(context, R.color.orange_primary)
         }
     }
 
@@ -136,14 +135,10 @@ class MyTicketAdapter(
         if (expiryDate <= 0) return "Không hạn"
         val now = System.currentTimeMillis()
         val diff = expiryDate - now
-
         return when {
             diff < 0 -> "Hết hạn"
             diff < 24 * 60 * 60 * 1000 -> "Còn < 1 ngày"
-            else -> {
-                val daysLeft = diff / (24 * 60 * 60 * 1000)
-                "Còn $daysLeft ngày"
-            }
+            else -> "Còn ${diff / (24 * 60 * 60 * 1000)} ngày"
         }
     }
 
@@ -152,22 +147,13 @@ class MyTicketAdapter(
         return try {
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
             "Hết hạn: ${sdf.format(Date(expiryDate))}"
-        } catch (e: Exception) {
-            ""
-        }
+        } catch (e: Exception) { "" }
     }
 
     companion object {
         private val Diff = object : DiffUtil.ItemCallback<Transaction>() {
-            override fun areItemsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
-                return oldItem.id.isNotBlank() && oldItem.id == newItem.id ||
-                    oldItem.ticketCode.isNotBlank() && oldItem.ticketCode == newItem.ticketCode
-            }
-
-            override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
-                return oldItem == newItem
-            }
+            override fun areItemsTheSame(oldItem: Transaction, newItem: Transaction) = oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction) = oldItem == newItem
         }
     }
 }
-

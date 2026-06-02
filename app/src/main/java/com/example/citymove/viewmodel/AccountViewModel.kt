@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.citymove.data.model.Feedback
 import com.example.citymove.data.model.HomeData
 import com.example.citymove.data.model.RewardItem
 import com.example.citymove.data.model.Transaction
@@ -31,6 +32,9 @@ class AccountViewModel(
     private val _rewards = MutableLiveData<List<RewardItem>>()
     val rewards: LiveData<List<RewardItem>> = _rewards
 
+    private val _feedbackStatus = MutableLiveData<Result<Unit>?>()
+    val feedbackStatus: LiveData<Result<Unit>?> = _feedbackStatus
+
     fun loadProfile() {
         _uiState.value = AccountUiState.Loading
         viewModelScope.launch {
@@ -52,6 +56,17 @@ class AccountViewModel(
             repository.getAvailableRewards()
                 .onSuccess { _rewards.value = it }
         }
+    }
+
+    fun sendFeedback(feedback: Feedback) {
+        viewModelScope.launch {
+            val result = repository.sendFeedback(feedback)
+            _feedbackStatus.value = result
+        }
+    }
+
+    fun resetFeedbackStatus() {
+        _feedbackStatus.value = null
     }
 }
 

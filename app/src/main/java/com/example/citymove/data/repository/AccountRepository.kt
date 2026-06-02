@@ -1,5 +1,6 @@
 package com.example.citymove.data.repository
 
+import com.example.citymove.data.model.Feedback
 import com.example.citymove.data.model.RewardItem
 import com.example.citymove.data.model.Transaction
 import com.example.citymove.data.model.UserProfile
@@ -114,6 +115,20 @@ class AccountRepository {
                 RewardItem("2", "Miễn phí 1 chuyến đi", "Tối đa 10.000đ", 200),
                 RewardItem("3", "Voucher Highlands 20k", "Cho hóa đơn từ 50k", 500)
             ))
+        }
+    }
+
+    suspend fun sendFeedback(feedback: Feedback): Result<Unit> {
+        val currentUser = auth.currentUser ?: return Result.failure(Exception("Chưa đăng nhập"))
+        return try {
+            val feedbackData = feedback.copy(
+                userId = currentUser.uid,
+                userName = currentUser.displayName ?: currentUser.email?.substringBefore("@") ?: "User"
+            )
+            db.collection("feedback").add(feedbackData).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 }

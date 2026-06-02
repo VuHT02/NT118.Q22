@@ -2,8 +2,12 @@ package com.example.citymove
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -13,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.citymove.adapter.MyTicketAdapter
+import com.example.citymove.data.model.Feedback
 import com.example.citymove.data.model.Transaction
 import com.example.citymove.viewmodel.AccountViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -50,9 +55,11 @@ class MyTicketsActivity : AppCompatActivity() {
         val btnFilterUsed = findViewById<TextView>(R.id.btnFilterUsed)
         val btnDemo = findViewById<TextView>(R.id.btnDemo)
 
-        adapter = MyTicketAdapter(emptyList()) { ticket ->
-            openTicket(ticket)
-        }
+        adapter = MyTicketAdapter(
+            initialList = emptyList(),
+            onClick = { ticket -> openTicket(ticket) },
+            onFeedbackClick = { ticket -> showFeedbackDialog(ticket) }
+        )
 
         rvTickets.layoutManager = LinearLayoutManager(this)
         rvTickets.adapter = adapter
@@ -62,76 +69,127 @@ class MyTicketsActivity : AppCompatActivity() {
         btnFilterUsed.setOnClickListener { applyFilter(TicketFilter.USED, btnFilterAll, btnFilterUnused, btnFilterUsed) }
 
         viewModel.transactions.observe(this) { list ->
-        btnDemo.setOnClickListener { showDemoDialog() }
             allTickets = list.filter(::isTicketTransaction)
             renderTickets(rvTickets)
         }
 
+        viewModel.feedbackStatus.observe(this) { result ->
+            result?.let {
+                if (it.isSuccess) {
+                    Toast.makeText(this, "Cảm ơn bạn đã phản hồi!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Lỗi: ${it.exceptionOrNull()?.message}", Toast.LENGTH_SHORT).show()
+                }
+                viewModel.resetFeedbackStatus()
+            }
+        }
+
+        btnDemo.setOnClickListener { showDemoDialog() }
+        
         applyFilter(TicketFilter.ALL, btnFilterAll, btnFilterUnused, btnFilterUsed)
         viewModel.loadTransactions()
     }
 
-     private fun isTicketTransaction(item: Transaction): Boolean {
-         return item.type == "PAYMENT" && (
-             item.ticketCode.isNotBlank() ||
-             item.routeName.isNotBlank() ||
-             item.title.contains("vé", ignoreCase = true)
-         )
-     }
+    private fun showFeedbackDialog(ticket: Transaction) {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_feedback, null)
+        val tvRouteName = dialogView.findViewById<TextView>(R.id.tvRouteName)
+        val ratingBar = dialogView.findViewById<RatingBar>(R.id.ratingBar)
+        val etComment = dialogView.findViewById<EditText>(R.id.etComment)
+        val btnCancel = dialogView.findViewById<Button>(R.id.btnCancel)
+        val btnSubmit = dialogView.findViewById<Button>(R.id.btnSubmit)
 
-     private fun showDemoDialog() {
-         if (allTickets.isEmpty()) {
-             Toast.makeText(this, "Chưa có vé nào", Toast.LENGTH_SHORT).show()
-             return
-         }
+        tvRouteName.text = ticket.routeName.ifBlank { ticket.title }
 
-         val ticketLabels = allTickets.mapIndexed { idx, ticket ->
-             val status = if (ticket.isUsed) "✓ Đã dùng" else "⊗ Chưa dùng"
-             val route = ticket.routeName.ifBlank { ticket.title.ifBlank { "Vé ${idx + 1}" } }
-             "$status - $route"
-         }.toTypedArray()
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
 
-         AlertDialog.Builder(this)
-             .setTitle("Demo: Chuyển trạng thái vé")
-             .setItems(ticketLabels) { _, which ->
-                 val selected = allTickets[which]
-                 toggleTicketStatus(selected)
-             }
-             .setNegativeButton("Hủy", null)
-             .show()
-     }
+        btnCancel.setOnClickListener { dialog.dismiss() }
 
-     private fun toggleTicketStatus(ticket: Transaction) {
-         val auth = FirebaseAuth.getInstance()
-         val db = FirebaseFirestore.getInstance()
-         val userId = auth.currentUser?.uid ?: return
+        btnSubmit.setOnClickListener {
+            val rating = ratingBar.rating
+            val comment = etComment.text.toString().trim()
 
-         val newIsUsed = !ticket.isUsed
-         val newExpiryDate = if (newIsUsed) 0L else (System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000)
+            if (rating == 0f) {
+                Toast.makeText(this, "Vui lòng chọn số sao đánh giá", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-         db.collection("users").document(userId)
-             .collection("transactions").document(ticket.id)
-             .update("isUsed", newIsUsed, "expiryDate", newExpiryDate)
-             .addOnSuccessListener {
-                 val status = if (newIsUsed) "Đã sử dụng" else "Chưa dùng"
-                 Toast.makeText(this, "Cập nhật: $status", Toast.LENGTH_SHORT).show()
-                 viewModel.loadTransactions()
-             }
-             .addOnFailureListener { e ->
-                 Toast.makeText(this, "Lỗi: ${e.message}", Toast.LENGTH_SHORT).show()
-             }
-     }
- 
-     private fun applyFilter(
-         filter: TicketFilter,
-         btnFilterAll: TextView,
-         btnFilterUnused: TextView,
-         btnFilterUsed: TextView
-     ) {
-         currentFilter = filter
-         updateFilterUi(btnFilterAll, btnFilterUnused, btnFilterUsed)
-         renderTickets(findViewById(R.id.rvTickets))
-     }
+            val feedback = Feedback(
+                routeId = ticket.id, // Hoặc ID tuyến xe nếu có
+                routeName = tvRouteName.text.toString(),
+                rating = rating,
+                comment = comment
+            )
+            
+            viewModel.sendFeedback(feedback)
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun isTicketTransaction(item: Transaction): Boolean {
+        return item.type == "PAYMENT" && (
+            item.ticketCode.isNotBlank() ||
+            item.routeName.isNotBlank() ||
+            item.title.contains("vé", ignoreCase = true)
+        )
+    }
+
+    private fun showDemoDialog() {
+        if (allTickets.isEmpty()) {
+            Toast.makeText(this, "Chưa có vé nào", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val ticketLabels = allTickets.mapIndexed { idx, ticket ->
+            val status = if (ticket.isUsed) "✓ Đã dùng" else "⊗ Chưa dùng"
+            val route = ticket.routeName.ifBlank { ticket.title.ifBlank { "Vé ${idx + 1}" } }
+            "$status - $route"
+        }.toTypedArray()
+
+        AlertDialog.Builder(this)
+            .setTitle("Demo: Chuyển trạng thái vé")
+            .setItems(ticketLabels) { _, which ->
+                val selected = allTickets[which]
+                toggleTicketStatus(selected)
+            }
+            .setNegativeButton("Hủy", null)
+            .show()
+    }
+
+    private fun toggleTicketStatus(ticket: Transaction) {
+        val auth = FirebaseAuth.getInstance()
+        val db = FirebaseFirestore.getInstance()
+        val userId = auth.currentUser?.uid ?: return
+
+        val newIsUsed = !ticket.isUsed
+        val newExpiryDate = if (newIsUsed) 0L else (System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000)
+
+        db.collection("users").document(userId)
+            .collection("transactions").document(ticket.id)
+            .update("isUsed", newIsUsed, "expiryDate", newExpiryDate)
+            .addOnSuccessListener {
+                val status = if (newIsUsed) "Đã sử dụng" else "Chưa dùng"
+                Toast.makeText(this, "Cập nhật: $status", Toast.LENGTH_SHORT).show()
+                viewModel.loadTransactions()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Lỗi: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun applyFilter(
+        filter: TicketFilter,
+        btnFilterAll: TextView,
+        btnFilterUnused: TextView,
+        btnFilterUsed: TextView
+    ) {
+        currentFilter = filter
+        updateFilterUi(btnFilterAll, btnFilterUnused, btnFilterUsed)
+        renderTickets(findViewById(R.id.rvTickets))
+    }
 
     private fun updateFilterUi(btnFilterAll: TextView, btnFilterUnused: TextView, btnFilterUsed: TextView) {
         val selectedColor = ContextCompat.getColor(this, R.color.white)
@@ -185,7 +243,7 @@ class MyTicketsActivity : AppCompatActivity() {
 
     private fun openTicket(ticket: Transaction) {
         if (ticket.isUsed) {
-            Toast.makeText(this, "Vé này đã được sử dụng", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(this, "Vé này đã được sử dụng", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -215,4 +273,3 @@ class MyTicketsActivity : AppCompatActivity() {
 
     private fun formatCurrency(amount: Long): String = String.format("%,dđ", amount).replace(",", ".")
 }
-
