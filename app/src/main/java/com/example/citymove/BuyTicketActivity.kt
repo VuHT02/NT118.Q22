@@ -236,7 +236,8 @@ class BuyTicketActivity : AppCompatActivity() {
                 "quantity" to quantity,
                 "ticketCode" to ticketCode,
                 "ticketType" to selectedTicketType,
-                "transport" to selectedTransport
+                "transport" to selectedTransport,
+                "isUsed" to false
             )
             batch.set(userRef.collection("transactions").document(), transaction)
 

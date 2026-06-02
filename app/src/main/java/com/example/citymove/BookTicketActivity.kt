@@ -266,7 +266,8 @@ class BookTicketActivity : AppCompatActivity() {
                     "routeId"    to r.id,
                     "quantity"   to quantity,
                     "ticketCode" to ticketCode,
-                    "earnedPoints" to earnedPoints
+                    "earnedPoints" to earnedPoints,
+                    "isUsed"     to false
                 )
 
                 val transRef = userRef.collection("transactions").document()

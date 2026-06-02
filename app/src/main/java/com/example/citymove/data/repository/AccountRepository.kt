@@ -5,7 +5,6 @@ import com.example.citymove.data.model.Transaction
 import com.example.citymove.data.model.UserProfile
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 
@@ -84,7 +83,12 @@ class AccountRepository {
                 .collection("transactions")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get().await()
-            val list = docs.map { it.toObject(Transaction::class.java).copy(id = it.id) }
+            val list = docs.mapNotNull { doc ->
+                doc.toObject(Transaction::class.java).copy(
+                    id = doc.id,
+                    isUsed = doc.getBoolean("isUsed") ?: false
+                )
+            }
             Result.success(list)
         } catch (e: Exception) {
             Result.failure(e)
@@ -103,7 +107,7 @@ class AccountRepository {
             } else {
                 Result.success(docs.map { it.toObject(RewardItem::class.java).copy(id = it.id) })
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Result.success(listOf(
                 RewardItem("1", "Giảm 50% vé xe buýt", "Áp dụng cho mọi tuyến xe", 100),
                 RewardItem("2", "Miễn phí 1 chuyến đi", "Tối đa 10.000đ", 200),

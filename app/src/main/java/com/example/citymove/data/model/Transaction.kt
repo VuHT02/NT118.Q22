@@ -11,5 +11,6 @@ data class Transaction(
     val quantity: Int = 1,
     val ticketCode: String = "",
     val ticketType: String = "",
-    val transport: String = ""
+    val transport: String = "",
+    val isUsed: Boolean = false
 )
