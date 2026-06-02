@@ -29,6 +29,7 @@ class MyTicketAdapter(
         val tvTitle: TextView = v.findViewById(R.id.tvTitle)
         val tvCode: TextView = v.findViewById(R.id.tvCode)
         val tvDate: TextView = v.findViewById(R.id.tvDate)
+        val tvExpiry: TextView = v.findViewById(R.id.tvExpiry)
         val tvStatus: TextView = v.findViewById(R.id.tvStatus)
         val tvAmount: TextView = v.findViewById(R.id.tvAmount)
         val tvAction: TextView = v.findViewById(R.id.tvAction)
@@ -43,6 +44,9 @@ class MyTicketAdapter(
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = getItem(position)
+        val isExpired = isTicketExpired(item)
+        val effectiveUsed = item.isUsed || isExpired
+
         val routeLabel = item.routeName.ifBlank { item.title.ifBlank { "Vé của tôi" } }
         val codeLabel = if (item.ticketCode.isNotBlank()) "Mã vé: ${item.ticketCode}" else "Mã vé chưa khả dụng"
         val dateLabel = if (item.date.isNotBlank()) item.date else {
@@ -51,10 +55,18 @@ class MyTicketAdapter(
         val accentColor = resolveAccentColor(holder.itemView, item)
         val mutedColor = ContextCompat.getColor(holder.itemView.context, R.color.text_hint)
         val secondaryColor = ContextCompat.getColor(holder.itemView.context, R.color.text_secondary)
-        val statusText = if (item.isUsed) "Đã sử dụng" else "Chưa dùng"
-        val statusTextColor = if (item.isUsed) secondaryColor else ContextCompat.getColor(holder.itemView.context, R.color.white)
-        val actionText = when {
+        val statusText = when {
             item.isUsed -> "Đã sử dụng"
+            isExpired -> "Hết hạn"
+            else -> getExpiryText(item.expiryDate)
+        }
+        val statusTextColor = when {
+            item.isUsed -> secondaryColor
+            isExpired -> ContextCompat.getColor(holder.itemView.context, R.color.white)
+            else -> ContextCompat.getColor(holder.itemView.context, R.color.white)
+        }
+        val actionText = when {
+            effectiveUsed -> "Đã sử dụng"
             item.ticketCode.isNotBlank() -> "Xem QR"
             else -> "Chưa có QR"
         }
@@ -62,31 +74,32 @@ class MyTicketAdapter(
         holder.tvTitle.text = routeLabel
         holder.tvCode.text = codeLabel
         holder.tvDate.text = dateLabel
+        holder.tvExpiry.text = formatExpiryDate(item.expiryDate)
         holder.tvAmount.text = formatCurrency(abs(item.amount))
         holder.tvStatus.text = statusText
         holder.tvAction.text = actionText
-        holder.tvAction.isEnabled = !item.isUsed && item.ticketCode.isNotBlank()
+        holder.tvAction.isEnabled = !effectiveUsed && item.ticketCode.isNotBlank()
 
-        holder.tvTitle.setTextColor(if (item.isUsed) secondaryColor else accentColor)
-        holder.tvAmount.setTextColor(if (item.isUsed) mutedColor else accentColor)
-        holder.tvCode.setTextColor(if (item.isUsed) mutedColor else secondaryColor)
-        holder.tvDate.setTextColor(if (item.isUsed) mutedColor else secondaryColor)
+        holder.tvTitle.setTextColor(if (effectiveUsed) secondaryColor else accentColor)
+        holder.tvAmount.setTextColor(if (effectiveUsed) mutedColor else accentColor)
+        holder.tvCode.setTextColor(if (effectiveUsed) mutedColor else secondaryColor)
+        holder.tvDate.setTextColor(if (effectiveUsed) mutedColor else secondaryColor)
 
         holder.tvStatus.setBackgroundResource(
-            if (item.isUsed) R.drawable.bg_tab_unselected else R.drawable.bg_tab_selected
+            if (effectiveUsed) R.drawable.bg_tab_unselected else if (isExpired) R.drawable.bg_tab_unselected else R.drawable.bg_tab_selected
         )
         holder.tvStatus.setTextColor(statusTextColor)
 
         holder.tvAction.setBackgroundResource(
-            if (item.isUsed) R.drawable.bg_tab_unselected else R.drawable.bg_tab_selected
+            if (effectiveUsed) R.drawable.bg_tab_unselected else R.drawable.bg_tab_selected
         )
         holder.tvAction.setTextColor(
-            if (item.isUsed) secondaryColor else ContextCompat.getColor(holder.itemView.context, R.color.white)
+            if (effectiveUsed) secondaryColor else ContextCompat.getColor(holder.itemView.context, R.color.white)
         )
 
         holder.iconBg.setBackgroundResource(R.drawable.bg_icon_circle_orange)
         holder.iconBg.backgroundTintList = android.content.res.ColorStateList.valueOf(
-            if (item.isUsed) ContextCompat.getColor(holder.itemView.context, R.color.bg_icon_gray) else accentColor
+            if (effectiveUsed) ContextCompat.getColor(holder.itemView.context, R.color.bg_icon_gray) else accentColor
         )
         holder.ivIcon.setImageResource(R.drawable.ic_ticket)
         holder.ivIcon.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.white))
@@ -112,6 +125,35 @@ class MyTicketAdapter(
                 "single" -> ContextCompat.getColor(context, R.color.orange_primary)
                 else -> ContextCompat.getColor(context, R.color.orange_primary)
             }
+        }
+    }
+
+    private fun isTicketExpired(item: Transaction): Boolean {
+        return item.expiryDate > 0 && System.currentTimeMillis() > item.expiryDate
+    }
+
+    private fun getExpiryText(expiryDate: Long): String {
+        if (expiryDate <= 0) return "Không hạn"
+        val now = System.currentTimeMillis()
+        val diff = expiryDate - now
+
+        return when {
+            diff < 0 -> "Hết hạn"
+            diff < 24 * 60 * 60 * 1000 -> "Còn < 1 ngày"
+            else -> {
+                val daysLeft = diff / (24 * 60 * 60 * 1000)
+                "Còn $daysLeft ngày"
+            }
+        }
+    }
+
+    private fun formatExpiryDate(expiryDate: Long): String {
+        if (expiryDate <= 0) return ""
+        return try {
+            val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+            "Hết hạn: ${sdf.format(Date(expiryDate))}"
+        } catch (e: Exception) {
+            ""
         }
     }
 

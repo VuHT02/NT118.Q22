@@ -12,5 +12,6 @@ data class Transaction(
     val ticketCode: String = "",
     val ticketType: String = "",
     val transport: String = "",
-    val isUsed: Boolean = false
+    val isUsed: Boolean = false,
+    val expiryDate: Long = 0L
 )

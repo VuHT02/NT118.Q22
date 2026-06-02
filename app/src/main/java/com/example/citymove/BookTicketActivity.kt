@@ -267,7 +267,8 @@ class BookTicketActivity : AppCompatActivity() {
                     "quantity"   to quantity,
                     "ticketCode" to ticketCode,
                     "earnedPoints" to earnedPoints,
-                    "isUsed"     to false
+                    "isUsed"     to false,
+                    "expiryDate" to (now + 7 * 24 * 60 * 60 * 1000)
                 )
 
                 val transRef = userRef.collection("transactions").document()

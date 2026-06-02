@@ -86,7 +86,8 @@ class AccountRepository {
             val list = docs.mapNotNull { doc ->
                 doc.toObject(Transaction::class.java).copy(
                     id = doc.id,
-                    isUsed = doc.getBoolean("isUsed") ?: false
+                    isUsed = doc.getBoolean("isUsed") ?: false,
+                    expiryDate = doc.getLong("expiryDate") ?: 0L
                 )
             }
             Result.success(list)

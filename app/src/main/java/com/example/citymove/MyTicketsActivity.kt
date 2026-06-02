@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.citymove.adapter.MyTicketAdapter
 import com.example.citymove.data.model.Transaction
 import com.example.citymove.viewmodel.AccountViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -45,6 +48,7 @@ class MyTicketsActivity : AppCompatActivity() {
         val btnFilterAll = findViewById<TextView>(R.id.btnFilterAll)
         val btnFilterUnused = findViewById<TextView>(R.id.btnFilterUnused)
         val btnFilterUsed = findViewById<TextView>(R.id.btnFilterUsed)
+        val btnDemo = findViewById<TextView>(R.id.btnDemo)
 
         adapter = MyTicketAdapter(emptyList()) { ticket ->
             openTicket(ticket)
@@ -58,6 +62,7 @@ class MyTicketsActivity : AppCompatActivity() {
         btnFilterUsed.setOnClickListener { applyFilter(TicketFilter.USED, btnFilterAll, btnFilterUnused, btnFilterUsed) }
 
         viewModel.transactions.observe(this) { list ->
+        btnDemo.setOnClickListener { showDemoDialog() }
             allTickets = list.filter(::isTicketTransaction)
             renderTickets(rvTickets)
         }
@@ -66,24 +71,67 @@ class MyTicketsActivity : AppCompatActivity() {
         viewModel.loadTransactions()
     }
 
-    private fun isTicketTransaction(item: Transaction): Boolean {
-        return item.type == "PAYMENT" && (
-            item.ticketCode.isNotBlank() ||
-            item.routeName.isNotBlank() ||
-            item.title.contains("vé", ignoreCase = true)
-        )
-    }
+     private fun isTicketTransaction(item: Transaction): Boolean {
+         return item.type == "PAYMENT" && (
+             item.ticketCode.isNotBlank() ||
+             item.routeName.isNotBlank() ||
+             item.title.contains("vé", ignoreCase = true)
+         )
+     }
 
-    private fun applyFilter(
-        filter: TicketFilter,
-        btnFilterAll: TextView,
-        btnFilterUnused: TextView,
-        btnFilterUsed: TextView
-    ) {
-        currentFilter = filter
-        updateFilterUi(btnFilterAll, btnFilterUnused, btnFilterUsed)
-        renderTickets(findViewById(R.id.rvTickets))
-    }
+     private fun showDemoDialog() {
+         if (allTickets.isEmpty()) {
+             Toast.makeText(this, "Chưa có vé nào", Toast.LENGTH_SHORT).show()
+             return
+         }
+
+         val ticketLabels = allTickets.mapIndexed { idx, ticket ->
+             val status = if (ticket.isUsed) "✓ Đã dùng" else "⊗ Chưa dùng"
+             val route = ticket.routeName.ifBlank { ticket.title.ifBlank { "Vé ${idx + 1}" } }
+             "$status - $route"
+         }.toTypedArray()
+
+         AlertDialog.Builder(this)
+             .setTitle("Demo: Chuyển trạng thái vé")
+             .setItems(ticketLabels) { _, which ->
+                 val selected = allTickets[which]
+                 toggleTicketStatus(selected)
+             }
+             .setNegativeButton("Hủy", null)
+             .show()
+     }
+
+     private fun toggleTicketStatus(ticket: Transaction) {
+         val auth = FirebaseAuth.getInstance()
+         val db = FirebaseFirestore.getInstance()
+         val userId = auth.currentUser?.uid ?: return
+
+         val newIsUsed = !ticket.isUsed
+         val newExpiryDate = if (newIsUsed) 0L else (System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000)
+
+         db.collection("users").document(userId)
+             .collection("transactions").document(ticket.id)
+             .update("isUsed", newIsUsed, "expiryDate", newExpiryDate)
+             .addOnSuccessListener {
+                 val status = if (newIsUsed) "Đã sử dụng" else "Chưa dùng"
+                 Toast.makeText(this, "Cập nhật: $status", Toast.LENGTH_SHORT).show()
+                 viewModel.loadTransactions()
+             }
+             .addOnFailureListener { e ->
+                 Toast.makeText(this, "Lỗi: ${e.message}", Toast.LENGTH_SHORT).show()
+             }
+     }
+ 
+     private fun applyFilter(
+         filter: TicketFilter,
+         btnFilterAll: TextView,
+         btnFilterUnused: TextView,
+         btnFilterUsed: TextView
+     ) {
+         currentFilter = filter
+         updateFilterUi(btnFilterAll, btnFilterUnused, btnFilterUsed)
+         renderTickets(findViewById(R.id.rvTickets))
+     }
 
     private fun updateFilterUi(btnFilterAll: TextView, btnFilterUnused: TextView, btnFilterUsed: TextView) {
         val selectedColor = ContextCompat.getColor(this, R.color.white)

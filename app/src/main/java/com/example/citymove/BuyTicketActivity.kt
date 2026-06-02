@@ -237,7 +237,8 @@ class BuyTicketActivity : AppCompatActivity() {
                 "ticketCode" to ticketCode,
                 "ticketType" to selectedTicketType,
                 "transport" to selectedTransport,
-                "isUsed" to false
+                "isUsed" to false,
+                "expiryDate" to (System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000)
             )
             batch.set(userRef.collection("transactions").document(), transaction)
 
