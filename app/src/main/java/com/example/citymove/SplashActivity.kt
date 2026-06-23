@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
@@ -44,8 +45,19 @@ class SplashActivity : AppCompatActivity() {
             .start()
 
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+            checkLoginStatus()
         }, 2500)
+    }
+
+    private fun checkLoginStatus() {
+        val auth = FirebaseAuth.getInstance()
+        if (auth.currentUser != null) {
+            // User is signed in, go to HomeActivity
+            startActivity(Intent(this, HomeActivity::class.java))
+        } else {
+            // No user is signed in, go to LoginActivity
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
+        finish()
     }
 }

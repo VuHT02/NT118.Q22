@@ -121,6 +121,7 @@ class AccountRepository {
     suspend fun sendFeedback(feedback: Feedback): Result<Unit> {
         val currentUser = auth.currentUser ?: return Result.failure(Exception("Chưa đăng nhập"))
         return try {
+            currentUser.getIdToken(true).await() // Làm mới token để tránh PERMISSION_DENIED
             val feedbackData = feedback.copy(
                 userId = currentUser.uid,
                 userName = currentUser.displayName ?: currentUser.email?.substringBefore("@") ?: "User"
@@ -132,3 +133,4 @@ class AccountRepository {
         }
     }
 }
+

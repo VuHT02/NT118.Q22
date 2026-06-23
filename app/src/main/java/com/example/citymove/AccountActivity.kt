@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -121,6 +120,7 @@ class AccountActivity : AppCompatActivity() {
         val btnSubmit = dialogView.findViewById<Button>(R.id.btnSubmit)
 
         // Tùy chỉnh cho feedback chung
+        tvTitle?.text = "Góp ý CityMove"
         tvRouteName.text = "Trải nghiệm ứng dụng CityMove"
         
         val dialog = AlertDialog.Builder(this)
