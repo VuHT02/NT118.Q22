@@ -5,6 +5,7 @@
     android:id="@+id/searchRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="#F0F4F8">
 
     <!-- Top bar with buttons -->
