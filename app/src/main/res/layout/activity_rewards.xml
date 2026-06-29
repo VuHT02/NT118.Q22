@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F4F8"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -11,13 +12,6 @@
         android:layout_height="56dp"
         android:background="#0b1928"
         android:paddingHorizontal="16dp">
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_arrow_back"
-            app:tint="#FFFFFF" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,6 +20,17 @@
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            android:translationZ="2dp"
+            android:elevation="2dp"
+            app:tint="#FFFFFF" />
     </RelativeLayout>
 
     <androidx.cardview.widget.CardView
